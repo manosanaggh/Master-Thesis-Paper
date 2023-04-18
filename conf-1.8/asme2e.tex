@@ -1,0 +1,206 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%% asme2e.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Template for producing ASME-format articles using LaTeX            %
+% Written by   Harry H. Cheng                                        %
+%              Integration Engineering Laboratory                    %
+%              Department of Mechanical and Aeronautical Engineering %
+%              University of California                              %
+%              Davis, CA 95616                                       %
+%              Tel: (530) 752-5020 (office)                          %
+%                   (530) 752-1028 (lab)                             %
+%              Fax: (530) 752-4158                                   %
+%              Email: hhcheng@ucdavis.edu                            %
+%              WWW:   http://iel.ucdavis.edu/people/cheng.html       %
+%              May 7, 1994                                           %
+% Modified: February 16, 2001 by Harry H. Cheng                      %
+% Modified: January  01, 2003 by Geoffrey R. Shiflett                %
+% Use at your own risk, send complaints to /dev/null                 %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% use twocolumn and 10pt options with the asme2e format
+\documentclass[twocolumn,10pt]{asme2e}
+\special{papersize=8.5in,11in}
+\usepackage{graphicx}
+\graphicspath{{./}}
+\usepackage[%  
+    colorlinks=true,
+    pdfborder={0 0 0},
+    linkcolor=red
+]{hyperref}
+
+%% The class has several options
+%  onecolumn/twocolumn - format for one or two columns per page
+%  10pt/11pt/12pt - use 10, 11, or 12 point font
+%  oneside/twoside - format for oneside/twosided printing
+%  final/draft - format for final/draft copy
+%  cleanfoot - take out copyright info in footer leave page number
+%  cleanhead - take out the conference banner on the title page
+%  titlepage/notitlepage - put in titlepage or leave out titlepage
+%  
+%% The default is oneside, onecolumn, 10pt, final
+
+%%% Replace here with information related to your conference
+%\confshortname{IDETC/CIE 2009}
+%\conffullname{the ASME 2009 International Design Engineering Technical Conferences \&\\
+    %          Computers and Information in Engineering Conference}
+
+%%%%% for date in a single month, use
+%\confdate{24-28}
+%\confmonth{September}
+%%%%% for date across two months, use
+%\confdate{January 6-September 2}
+%\confyear{2009}
+%\confcity{San Diego}
+%\confcountry{USA}
+
+%%% Replace DETC2009/MESA-12345 with the number supplied to you 
+%%% by ASME for your paper.
+%\papernum{DETC2009/MESA-12345}
+
+%%% You need to remove 'DRAFT: ' in the title for the final submitted version.
+\title{Improving job throughput with multiple JVM instances for Big Data Analytics using smart offloading} 
+%%% for the discussion section only
+%\usepackage{helvet}
+%\title{\fontfamily{phv}\selectfont{\Huge{DRAFT: AN ARTICLE CREATED USING \LaTeX2\raisebox{-.3ex}{$\epsilon$}\ IN ASME FORMAT}}}
+
+%%% first author
+\author{Emmanouil Anagnostakis
+    \affiliation{
+	MSc Student\\
+	Department of Computer Science\\
+	University of Crete\\
+    Email: manosanag@csd.uoc.gr
+    }	
+}
+
+%%% second author
+%%% remove the following entry for single author papers
+%%% add more entries for additional authors
+%\author{First Coauthor\thanks{Address all correspondence to this author.} \\
+%       {\tensfb Second Coauthor}     
+%    \affiliation{Department or Division Name\\
+%	Company or College Name\\
+%	City, State (spelled out), Zip Code\\
+%	Country (only if not U.S.)\\
+%	Email address (if available)
+%    }
+%}
+
+\begin{document}
+
+\maketitle    
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+{
+With the increasing size and complexity of big data, there is a growing need for efficient and scalable data processing frameworks such as Apache Spark. However, the high computational and memory requirements of big data analytics workloads pose significant challenges for cluster computing systems. In this paper, we propose an offloading technique to improve job throughput for big data analytics workloads on Spark clusters.
+
+Our offloading technique leverages the capabilities of servers, to move large parts of the Java Heap from the main memory to fast storage devices. By offloading computation-intensive tasks, we aim to reduce the workload on Spark workers, thereby improving their performance and job throughput. We also explore the trade-offs between the cost of offloading and the performance gains achieved.
+
+We evaluate our offloading technique using various big data analytics workloads on a Spark cluster. Our results show that our offloading technique can significantly improve job throughput for big data analytics workloads, while maintaining a reasonable cost of offloading.
+
+Overall, our offloading technique offers a promising approach to improving job throughput for big data analytics workloads on Spark clusters, particularly for computation-intensive tasks. The proposed technique can be easily integrated into existing Spark clusters and offers a scalable solution for processing increasingly large and complex big data workloads.
+}
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{INTRODUCTION}
+
+With the exponential growth of data in various fields such as finance, healthcare, social media, and e-commerce, there is a significant need for scalable and efficient big data processing frameworks. Apache Spark is one such framework that has gained popularity due to its ability to handle large-scale data processing and analytics. Spark provides a distributed computing platform that can process data in parallel across multiple nodes in a cluster. However, with the increasing size and complexity of big data workloads, Spark clusters are facing significant challenges in meeting the performance and throughput requirements.
+
+One of the main challenges in Spark clusters is the high computational and memory requirements of big data analytics workloads. These requirements can result in excessive CPU and memory usage on Spark workers, leading to performance bottlenecks and slow job completion times. To address these challenges, researchers have proposed various techniques to optimize the performance of Spark clusters, including data partitioning, caching, and resource allocation.
+
+In this paper, we propose a new technique for improving the performance and job throughput of Spark clusters by offloading computation-intensive tasks to fast storage devices such as NVMe. Our approach leverages the capabilities of the executing machine to offload computation-intensive tasks from the Spark workers, thereby reducing the workload on the workers and improving their performance and job throughput.
+
+The main contribution of this paper is a comprehensive evaluation of the performance and cost trade-offs of offloading computation-intensive tasks to fast storage devices in Spark clusters. We demonstrate the effectiveness of our approach using various big data analytics workloads on a Spark cluster. We also compare our approach with the native Spark distribution and show that our approach can be used instead of this distribution to improve performance.
+
+The rest of the paper is organized as follows. In section 2, we discuss related work on Spark optimization techniques and offloading techniques. In section 3, we describe our proposed offloading technique and its implementation in Spark clusters. In section 4, we present our experimental results and evaluate the performance and cost trade-offs of our approach. Finally, we conclude the paper in section 5 and discuss future research directions.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{BACKGROUND}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{DESIGN}
+
+
+\subsection*{}
+\subsection*{} 
+\subsection*{}
+\subsection*{}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{EVALUATION}
+
+\subsection*{}
+
+\subsection*{} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{RESULTS}
+
+\subsection*{}
+
+\subsection*{}
+
+\subsection*{}
+
+\subsection*{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{RELATED WORK}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{FUTURE WORK}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{CONCLUSION}
+
+In this paper, we proposed a new technique for improving the performance and job throughput of Spark clusters by offloading computation-intensive tasks to fast storage devices such as NVMe. Our approach leverages the capabilities of the underlying running machine to offload computation-intensive tasks from the Spark workers, thereby reducing the workload on the workers and improving their performance and job throughput.
+
+Our experimental results demonstrate the effectiveness of our approach using various big data analytics workloads on a Spark cluster. We also compared our approach with the native Spark distribution and showed that our approach can be used instead of this distribution to further improve performance.
+
+Our work contributes to the growing body of research on improving the performance and scalability of Spark clusters for big data analytics workloads. Our approach offers a scalable solution for processing increasingly large and complex big data workloads and can be easily integrated into existing Spark clusters.
+
+Future research directions include investigating the use of other storage mediums such as the hybrid NVM and developing techniques for dynamically adjusting the offloading decisions based on workload characteristics and resource availability.
+
+Overall, our offloading technique offers a promising approach to improving job throughput for big data analytics workloads on Spark clusters, particularly for computation-intensive tasks. With the increasing demand for efficient and scalable big data processing frameworks, our approach provides a valuable contribution to the field of big data analytics.
+
+% Here's where you specify the bibliography style file.
+% The full file name for the bibliography style file 
+% used for an ASME paper is asmems4.bst.
+\bibliographystyle{asmems4}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{acknowledgment}
+\end{acknowledgment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The bibliography is stored in an external database file
+% in the BibTeX format (file_name.bib).  The bibliography is
+% created by the following command and it will appear in this
+% position in the document. You may, of course, create your
+% own bibliography by using thebibliography environment as in
+%
+% \begin{thebibliography}{12}
+% ...
+% \bibitem{itemreference} D. E. Knudsen.
+% {\em 1966 World Bnus Almanac.}
+% {Permafrost Press, Novosibirsk.}
+% ...
+% \end{thebibliography}
+
+% Here's where you specify the bibliography database file.
+% The full file name of the bibliography database for this
+% article is asme2e.bib. The name for your database is up
+% to you.
+\bibliography{asme2e}
+
+\end{document}
