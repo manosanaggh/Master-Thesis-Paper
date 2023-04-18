@@ -207,3 +207,12 @@
 %     month = "May",
 %     year = 2003}
 %
+
+% email="manosanag@ics.forth.gr" 
+ bibtexfile{
+ author="Manos Anagnostakis",
+ version="1",
+ date="April 18, 2023",
+ filename="asme2e.bib",
+ address="Computer Architecture and VLSI Systems Laboratory, ICS FORTH, Voutes, Iraklion"
+}

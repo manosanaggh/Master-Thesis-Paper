@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=latex 2022.11.14)  18 APR 2023 21:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=latex 2022.11.14)  19 APR 2023 01:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -356,28 +356,25 @@ f
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
-15.
+13.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 ) [1
 
 
-] (./asme2e.bbl
-
-LaTeX Warning: Empty `thebibliography' environment on input line 3.
-
-) [2] (./asme2e.aux)
+] (./asme2e.bbl)
+[2] (./asme2e.aux)
 Package rerunfilecheck Info: File `asme2e.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 8253 strings out of 480248
- 130610 string characters out of 5896176
- 432043 words of memory out of 5000000
- 26099 multiletter control sequences out of 15000+600000
+ 8260 strings out of 480248
+ 130661 string characters out of 5896176
+ 432273 words of memory out of 5000000
+ 26106 multiletter control sequences out of 15000+600000
  484328 words of font info for 59 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  65i,11n,67p,656b,330s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on asme2e.dvi (2 pages, 14372 bytes).
+Output written on asme2e.dvi (2 pages, 18184 bytes).

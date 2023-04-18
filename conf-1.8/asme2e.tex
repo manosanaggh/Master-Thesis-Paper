@@ -65,10 +65,10 @@
 %%% first author
 \author{Emmanouil Anagnostakis
     \affiliation{
-	MSc Student\\
-	Department of Computer Science\\
-	University of Crete\\
-    Email: manosanag@csd.uoc.gr
+	    Graduate Research Assistant\\
+	    Computer Architecture and VLSI Systems Laboratory, ICS-FORTH\\
+	    Heraklion, Greece\\
+      manosanag@ics.forth.gr
     }	
 }
 
@@ -90,17 +90,15 @@
 \maketitle    
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{abstract}
-{
+\section*{ABSTRACT}
+
 With the increasing size and complexity of big data, there is a growing need for efficient and scalable data processing frameworks such as Apache Spark. However, the high computational and memory requirements of big data analytics workloads pose significant challenges for cluster computing systems. In this paper, we propose an offloading technique to improve job throughput for big data analytics workloads on Spark clusters.
 
 Our offloading technique leverages the capabilities of servers, to move large parts of the Java Heap from the main memory to fast storage devices. By offloading computation-intensive tasks, we aim to reduce the workload on Spark workers, thereby improving their performance and job throughput. We also explore the trade-offs between the cost of offloading and the performance gains achieved.
 
 We evaluate our offloading technique using various big data analytics workloads on a Spark cluster. Our results show that our offloading technique can significantly improve job throughput for big data analytics workloads, while maintaining a reasonable cost of offloading.
 
-Overall, our offloading technique offers a promising approach to improving job throughput for big data analytics workloads on Spark clusters, particularly for computation-intensive tasks. The proposed technique can be easily integrated into existing Spark clusters and offers a scalable solution for processing increasingly large and complex big data workloads.
-}
-\end{abstract}
+\par Overall, our offloading technique offers a promising approach to improving job throughput for big data analytics workloads on Spark clusters, particularly for computation-intensive tasks. The proposed technique can be easily integrated into existing Spark clusters and offers a scalable solution for processing increasingly large and complex big data workloads.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{INTRODUCTION}
@@ -142,6 +140,7 @@ The rest of the paper is organized as follows. In section 2, we discuss related 
 \subsection*{}
 
 \subsection*{} 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{RESULTS}
 
@@ -202,5 +201,7 @@ Overall, our offloading technique offers a promising approach to improving job t
 % article is asme2e.bib. The name for your database is up
 % to you.
 \bibliography{asme2e}
+
+\nocite{*}
 
 \end{document}
