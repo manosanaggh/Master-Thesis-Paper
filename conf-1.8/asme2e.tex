@@ -57,7 +57,7 @@
 %\papernum{DETC2009/MESA-12345}
 
 %%% You need to remove 'DRAFT: ' in the title for the final submitted version.
-\title{Improving job throughput with multiple JVM instances for Big Data Analytics using smart offloading} 
+\title{Improving server throughput for Big Data Analytics using smart offloading} 
 %%% for the discussion section only
 %\usepackage{helvet}
 %\title{\fontfamily{phv}\selectfont{\Huge{DRAFT: AN ARTICLE CREATED USING \LaTeX2\raisebox{-.3ex}{$\epsilon$}\ IN ASME FORMAT}}}
@@ -94,7 +94,7 @@
 
 With the increasing size and complexity of big data, there is a growing need for efficient and scalable data processing frameworks such as Apache Spark. However, the high computational and memory requirements of big data analytics workloads pose significant challenges for cluster computing systems. In this paper, we propose an offloading technique to improve job throughput for big data analytics workloads on Spark clusters.
 
-Our offloading technique leverages the capabilities of servers, to move large parts of the Java Heap from the main memory to fast storage devices. By offloading computation-intensive tasks, we aim to reduce the workload on Spark workers, thereby improving their performance and job throughput. We also explore the trade-offs between the cost of offloading and the performance gains achieved.
+Our offloading technique leverages the capabilities of servers that run instances of the Java Virtual Machine, the core of Big Data Analytics like Apache Spark, to move large parts of the Java Heap from the main memory to a memory mapped secondary heap over a fast storage device called TeraHeap. TeraHeap 1) eliminates Serialiazation/Deserialization overheads imposed by these kind of frameworks when moving data offheap to/from fast storages devices 2) eliminates GC over the secondary heap therefore significantly minimizing overall GC overhead. By offloading computation-intensive tasks, we aim to reduce the workload on Spark workers, thereby improving their performance and job throughput. We also explore the trade-offs between the cost of offloading and the performance gains achieved.
 
 We evaluate our offloading technique using various big data analytics workloads on a Spark cluster. Our results show that our offloading technique can significantly improve job throughput for big data analytics workloads, while maintaining a reasonable cost of offloading.
 
