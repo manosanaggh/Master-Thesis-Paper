@@ -216,3 +216,10 @@
  filename="asme2e.bib",
  address="Computer Architecture and VLSI Systems Laboratory, ICS FORTH, Voutes, Iraklion"
 }
+
+
+
+
+Our offloading technique leverages the capabilities of servers that run instances of the Java Virtual Machine, the core of Big Data Analytics like Apache Spark, to move large parts of the Java Heap from the main memory to a memory mapped secondary heap over a fast storage device called TeraHeap. TeraHeap 1) eliminates Serialiazation/Deserialization overheads posed by these kind of frameworks when moving data offheap to/from fast storages devices 2) eliminates GC over the secondary heap, therefore significantly minimizing overall GC overhead. By offloading the managed Java Heap and relaxing computation-intensive tasks, we aim to reduce the workload on Spark workers, thereby improving their performance and job throughput. We also explore the trade-offs between the cost of offloading and the performance gains achieved.
+
+\par Overall, our offloading technique offers a promising approach to improving job throughput for big data analytics workloads on Spark clusters, particularly for computation-intensive tasks. The proposed technique can be easily integrated into existing Spark clusters and offers a scalable solution for processing increasingly large and complex big data workloads.
