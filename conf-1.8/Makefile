@@ -1,12 +1,12 @@
 # type "make" command in Unix to create asme2e.pdf file 
 all: clean
-	latex asme2e
+	pdflatex asme2e
 	bibtex asme2e
-	latex asme2e
-	dvips -o asme2e.ps asme2e
-	ps2pdf asme2e.ps paper.pdf
+	pdflatex asme2e
+	#dvips -o asme2e.ps asme2e
+	#ps2pdf asme2e.ps paper.pdf
 	mkdir -p ../paper
-	mv paper.pdf ../paper/
+	mv asme2e.pdf ../paper/paper.pdf
 
 abstract:
 	latex abstract
