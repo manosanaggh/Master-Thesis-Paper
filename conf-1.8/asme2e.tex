@@ -109,7 +109,7 @@ TeraHeap 1) eliminates Serialization/Deserialization overheads posed by this kin
 
 We demonstrate the effectiveness of our approach using various big data analytics workloads on a real-world Spark cluster. We also compare our approach with the native Spark distribution and show that our approach can be used instead of this distribution to improve performance and server throughput.
 
-The paper makes the following contributions 1) A comprehensive evaluation of the performance and cost trade-offs of a proposed heap offloading technique that utilizes fast storage devices to improve server throughput. 2) A detailed methodology for running Apache Spark and understanding how to use it for conducting off-heap experiments using the Native or our proposed approach 3) Proves that heap offloading to fast storage devices is a significant research direction.
+The paper makes the following contributions 1) A comprehensive evaluation of the performance and cost trade-offs of our proposed heap offloading technique, that utilizes fast storage devices to improve server throughput for Apache Spark, against Native Spark. 2) A detailed methodology for running Apache Spark and understanding how to use it for conducting off-heap experiments using the Native Spark or TeraHeap 3) Proves that heap offloading to fast storage devices is a significant research direction.
 
 The rest of the paper is organized as follows. In section 2 we discuss related work on Spark optimization techniques and offloading techniques. In section 3, we describe our experimental methodology in order for someone to achieve the desired performance using TeraHeap. In section 4, we present our experimental results and evaluate the performance and cost trade-offs of our approach. In section 5, we discuss future research directions. Finally we conclude the paper in section 6 with an outline of our work.
 
@@ -166,103 +166,103 @@ ConnectedComponent is a graph algorithm that is used to identify the connected c
 The ConnectedComponent workload involves iterating over the graph, identifying the connected components of each node, and merging the components as necessary. The workload is computationally intensive and requires a significant amount of memory to store the graph.
 
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{gcs_linr_h1_native.png}
 	\caption{Number of GCs over time for H1 Linear Regression Native Spark investigation.}
 	\label{fig:gcs_linr_h1_native}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{gcs_linr_h1_th.png}
 	\caption{Number of GCs over time for H1 Linear Regression TeraHeap Spark investigation.}
 	\label{fig:gcs_linr_h1_th}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{gcs_linr_pc_native.png}
 	\caption{Number of GCs over time for Page Cache Linear Regression Native Spark investigation.}
 	\label{fig:gcs_linr_pc_native}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{gcs_linr_pc_th.png}
 	\caption{Number of GCs over time for Page Cache Linear Regression TeraHeap Spark investigation.}
 	\label{fig:gcs_linr_pc_th}
 \end{figure*}
 \iffalse
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{gcs_pr_h1_th.png}
 	\caption{Number of GCs over time for H1 Page Rank TeraHeap Spark investigation.}
 	\label{fig:gcs_pr_h1_th}
 \end{figure*}
 \fi
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{linr_h1_native.png}
 	\caption{Execution time breakdown for H1 Linear Regression Native Spark investigation.}
 	\label{fig:linr_h1_native}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{linr_h1_th.png}
 	\caption{Execution time breakdown for H1 Linear Regression TeraHeap Spark investigation.}
 	\label{fig:linr_h1_th}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{linr_pc_native.png}
 	\caption{Execution time breakdown for Page Cache Linear Regression Native Spark investigation.}
 	\label{fig:linr_pc_native}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{linr_pc_th.png}
 	\caption{Execution time breakdown for Page Cache Linear Regression TeraHeap Spark investigation.}
 	\label{fig:linr_pc_th}
 \end{figure*}
 \iffalse
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{pr_h1_th.png}
 	\caption{Execution time breakdown for H1 Page Rank TeraHeap Spark investigation.}
 	\label{fig:pr_h1_th}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{pr_pc_th.png}
 	\caption{Execution time breakdown for PageCache Page Rank TeraHeap Spark investigation.}
 	\label{fig:pr_pc_th}
 \end{figure*}
 \fi
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{rw_linr_h1_native.png}
 	\caption{Read-Write traffic over time for H1 Linear Regression Native Spark investigation.}
 	\label{fig:rw_linr_h1_native}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{rw_linr_h1_th.png}
 	\caption{Read-Write traffic over time for H1 Linear Regression TeraHeap Spark investigation.}
 	\label{fig:rw_linr_h1_th}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{rw_linr_pc_native.png}
 	\caption{Read-Write traffic over time for PageCache Linear Regression Native Spark investigation.}
 	\label{fig:rw_linr_pc_native}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{rw_linr_pc_th.png}
 	\caption{Read-Write traffic over time for PageCache Linear Regression TeraHeap Spark investigation.}
 	\label{fig:rw_linr_pc_th}
 \end{figure*}
 \iffalse
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{rw_pr_h1_th.png}
 	\caption{Read-Write traffic over time for H1 Page Rank TeraHeap Spark investigation.}
 	\label{fig:rw_pr_h1_th}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=12cm,height=6cm]{rw_pr_pc_th.png}
 	\caption{Read-Write traffic over time for PageCache Page Rank TeraHeap Spark investigation.}
 	\label{fig:rw_pr_pc_th}
@@ -291,43 +291,46 @@ Concurrent execution also facilitates workload prioritization, allowing organiza
 
 Furthermore, the concurrent execution of Spark workloads supports experimentation and testing. By running workloads concurrently on the same server, comparisons, performance benchmarking, and optimization can be performed in a controlled environment. This concurrent execution environment enables organizations to evaluate and fine-tune Spark applications effectively.
 
+Moreover, concurrent execution of workloads allows users to run workloads along with other users simultaneously. While this is a method that wouldn't be considered correct in order to evaluate something because of the interference of other applications running concurrently, it is something common for the cloud and datacenters where companies-users share the cloud-server.
+
 Scalability is another advantage of concurrent execution. As data volumes and processing demands increase, running multiple workloads concurrently allows for horizontal scalability. Additional Spark worker nodes can be added to accommodate larger workloads or handle additional workloads without the need for significant infrastructure changes. This scalability ensures that the system can handle growing demands while maintaining high performance.
 
 In conclusion, the concurrent execution of multiple Spark workloads on a single server offers significant advantages for performance optimization. It enables optimal resource utilization, workload consolidation, improved throughput, workload prioritization, experimentation, and scalability. By carefully managing resources, workload scheduling, and monitoring, organizations can achieve higher performance, reduce infrastructure costs, and simplify management. This approach provides an effective strategy to maximize the benefits of Spark for big data analytics.
 
 \subsection*{3.8 Is cost a contributing factor to pursuing higher throughput for a server?}
 Renting servers is a common practice for organizations requiring computational resources, and the question arises as to whether reducing the monetary cost is possible by achieving higher throughput and faster workload completion. The relationship between cost reduction and achieving higher throughput on rented servers is indeed significant. By optimizing server performance, efficiently utilizing resources, implementing workload scheduling, and improving productivity, organizations can realize cost savings. Achieving higher throughput and faster workload completion can lead to a reduced rental duration, minimizing the time and associated costs of server usage. Efficient resource utilization and workload scheduling contribute to cost reduction by minimizing the number of servers required and maximizing their utilization. Rental pricing models that take into account resource utilization or data processed can further reduce costs for organizations achieving higher throughput. Additionally, improved productivity resulting from higher throughput and faster workload completion enhances overall efficiency, allowing organizations to accomplish more work within the same rental period and reducing rental expenses. Therefore, pursuing higher throughput and faster workload completion offers tangible benefits in terms of monetary cost reduction for organizations renting servers.
+In order to estimate the cost of our evaluation in real-world public clusters we chose a variety of providers like Amazon, Google and Microsoft. This way we covered the most known providers and platforms someone would choose to run their workloads on. We chose 2 machines from each platform identical to the specifications of our 64 and 256 GB DRAM machines. These are the cheapest machines of that particular category offered by the platform. We then used the platform's pricing calculator to estimate the cost of renting that machine for the time needed for each configuration to finish all instances. The price for renting the device is really amenable to the cost for renting the machine.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{4. Evaluation}
-\begin{figure*}[h!]
+\begin{figure*}[ht]
 	\includegraphics[width=13cm,height=6cm]{lr64.png}
 	\caption{Execution time breakdown for multiple instances of LinearRegression using the 64 GB total DRAM setup. 
 	E.g. 22-28-64-Native 1 indicates the first of the 2-4-8 instances that was run in parallel and uses 22 GB H1 - 28 GB total cgroup DRAM and 64 GB total DRAM for the machine.}
 	\label{fig:lr64}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=13cm,height=6cm]{pr64.png}
 	\caption{Execution time breakdown for multiple instances of PageRank using the 64 GB total DRAM setup. 
 	E.g. 22-28-64-Native 1 indicates the first of the 2-4-8 instances that was run in parallel and uses 22 GB H1 - 28 GB total cgroup DRAM and 64 GB total DRAM for the machine.}
 	\label{fig:pr64}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=13cm,height=6cm]{logr64.png}
 	\caption{Execution time breakdown for multiple instances of Logistic Regression using the 64 GB total DRAM setup. 
 	E.g. 22-28-64-Native 1 indicates the first of the 2-4-8 instances that was run in parallel and uses 22 GB H1 - 28 GB total cgroup DRAM and 64 GB total DRAM for the machine.}
 	\label{fig:logr64}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=13cm,height=6cm]{cc64.png}
 	\caption{Execution time breakdown for multiple instances of Connected Component using the 64 GB total DRAM setup. 
 	E.g. 22-28-64-Native 1 indicates the first of the 2-4-8 instances that was run in parallel and uses 22 GB H1 - 28 GB total cgroup DRAM and 64 GB total DRAM for the machine.}
 	\label{fig:cc64}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=13cm,height=6cm]{pr256.png}
 	\caption{Execution time breakdown for multiple instances of PageRank using the 256 GB total DRAM setup. 
 	E.g. 44-60-256-Native 1 indicates the first of the 2-4-8 instances that was run in parallel and uses 44 GB H1 - 60 GB total cgroup DRAM and 256 GB total DRAM for the machine.}
@@ -355,84 +358,89 @@ By looking at this graph it is clear that Spark suffers by both S/D and GC, but 
 Figure \ref{pr256} shows the performance of multiple Native-TeraHeap Spark instances running PageRank with 32 GB dataset per instance in our 256 GB DRAM machine. Each instance of Spark uses one executor with 8 cores per executor. Available DRAM is 240 GB and 16 GB are left to the Operating system, resulting in 256 GB total DRAM. Starting from the left of the graph, the first 4 bars show the performance of Native Spark with each instance using 44 GB DRAM for H1 (Java Heap) and 16 GB for JVM Native memory and I/O cache resulting in a total of 60 GB DRAM per instance and utilizing 240 of 256 GB total DRAM. The next 6 bars show the performance of Native Spark with each instance using 32 GB DRAM for H1 (Java Heap) and 8 GB for JVM Native memory and I/O cache resulting in a total of 40 GB DRAM per instance and utilizing 240 of 240 GB total available DRAM. The next 7 bars show the performance of Native Spark with each instance using 27 GB DRAM for H1 (Java Heap) and 7 GB for JVM Native memory and I/O cache resuting in a total of 34 GB DRAM per instance and utilizing 240 of 240 GB total available DRAM. The next 7 bars show the performance of TeraHeap Spark with each instance using 27 GB DRAM for H1 (Java Heap) and 7 GB for JVM Native memory and I/O cache resuting in a total of 34 GB DRAM per instance and utilizing 240 of 240 GB total available DRAM. The last 7 bars show the performance of Native Spark with each instance using 14 GB DRAM for H1 (Java Heap) and 20 GB for JVM Native memory and I/O cache resuting in a total of 34 GB DRAM per instance and utilizing 240 of 240 total DRAM. By looking at this graph it is clear that Spark suffers by both S/D and GC, but more specifically when it comes to PageRank we witness Major GC to increase dramaticaly as we increase the number of Spark instances running. These overheads are absorbed by TeraHeap.
 Finally someone would prefer to have a bigger heap than I/O cache when running PageRank.
 
-\begin{figure*}[h!]
+\section*{4.2 Is the CPU utilization of the server incresing accordingly to throughput?}
+
+\begin{figure*}[ht]
         \includegraphics[width=13cm,height=6cm]{PR_64_THR.png}
-	\caption{Page Rank 64 GB DRAM setup Native and TeraHeap throughput as the number of instances increases.}
+	\caption{Page Rank 64 GB DRAM setup Native and TeraHeap throughput as the number of instances increases. Configurations starting with N denote a run with Native instances of Spark and with T with TeraHeap. H1 is a run with the memory budget configured to contain a bigger size for H1 than PageCache and PC the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap instances with exactly the same configuration.}
 	\label{fig:pr_64_thr}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=13cm,height=6cm]{LINR_64_THR.png}
-	\caption{Linear Regression 64 GB DRAM setup Native and TeraHeap throughput as the number of instances increases.}
+	\caption{Linear Regression 64 GB DRAM setup Native and TeraHeap throughput as the number of instances increases. Configurations starting with N denote a run with Native instances of Spark and with T with TeraHeap. H1 is a run with the memory budget configured to contain a bigger size for H1 than PageCache and PC the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap instances with exactly the same configuration.}
 	\label{fig:linr_64_thr}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=13cm,height=6cm]{LOGR_64_THR.png}
-	\caption{Logistic Regression 64 GB DRAM setup Native and TeraHeap throughput as the number of instances increases.}
+	\caption{Logistic Regression 64 GB DRAM setup Native and TeraHeap throughput as the number of instances increases. Configurations starting with N denote a run with Native instances of Spark and with T with TeraHeap. H1 is a run with the memory budget configured to contain a bigger size for H1 than PageCache and PC the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap instances with exactly the same configuration.}
 	\label{fig:logr_64_thr}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=13cm,height=6cm]{CC_64_THR.png}
-	\caption{Connected Component 64 GB DRAM setup Native and TeraHeap throughput as the number of instances increases.}
+	\caption{Connected Component 64 GB DRAM setup Native and TeraHeap throughput as the number of instances increases.Configurations starting with N denote a run with Native instances of Spark and with T with TeraHeap. H1 is a run with the memory budget configured to contain a bigger size for H1 than PageCache and PC the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap instances with exactly the same configuration. }
 	\label{fig:cc_64_thr}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=13cm,height=6cm]{PR_64_IDLE.png}
-	\caption{Page Rank 64 GB DRAM setup Native and TeraHeap idle CPU as the number of instances increases.}
+	\caption{Page Rank 64 GB DRAM setup Native and TeraHeap idle CPU as the number of instances increases. Configurations starting with N denote a run with Native instances of Spark and with T with TeraHeap. H1 is a run with the memory budget configured to contain a bigger size for H1 than PageCache and PC the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap instances with exactly the same configuration.}
 	\label{fig:pr_64_idle}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=13cm,height=6cm]{LINR_64.png}
-	\caption{Linear Regression 64 GB DRAM setup Native and TeraHeap idle CPU as the number of instances increases.}
+	\caption{Linear Regression 64 GB DRAM setup Native and TeraHeap idle CPU as the number of instances increases. Configurations starting with N denote a run with Native instances of Spark and with T with TeraHeap. H1 is a run with the memory budget configured to contain a bigger size for H1 than PageCache and PC the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap instances with exactly the same configuration.}
 	\label{fig:linr_64_idle}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=13cm,height=6cm]{LOGR_64.png}
-	\caption{Logistic Regression 64 GB DRAM setup Native and TeraHeap idle CPU as the number of instances increases.}
+	\caption{Logistic Regression 64 GB DRAM setup Native and TeraHeap idle CPU as the number of instances increases. Configurations starting with N denote a run with Native instances of Spark and with T with TeraHeap. H1 is a run with the memory budget configured to contain a bigger size for H1 than PageCache and PC the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap instances with exactly the same configuration.}
 	\label{fig:logr_64_idle}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=13cm,height=6cm]{CC_64.png}
-	\caption{Connected Component 64 GB DRAM setup Native and TeraHeap idle CPU as the number of instances increases.}
+	\caption{Connected Component 64 GB DRAM setup Native and TeraHeap idle CPU as the number of instances increases. Configurations starting with N denote a run with Native instances of Spark and with T with TeraHeap. H1 is a run with the memory budget configured to contain a bigger size for H1 than PageCache and PC the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap instances with exactly the same configuration.}
 	\label{fig:cc_64_idle}
 \end{figure*}
 
 By looking at figures \ref{fig:pr_64_thr}, \ref{fig:linr_64_thr}, \ref{fig:logr_64_thr} and \ref{fig:cc_64_thr} we see that Native Spark's throughput decreases as the number of colocated instances-executors increase in the server. The main goal for colocating tasks is to increase the CPU utilization and achieve better throughput as effectively as possible as if running each instance isolated. While Native Spark fails to provide scalability, TH Spark achieves nearly double the throughput of Native Spark and is also able to scale beyond 4 instances.
 
 Figures \ref{fig:pr_64_idle}, \ref{fig:linr_64_idle}, \ref{fig:logr_64_idle} and \ref{fig:cc_64_idle}  show the percentage of idle CPU while the number of colocated instances grows. CPU idle should decrease in this particular concept and that is something proven in the figure. In PageRank graph we notice TeraHeap with 2 instances achieving less idle CPU percentage than Native Spark with 4 instances.
-\begin{figure*}[h!]
+
+\section*{4.3 Detailed synopsis of multi-instances evaluation. What happens with monetary cost across different cloud platforms?}
+
+\begin{figure*}[ht]
         \includegraphics[width=18cm,height=5cm]{pr_table.png}
-	\caption{Page Rank synopsis table.}
+	\caption{Page Rank synopsis table. Configurations starting with N denote a run with Native instances of Spark and with T with TeraHeap. H1 is a run with the memory budget configured to contain a bigger size for H1 than PageCache and PC the opposite.}
 	\label{fig:pr_table}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=20cm,height=10cm]{linr_table.png}
-	\caption{Linear Regression synopsis table.}
+	\caption{Linear Regression synopsis table. Configurations starting with N denote a run with Native instances of Spark and with T with TeraHeap. H1 is a run with the memory budget configured to contain a bigger size for H1 than PageCache and PC the opposite.}
 	\label{fig:linr_table}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=20cm,height=10cm]{logr_table.png}
-	\caption{Logistic Regression synopsis table.}
+	\caption{Logistic Regression synopsis table. Configurations starting with N denote a run with Native instances of Spark and with T with TeraHeap. H1 is a run with the memory budget configured to contain a bigger size for H1 than PageCache and PC the opposite.}
 	\label{fig:logr_table}
 \end{figure*}
 
-\begin{figure*}[h!]
+\begin{figure*}[ht]
         \includegraphics[width=20cm,height=10cm]{cc_table.png}
-	\caption{Connected Component synopsis table.}
+	\caption{Connected Component synopsis table. Configurations starting with N denote a run with Native instances of Spark and with T with TeraHeap. H1 is a run with the memory budget configured to contain a bigger size for H1 than PageCache and PC the opposite. }
 	\label{fig:cc_table}
 \end{figure*}
 
 
 Tables \ref{fig:pr_table}, \ref{fig:linr_table}, \ref{fig:logr_table} and \ref{fig:cc_table} show a detailed synopsis of the performance and AWS, GCP and Azure costs of deploying multiple instances of Spark using both techniques. Each setup is run using 2 different amounts for H1 (80 and 40\%). While the number of instances increases TeraHeap appears to maintain throughput while Native Spark has significant throughput decrease. In several occassions, if we compare Native's to TeraHeap's throughput we notice TeraHeap having more than 100\% increase compared to Native. In PageRank's 64 DB DRAM setup TeraHeap manages to scale to 8 instances while Native Spark runs out of memory. Furthermore when looking at the PageRank table it becomes clear that TeraHeap achieves a higher CPU utilization, because of the S/D elimination and less I/O. Despite TeraHeap's better performance, the total time taken for all instances to complete surpasses the time it would take to run the same number of single isolated instances one after the other. This means that in order to achieve better performance we would need a scheduling policy to decide H1 and PageCache amount for each workload running. This is something discussed in the next section.
-
+Moreover, regarding the monetary cost across different cloud platforms such as AWS EC2 (Amazon Web Services Cloud), Google Cloud Platform (GCP) and Microsoft Azure, we witness that all providers offer a similar cost for identical machines. As seen by the tables, taking into account that we have an hourly cost, TeraHeap seems to be the obvious choice for running Spark workloads and save money, because it is able to offer more scalability to the user by freeing memory in order to increase CPU utilization and increase throuput. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{5. Future Work}
 
