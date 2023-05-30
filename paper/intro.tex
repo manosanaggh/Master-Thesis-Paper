@@ -1,0 +1,74 @@
+\section{Introduction}
+\label{sec:intro}
+
+With the exponential growth of data in various fields such as finance,
+healthcare, social media, and e-commerce, there is a significant need
+for scalable and efficient big data processing frameworks. Apache
+Spark \cite{Spark} is one such framework that has gained popularity
+due to its ability to handle large-scale data processing and
+analytics. Spark provides a distributed computing platform that can
+process data in parallel across multiple nodes in a cluster. However,
+with the increasing size and complexity of big data workloads, Spark
+clusters are facing significant challenges in meeting the performance
+and throughput requirements.
+
+One of the main challenges in Spark clusters is the high computational
+and memory requirements of big data analytics workloads. These
+requirements can result in excessive CPU and memory usage on Spark
+workers, leading to performance bottlenecks and slow job completion
+times. To address these challenges, researchers have proposed various
+techniques to optimize the performance of Spark clusters, including
+data partitioning, caching, and resource allocation.
+
+In this paper, we focus on the memory limit problem of servers
+becoming an obstacle for further throughput increase and we propose a
+new technique for improving the performance and job throughput of
+Spark clusters by moving long-lived objects from the main managed Java
+Heap to a fast storage device such as NVMe, thereby saving memory for
+other more useful tasks and leaving space for more CPU utilization.
+Our approach leverages the capabilities of the underlying machine to
+create less memory-consuming computation tasks, thereby reducing the
+workload on the Spark workers, while maintaining effective
+per-executor performance under the colocation of multiple executors
+required to achieve max throughput.
+
+Specifically, in order to achieve higher throughput and better
+performance for Spark, we use TeraHeap, a secondary managed
+memory-mapped heap over an NVMe storage device, which is used to hold
+the Resilient Distributed Datasets (Spark RDDs) instead of the main
+managed Java Heap and completely remove any
+Serialization/Deserialization and Garbage Collection (GC) cost over
+them.
+
+TeraHeap 1) eliminates Serialization/Deserialization overheads posed
+by this kind of frameworks when moving data off-heap to/from fast
+storage devices 2) eliminates GC pauses over the secondary heap,
+therefore significantly minimizing overall GC overhead. By offloading
+the managed Java Heap and relaxing computation-intensive tasks, we aim
+to reduce the workload on Spark workers, thereby improving their
+performance and job throughput. We also explore the trade-offs between
+the cost of offloading and the performance gains achieved.
+
+We demonstrate the effectiveness of our approach using various big
+data analytics workloads on a real-world Spark cluster. We also
+compare our approach with the native Spark distribution and show that
+our approach can be used instead of this distribution to improve
+performance and server throughput.
+
+The paper makes the following contributions 1) A comprehensive
+evaluation of the performance and cost trade-offs of our proposed heap
+offloading technique, that utilizes fast storage devices to improve
+server throughput for Apache Spark, against Native Spark. 2) A
+detailed methodology for running Apache Spark and understanding how to
+use it for conducting off-heap experiments using the Native Spark or
+TeraHeap 3) Proves that heap offloading to fast storage devices is a
+significant research direction.
+
+The rest of the paper is organized as follows. In section 2 we discuss
+related work on Spark optimization techniques and offloading
+techniques. In section 3, we describe our experimental methodology in
+order for someone to achieve the desired performance using TeraHeap.
+In section 4, we present our experimental results and evaluate the
+performance and cost trade-offs of our approach. In section 5, we
+discuss future research directions. Finally we conclude the paper in
+section 6 with an outline of our work.

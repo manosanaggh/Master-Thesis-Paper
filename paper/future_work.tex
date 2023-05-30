@@ -1,0 +1,38 @@
+\section{Future Work}
+
+While our proposed offloading technique shows promising results in
+improving job throughput for big data analytics workloads on Spark
+clusters, there are several avenues for future work to further improve
+the performance and scalability of Spark clusters. 
+
+Firstly, one potential direction for future work is to investigate the
+use of other types of storage mediums such as the hybrid NVM. This
+medium could improve the performance of Big data analytics further by
+combining the advantages of memory and storage.
+
+Secondly, another area for future work is to develop techniques for
+dynamically adjusting the heap offloading decisions based on workload
+characteristics and resource availability. For example, the offloading
+decision can be based on the size of the input data or the
+availability of DRAM capacity in the cluster. Such techniques can help
+maximize the performance gains achieved by offloading while minimizing
+the cost of offloading.
+
+Thirdly, an interesting direction for future work is to explore the
+use of heap offloading in environments where Spark clusters are
+deployed across multiple machines using RDMA to achieve communication
+between the different machines. This can help utilize the DRAM, CPU
+and storage availability in more than one machine and provide a more
+cost-effective solution for big data processing.
+
+Finally, another potential area for future work is to investigate the
+use of heap offloading for other big data processing frameworks beyond
+Spark. Many other big data processing frameworks such as Apache Giraph
+can potentially benefit from offloading techniques to improve their
+performance and scalability.
+
+Overall, there are many exciting avenues for future work in improving
+the performance and scalability of big data processing frameworks such
+as Spark. Our proposed offloading technique provides a solid
+foundation for future work and offers a promising approach for
+addressing the challenges of big data processing.

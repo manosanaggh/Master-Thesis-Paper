@@ -1,0 +1,42 @@
+### TeX ###
+## Core latex/pdflatex auxiliary files:
+*.cut
+*.swp
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.pdf
+*.pid
+*.fdb 
+*.fls 
+*.nav 
+*.snm 
+*.toc 
+*.lof
+*.fdb_latexmk
+.vscode/
+
+### Editor ###
+## Vim temp files:
+.*sw[op]
+
+## Related  Work files:
+related_work/
+related
+
+## Syncting files:
+*.synctex.*
+
+## Python intermediate files
+*.pyc
+
+## Excel tmp open files
+*.xlsx#
+.~lock.*
+
+.DS_Store
+evince.pid
+raw/drawio/.$canvas.drawio.bkp
+
