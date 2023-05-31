@@ -1,27 +1,44 @@
 \section{Related Work}
 
+\note{jk: Try to categorize the related work and add citations using
+"cite\{\} command". Try to use the name of the system in each paper
+and not authors name. When you discuss the work in each category try
+to show paper in chronological order.}
+
 Several studies have been conducted to improve the performance of big
 data processing systems. One approach is to utilize memory-aware task
 co-location to improve Spark application throughput, which has been
-investigated by Marco et al. in [3]. Meanwhile, in [4], Kirisame et
-al. proposed optimal heap limits to reduce browser memory use. Another
+investigated by Marco et al. in [3]. \note{jk: Provide more detail
+about their technique} 
+Meanwhile, in [4], Kirisame et
+al. proposed optimal heap limits to reduce browser memory use.
+\note{jk: Again add more details.} Another
 research direction is to leverage far memory to improve job
-throughput, as studied by Amaro et al. in [5]. To facilitate memory
+throughput, as studied by Amaro et al. in [5]. \note{jk: How this work
+is different for the Marco et al. work.}
+To facilitate memory
 offloading in datacenters, Weiner et al. presented TMO, a transparent
-memory offloading system in [6]. In cloud computing platforms, Sharma
+memory offloading system in [6] \note{jk: what they do. Give more
+details. now is like shopping list}. In cloud computing platforms, Sharma
 et al. proposed per-VM page cache partitioning to improve performance
 in [7]. Chen and Wang introduced Spark on Entropy, a reliable and
 efficient scheduler for low-latency parallel jobs in heterogeneous
 clouds, in [8]. Thamsen et al. developed Mary, Hugo, and Hugo*, three
 learning-based schedulers for distributed data-parallel processing
-jobs on shared clusters in [9]. Additionally, Bhimani et al. proposed
+jobs on shared clusters in [9] \note{jk: is this related of what we
+are doing? Maybe yes but you need to provide more context}. Additionally, Bhimani et al. proposed
 a lightweight virtualization framework for accelerating big data
 applications on enterprise cloud in [10], while Zhang et al. focused
 on understanding and improving disk-based intermediate data caching in
 Spark in [11]. Finally, Intasorn et al. investigated using compression
 tables to improve HiveQL performance with Spark in a case study on
 NVMe storage devices in [12]. 
-
+ 
+\note{I thin this paragraph does not help. It sounds like the previous
+study make a big effort and provide analysis. So, I guess, why do I
+need to read this paper? What is the new that I will learn. Can we
+show the open research questions/problems that the previous studies do
+not target?}
 These studies demonstrate a variety of approaches for optimizing big
 data processing systems, ranging from memory-aware task co-location
 and memory offloading to scheduler design and virtualization
