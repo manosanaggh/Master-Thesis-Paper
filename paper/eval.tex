@@ -8,7 +8,7 @@
     22-28-64-Native 1 indicates the first of the 2-4-8 instances that
     was run in parallel and uses 22 GB H1 - 28 GB total cgroup DRAM
     and 64 GB total DRAM for the machine.}
-	\label{fig:lr64}
+	\label{fig:linr64}
 \end{figure*}
 
 \begin{figure*}[ht]
@@ -151,7 +151,7 @@ absorbed by TeraHeap. TeraHeap also scales to 8 instances while Native
 can't because it runs out of memory. Finally someone would prefer to
 have a bigger heap than I/O cache when running PageRank.
 
-Figure \ref{logr64} shows the performance of multiple Native-TeraHeap
+Figure \ref{fig:logr64} shows the performance of multiple Native-TeraHeap
 Spark instances running LogisticRegression with 8 GB dataset per
 instance in our 64 GB DRAM machine. Each instance of Spark uses one
 executor with 8 cores per executor. Available DRAM is 56 GB and 8 GB
@@ -194,7 +194,7 @@ running. These overheads are absorbed by TeraHeap. Finally someone
 would prefer to have a bigger heap than I/O cache when running
 LogisticRegression.
 
-Figure \ref{cc64} shows the performance of multiple Native-TeraHeap
+Figure \ref{fig:cc64} shows the performance of multiple Native-TeraHeap
 Spark instances running ConnectedComponent with 8 GB dataset per
 instance in our 64 GB DRAM machine. Each instance of Spark uses one
 executor with 8 cores per executor. Available DRAM is 56 GB and 8 GB
@@ -233,7 +233,7 @@ running. These overheads are absorbed by TeraHeap. Finally someone
 would prefer to have a bigger heap than I/O cache when running
 ConnectedComponent.
 
-Figure \ref{pr256} shows the performance of multiple Native-TeraHeap
+Figure \ref{fig:pr256} shows the performance of multiple Native-TeraHeap
 Spark instances running PageRank with 32 GB dataset per instance in
 our 256 GB DRAM machine. Each instance of Spark uses one executor with
 8 cores per executor. Available DRAM is 240 GB and 16 GB are left to

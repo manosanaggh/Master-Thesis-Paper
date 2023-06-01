@@ -3,41 +3,40 @@
 
 With the exponential growth of data in various fields such as finance,
 healthcare, social media, and e-commerce, there is a significant need
-for scalable and efficient big data processing frameworks. 
+for more and more system memory from big data analytics frameworks 
+such as Apache Spark \cite{Spark} and Apache Giraph. 
 \note{jk: Add citations}
-Apache
-Spark \cite{Spark} is a framework that has gained popularity
-due to its ability to handle large-scale data processing and
-analytics. Spark provides a distributed computing platform that can
-process data in parallel across multiple nodes in a cluster. However,
-with the increasing size and complexity of big data workloads, Spark
-clusters are facing significant challenges in meeting the performance
-and throughput requirements. \note{jk: I do not understand this
+The memory pressure that arises when using these kind of frameworks comes from
+long Garbage Collection cycles performed by the Java Virtual Machine.
+\note{jk: I do not understand this
 paragraph. What is the problem. The  data or the Spark? The first
 sentence of each paragraph provides the context of the paragraph.}
 
-One of the main challenges in Spark clusters \note{jk: is not only in
-Spark clusters. We do not write a Spark paper. Giraph or Neo4j also
-face memory pressure issues} is the high computational
-and memory requirements of big data analytics workloads. \note{Explain
-in more precise way the computational needs e.g. caching.} These
-requirements can result in excessive CPU and memory usage on Spark
-workers, leading to performance bottlenecks and slow job completion
+%One of the main challenges in Spark clusters \note{jk: is not only in
+%Spark clusters. We do not write a Spark paper. Giraph or Neo4j also
+%face memory pressure issues} is the high computational
+%and memory requirements of big data analytics workloads. \note{Explain
+%in more precise way the computational needs e.g. caching.} 
+This requirement can result in excessive CPU under-utilization, 
+leading to performance bottlenecks and slow job completion
 times. To address these challenges, researchers have proposed various
 techniques \note{jk: add citations} to optimize the performance of Spark clusters, including
 data partitioning, caching, and resource allocation.
 
 \note{jk: explain why you only focus on the memory limit}
 In this paper, we focus on the memory limit problem of servers
-becoming an obstacle for further throughput increase and we propose a
-new technique \note{jk: you do not propose a tecnique. You make
-evaluation} for improving the performance and job throughput of
-Spark clusters by moving long-lived objects from the main managed Java
-Heap to a fast storage device such as NVMe, thereby saving memory for
+becoming an obstacle for further throughput increase by not
+allowing applications to furthe utlize the CPU. We conduct an
+analysis \note{jk: DONE you do not propose a tecnique. You make
+evaluation} of the performance of big data analytics using a smart
+heap offloading technique to fast storage devices.
+This offloading technique reduces memory pressure by
+moving long-lived objects from the main managed Java
+Heap to a fast storage device such as NVMe. Doing that it saves memory for
 other more useful tasks and leaving space for more CPU utilization.
 Our approach leverages the capabilities of the underlying machine to
 create less memory-consuming computation tasks, thereby reducing the
-workload on the Spark workers, while maintaining effective
+workload on the Spark workers. Along with that it maintains effective
 per-executor performance under the colocation of multiple executors
 required to achieve max throughput. \note{jk: Please use smaller
 sentences.}

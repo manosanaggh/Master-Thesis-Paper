@@ -1,29 +1,35 @@
 \begin{abstract}
 
-    Managing big data analytics i.e. Apache Spark poses challenges due to
-    limited memory resources in data centers.
+    %Managing big data analytics i.e. Apache Spark poses challenges due to
+    %limited memory resources in data centers.
+    Managed big data analytic frameworks require a lot of memory to process
+    large amounts of data.
     %
-    \note{jk: What challenges? (memory, cpu?) This is too abstract.
+    \note{jk: DONE What challenges? (memory, cpu?) This is too abstract.
     You should be precise. For example, Managed big data analytic
     frameworks demand more memory to process large amount of data.}
     %
-    The memory pressure that arises during data processing can result
-    in low server throughput, causing delays and inefficiencies.
+    The memory pressure that arises during data processing %can result
+    %in low server throughput, causing delays and inefficiencies.
+    prevents the frameworks from utilizing the CPU thus leading to
+    low server throughput.
     %
-    \note{jk: why there is memory pressure?} 
-    Memory is wasted in long GC
-    (Garbage Collection) \name{jk: first define the full name and then
+    \note{jk: DONE why there is memory pressure?} 
+    Memory is wasted in long Garbage Collection
+    (GC) \note{jk: DONE first define the full name and then
     the accronym in parenthesis. e.g., garbage collection (GC)} cycles
     leaving no room for useful work. 
     In
-    this paper, we propose a novel approach to improve server
+    this paper, we conduct an analysis of server
     throughput for managed big data analytics using smart heap
-    offloading to fast storage devices and reducing memory pressure.
+    offloading to fast storage devices in order to reduce memory pressure.
     \note{jk: You do not propose a system or a technique that allows
     you to improve system throughtput. You provide an analysis.}
     %
-    Our approach involves offloading data from heap memory to fast
-    storage devices in a smart and efficient manner, thereby freeing
+    We use a framework called TeraHeap that moves objects from the Java
+    managed heap to a secondary heap over a fast storage device%Our approach involves offloading data from heap memory to fast
+    %storage devices in a smart and efficient manner, 
+    thereby freeing
     up heap memory and reducing memory pressure without suffering from
     storage latencies.  \note{jk: This is what TeraHeap does.}
     %
@@ -32,22 +38,24 @@
     %
     We present a
     detailed methodology for running Apache Spark \note{jk: why only
-    Spark? Giraph? Other workloads?} using our proposed
-    mechanism of smart heap offloading, which significantly improves
-    server throughput for managed big data analytics. \note{jk: Why
+    Spark? Giraph? Other workloads?} using TeraHeap, which significantly improves
+    server throughput for managed big data analytics. The methodology includes
+    conducting a research about the needs of Big data analytics when using offheap mechanisms
+    such as the need for Java Heap or for IO Cache, breaking down the execution time and explaining
+    every different metric, provinding results such as server throughput...\note{jk: Why
     your methodology is important. What aspects are you investigate.
     You should write here 2-3 sentences trying to show that you put
-    effort for the methodology}. Our proposed
-    approach is implemented in Oracle's OpenJDK8 and in this paper we
+    effort for the methodology}. TeraHeap is implemented in Oracle's OpenJDK8. In this paper we
     evaluate its performance against Native Spark using various
-    workloads of the Spark Bench suite on a real-world cluster,
-    focusing on examining the performance under the colocation of
-    multiple instances. \note{jk: Please write smaller sentences.} 
-    Our experimental results show that our
-    approach significantly improves server throughput while reducing
+    workloads of the Spark Bench suite on a real-world cluster.
+    Our primary focus is to examine its performance under the colocation of
+    multiple instances. \note{jk: DONE Please write smaller sentences.} 
+    Our experimental results show that reducing memory pressure
+    by offloading the heap to fast storage devices
+    significantly improves server throughput while reducing
     memory usage against native Spark, making it a promising solution
     for managed big data analytics in data centers. We also include
-    results to show that our implementation can reduce money cost if
+    results to show that TeraHeap can reduce monetary cost if
     deployed in a world cluster like Amazon's EC2 or Google Cloud
     Platform or Microsoft Azure Cloud which are available to everyone. 
     \note{jk: Overall comments for the abstract. Abstract should be
