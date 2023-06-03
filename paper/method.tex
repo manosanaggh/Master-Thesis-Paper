@@ -3,11 +3,10 @@
 
 To evaluate the effectiveness of TeraHeap, we conduct a
 set of experiments using various workloads from the Spark Bench suite
+and graphalytics library for Giraph
 on a real-world cluster. Our experimental methodology consists of
-several steps. First, we set up our research server, using various
-configurations of datacenter machines, including CPU, memory, and
-storage. Next, we install and configure Spark and OpenJDK8 on the
-cluster. We use Spark's default configuration settings for our
+several steps. First, we install and configure Spark, Giraph and OpenJDK8 on the
+cluster. We use Spark's-Giraph's default configuration settings for our
 experiments, except for the garbage collector settings, which we tune
 according to the requirements for TeraHeap.
 
@@ -18,12 +17,13 @@ and compare it with the performance of the same
 workload using the default configuration, garbage collector tuning,
 and heap offloading approaches.
 
-We utilize all the available DRAM provided by our server leaving 8-10
-GB for the Operating System, while increasing the number of Spark
+When running multiple colocated instances of a frameowork,
+we utilize all the available DRAM provided by our server leaving 8-10
+GB for the Operating System, while increasing the number of
 instances that are executed. We show that by using TeraHeap, each
 individual instance requires less memory therefore memory becomes
 available for more instances to be deployed, achieving more total
-throughput than Native Spark in similar time windows.
+throughput than Native Spark-Giraph in similar time windows.
 
 To measure the performance of TeraHeap, we use several metrics,
 including server throughput, memory usage, and execution time. We
@@ -44,15 +44,36 @@ methodology, we can evaluate the effectiveness of TeraHeap
 for improving server throughput for managed big data
 analytics.
 
+\begin{table}[t!]
+  \centering
+  \caption{Server Specifications}
+  \label{tab:server-specs}
+  \begin{tabular}{|c|c|}
+    \hline
+    \textbf{Component} & \textbf{Specification} \\
+    \hline
+    Memory & 8x DDR4 32-GB \\
+    CPU & 2x Intel Xeon E5-2630 2.4 GHz \\
+    Cores per CPU & 16 \\
+    NUMA Islands & 2 \\
+    Cores per NUMA island & 16 \\
+    L1 Cache & 512 KB \\
+    L2 Cache & 2 MB \\
+    L3 (LLC) Cache & 20 MB \\
+    Storage & 2x 1.8 TB KVS NVMe \\
+    \hline
+  \end{tabular}
+\end{table}
+
 \subsection{Server Characteristics}
 The server used in our experiments is a high-performance machine with
-hardware specifications found in real-world clusters like Amazon EC2.
+hardware specifications found in real-world clusters.
 It is equipped with 8x DDR4 32-GB 2.4 GHz 64-bit DIMMs, providing a
 total of 256 GB of memory. The DDR4 memory technology is known for its
 high bandwidth and low power consumption, making it ideal for
 data-intensive applications like big data analytics. The server also
-features 32x Intel Xeon E5-2630 2.4 GHz 64-bit CPUs, divided into 2
-NUMA islands, each with 512 KB L1, 2 MB L2, and 20 MB L3 (LLC) cache.
+features 2x Intel Xeon E5-2630 2.4 GHz 16-core 64-bit CPUs, split into 2
+NUMA islands. Each core has 512 KB L1, 2 MB L2, and 20 MB L3 (LLC) cache.
 The Xeon E5-2630 CPU is a high-performance processor designed for data
 centers, offering a high core count, high clock speed, and advanced
 features like hyper-threading and Turbo Boost. The large L3 cache
@@ -76,8 +97,7 @@ Parallel Scavenge is also the go-to collector for applications that
 need high throughput like Spark. We use an executor with eight mutator
 threads for each instance of Spark we deploy on our server. For
 Parallel Scavenge, we use 8 GC Threads for minor GC and the default
-single-threaded old generation GC. Table XXX summarizes the Spark
-configuration we use as baseline. Spark uses the MEMORY-AND-DISK
+single-threaded old generation GC. Spark uses the MEMORY-AND-DISK
 storage level to place executor memory (heap) in DRAM and cache RDDs
 in the on-heap cache, up to 50\% of the total heap size. Any remaining
 RDDs are serialized in the off-heap cache over an NVMe SSD. This
@@ -93,10 +113,13 @@ for H1, 40\% and 80\% of total DRAM budget. 80\% is the go-to
 percentage of total DRAM RedHat uses in its datacenters [?]. What
 remains is used by JVM for Native memory (i.e. CodeCache) and for the
 operating system's Page Cache. In order to avoid inter-NUMA island
-interference we shut down the 16 cores belonging to the second island
+interference, we shut down the 16 cores belonging to the second island
 thus leaving 16 active cores. We also turn off the swapper, because it
 adds significant overhead and makes it difficult to understand the
 results of the experiments conducted.
+
+\subsection{Native Giraph Configuration}
+Empty
 
 \subsection{TeraHeap}
 \subsubsection{What is TeraHeap?}
@@ -107,15 +130,13 @@ in, erase any overhead caused by the use of MMIO. TeraHeap is designed
 as an extension of the main Java Heap. It holds specific long-lived
 objects that have the same lifetime span. This enables TeraHeap to
 operate as a GC-free heap that can delete entire regions of objects at
-once without a need to scan the heap over and over again for dead
-objects, which would be a performance kill as it would require scans
+once without the need to scan the heap over and over again for dead
+objects. This would be a performance kill as it would require scans
 over the storage device. The two main contributions of TeraHeap are
 the following: 1) MMIO keeps the objects that reside in the storage
 device deserialized, thus eliminating the need for
-Serialization/Deserialization, which is the no 1 overhead when running
-MEMORY-AND-DISK Spark 2) As discussed, TeraHeap reduces GC overheads
-without wasting DRAM by avoiding scans on long-lived objects,
-specificaly Spark RDDs.
+Serialization/Deserialization 2) As discussed, TeraHeap reduces GC overheads
+without wasting DRAM by avoiding scans on long-lived objects.
 
 \subsubsection{Spark Configuration}
 The configuration for TeraHeap is pretty much the same as for Native
@@ -123,12 +144,15 @@ Spark, with some necessary differences to achieve our goal. TeraHeap
 is mapped to a different storage device (NVMe) than that Spark is
 using for shuffling. We do this in order for TeraHeap to utilize its
 device to its fullest. MMIO allows TeraHeap Spark to run in
-MEMORY-ONLY storage level as Spark is unaware of using any device and
+MEMORY-ONLY storage level as Spark remains unaware of using any device and
 the OS takes control of the I/O. We also make the same decisions for
 the DRAM budget trying different amounts for H1, 40\% and 80\% of
 total DRAM budget. By doing that, we have different configurations
 where H1 dominates PageCache and the reverse showing what the needs of
-Spark applications are. 
+different Spark applications are. 
+
+\subsubsection{Giraph Configuration}
+Empty
 
 \subsection{What workloads did we choose to use for our experiments and why?}
 For our experiments, we selected four specific workloads from two
@@ -199,124 +223,124 @@ intensive and requires a significant amount of memory to store the
 graph.
 
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/gcs_linr_h1_native.png}
     \caption{Number of GCs over time for H1 Linear Regression Native
     Spark investigation.}
     \label{fig:gcs_linr_h1_native}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/gcs_linr_h1_th.png}
     \caption{Number of GCs over time for H1 Linear Regression TeraHeap
     Spark investigation.}
     \label{fig:gcs_linr_h1_th}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/gcs_linr_pc_native.png}
     \caption{Number of GCs over time for Page Cache Linear Regression
     Native Spark investigation.}
     \label{fig:gcs_linr_pc_native}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/gcs_linr_pc_th.png}
     \caption{Number of GCs over time for Page Cache Linear Regression
     TeraHeap Spark investigation.}
     \label{fig:gcs_linr_pc_th}
 \end{figure*}
 \iffalse
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/gcs_pr_h1_th.png}
     \caption{Number of GCs over time for H1 Page Rank TeraHeap Spark
     investigation.}
     \label{fig:gcs_pr_h1_th}
 \end{figure*}
 \fi
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/linr_h1_native.png}
     \caption{Execution time breakdown for H1 Linear Regression Native
     Spark investigation.}
     \label{fig:linr_h1_native}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/linr_h1_th.png}
     \caption{Execution time breakdown for H1 Linear Regression
     TeraHeap Spark investigation.}
     \label{fig:linr_h1_th}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/linr_pc_native.png}
     \caption{Execution time breakdown for Page Cache Linear Regression
     Native Spark investigation.}
     \label{fig:linr_pc_native}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/linr_pc_th.png}
     \caption{Execution time breakdown for Page Cache Linear Regression TeraHeap Spark investigation.}
     \label{fig:linr_pc_th}
 \end{figure*}
-\iffalse
-\begin{figure*}[ht]
+
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/pr_h1_th.png}
     \caption{Execution time breakdown for H1 Page Rank TeraHeap Spark
     investigation.} 
     \label{fig:pr_h1_th}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/pr_pc_th.png}
     \caption{Execution time breakdown for PageCache Page Rank TeraHeap
     Spark investigation.}
     \label{fig:pr_pc_th}
 \end{figure*}
-\fi
-\begin{figure*}[ht]
+
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/rw_linr_h1_native.png}
     \caption{Read-Write traffic over time for H1 Linear Regression
     Native Spark investigation.}
     \label{fig:rw_linr_h1_native}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/rw_linr_h1_th.png}
     \caption{Read-Write traffic over time for H1 Linear Regression
     TeraHeap Spark investigation.}
     \label{fig:rw_linr_h1_th}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/rw_linr_pc_native.png}
     \caption{Read-Write traffic over time for PageCache Linear
     Regression Native Spark investigation.}
     \label{fig:rw_linr_pc_native}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/rw_linr_pc_th.png}
     \caption{Read-Write traffic over time for PageCache Linear
     Regression TeraHeap Spark investigation.}
     \label{fig:rw_linr_pc_th}
 \end{figure*}
-\iffalse
-\begin{figure*}[ht]
+
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/rw_pr_h1_th.png}
     \caption{Read-Write traffic over time for H1 Page Rank TeraHeap
     Spark investigation.}
     \label{fig:rw_pr_h1_th}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/rw_pr_pc_th.png}
     \caption{Read-Write traffic over time for PageCache Page Rank
     TeraHeap Spark investigation.}
     \label{fig:rw_pr_pc_th}
 \end{figure*}
-\fi
+
 
 \subsection{Is Spark in need of Java Heap or more cache for I/O?}
 
@@ -350,7 +374,7 @@ and investigate how the workloads perform. At first we investigate the
 performance of TeraHeap Spark regarding these two parameters. Our
 machine uses 256 GB total DRAM and 16 single-NUMA island CPUs.
 
-\iffalse
+
 Figure 1 shows performance of single-instance TeraHeap Spark
 running PageRank with adjustable size for H1 while PageCache is kept
 steady at 16 GB. This graph shows that decreasing the size of H1
@@ -362,7 +386,7 @@ for PageCache while H1 is kept steady at 44 GB. This graph shows that
 decreasing the size of PageCache indicates no changes to other time.
 Figure 4 justifies these claims by showing the obvious decrease of the
 number of minor gcs.
-\fi 
+ 
 
 Figure \ref{fig:linr_h1_native} shows performance of single-instance
 Native Spark running LinearRegression with adjustable size for H1
@@ -426,15 +450,13 @@ system behavior. By considering a range of metrics, one can get a more
 accurate and comprehensive view of the performance of Spark instances.
 
 \subsection{Why would someone choose to run the workloads
-concurrently and not one by one?} The efficient execution of Spark
-workloads is essential for maximizing performance and resource
-utilization in big data analytics. To address this, the concurrent
-execution of multiple Spark workloads on a single server has emerged
+concurrently and not one by one?} The concurrent
+execution of multiple workloads on a single server has emerged
 as a strategy to improve efficiency and productivity. This section
-aims to explore the reasons why running multiple Spark workloads
+aims to explore the reasons why running multiple workloads
 concurrently offers significant advantages over sequential execution.
 
-Concurrent execution of Spark workloads provides several benefits.
+Concurrent execution of workloads provides several benefits.
 Firstly, it enables optimal resource utilization by effectively
 leveraging the available hardware resources, including CPUs, memory,
 and storage. Rather than leaving server resources idle between
@@ -461,12 +483,12 @@ and processed in a timely manner. This flexibility in resource
 allocation and workload prioritization ensures efficient utilization
 of available resources and improves overall performance.
 
-Furthermore, the concurrent execution of Spark workloads supports
+Furthermore, the concurrent execution of workloads supports
 experimentation and testing. By running workloads concurrently on the
 same server, comparisons, performance benchmarking, and optimization
 can be performed in a controlled environment. This concurrent
 execution environment enables organizations to evaluate and fine-tune
-Spark applications effectively.
+applications effectively.
 
 Moreover, concurrent execution of workloads allows users to run
 workloads along with other users simultaneously. While this is a
@@ -477,21 +499,19 @@ where companies-users share the cloud-server.
 
 Scalability is another advantage of concurrent execution. As data
 volumes and processing demands increase, running multiple workloads
-concurrently allows for horizontal scalability. Additional Spark
+concurrently allows for horizontal scalability. Additional 
 worker nodes can be added to accommodate larger workloads or handle
 additional workloads without the need for significant infrastructure
 changes. This scalability ensures that the system can handle growing
 demands while maintaining high performance.
 
-In conclusion, the concurrent execution of multiple Spark workloads on
+In conclusion, the concurrent execution of multiple workloads on
 a single server offers significant advantages for performance
 optimization. It enables optimal resource utilization, workload
 consolidation, improved throughput, workload prioritization,
 experimentation, and scalability. By carefully managing resources,
 workload scheduling, and monitoring, organizations can achieve higher
 performance, reduce infrastructure costs, and simplify management.
-This approach provides an effective strategy to maximize the benefits
-of Spark for big data analytics.
 
 \subsection{Is cost a contributing factor to pursuing higher
 throughput for a server?}
@@ -515,8 +535,8 @@ workload completion enhances overall efficiency, allowing
 organizations to accomplish more work within the same rental period
 and reducing rental expenses. Therefore, pursuing higher throughput
 and faster workload completion offers tangible benefits in terms of
-monetary cost reduction for organizations renting servers. In order to
-estimate the cost of our evaluation in real-world public clusters we
+monetary cost reduction for organizations renting servers. 
+\par In order to estimate the cost of our evaluation in real-world public clusters we
 chose a variety of providers like Amazon, Google and Microsoft. This
 way we covered the most known providers and platforms someone would
 choose to run their workloads on. We chose 2 machines from each
@@ -524,6 +544,5 @@ platform identical to the specifications of our 64 and 256 GB DRAM
 machines. These are the cheapest machines of that particular category
 offered by the platform. We then used the platform's pricing
 calculator to estimate the cost of renting that machine for the time
-needed for each configuration to finish all instances. The price for
-renting the device is really amenable to the cost for renting the
-machine.
+needed for each configuration to finish execution of all instances. Finally, we noticed that the price for
+renting the storage device is really amenable to the cost for renting the machine.

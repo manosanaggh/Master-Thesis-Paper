@@ -1,8 +1,8 @@
 \section{Evaluation}
 \label{sec:eval}
 
-\begin{figure*}[ht]
-	\includegraphics[width=13cm,height=6cm]{./fig/lr64.png}
+\begin{figure*}[ht!]
+	\includegraphics[width=13cm,height=6cm]{./fig/linr64.png}
     \caption{Execution time breakdown for multiple instances of
     LinearRegression using the 64 GB total DRAM setup. E.g.
     22-28-64-Native 1 indicates the first of the 2-4-8 instances that
@@ -11,7 +11,7 @@
 	\label{fig:linr64}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
         \includegraphics[width=13cm,height=6cm]{./fig/pr64.png}
     \caption{Execution time breakdown for multiple instances of
     PageRank using the 64 GB total DRAM setup. E.g. 22-28-64-Native 1
@@ -21,7 +21,7 @@
 	\label{fig:pr64}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
         \includegraphics[width=13cm,height=6cm]{./fig/logr64.png}
     \caption{Execution time breakdown for multiple instances of
     Logistic Regression using the 64 GB total DRAM setup. E.g.
@@ -31,7 +31,7 @@
 	\label{fig:logr64}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
         \includegraphics[width=13cm,height=6cm]{./fig/cc64.png}
     \caption{Execution time breakdown for multiple instances of
     Connected Component using the 64 GB total DRAM setup. E.g.
@@ -41,7 +41,7 @@
 	\label{fig:cc64}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
         \includegraphics[width=13cm,height=6cm]{./fig/pr256.png}
     \caption{Execution time breakdown for multiple instances of
     PageRank using the 256 GB total DRAM setup. E.g. 44-60-256-Native
@@ -266,7 +266,7 @@ cache when running PageRank.
 \subsection{Is the CPU utilization of the server incresing
 accordingly to throughput?}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
         \includegraphics[width=13cm,height=6cm]{./fig/PR_64_THR.png}
     \caption{Page Rank 64 GB DRAM setup Native and TeraHeap throughput
     as the number of instances increases. Configurations starting with
@@ -278,7 +278,7 @@ accordingly to throughput?}
 	\label{fig:pr_64_thr}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
         \includegraphics[width=13cm,height=6cm]{./fig/LINR_64_THR.png}
     \caption{Linear Regression 64 GB DRAM setup Native and TeraHeap
     throughput as the number of instances increases. Configurations
@@ -290,7 +290,7 @@ accordingly to throughput?}
 	\label{fig:linr_64_thr}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
         \includegraphics[width=13cm,height=6cm]{./fig/LOGR_64_THR.png}
     \caption{Logistic Regression 64 GB DRAM setup Native and TeraHeap
     throughput as the number of instances increases. Configurations
@@ -302,7 +302,7 @@ accordingly to throughput?}
 	\label{fig:logr_64_thr}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
         \includegraphics[width=13cm,height=6cm]{./fig/CC_64_THR.png}
     \caption{Connected Component 64 GB DRAM setup Native and TeraHeap
     throughput as the number of instances increases.Configurations
@@ -314,7 +314,7 @@ accordingly to throughput?}
 	\label{fig:cc_64_thr}
 \end{figure*}
 
-\begin{figure*}[ht]
+\begin{figure*}[ht!]
         \includegraphics[width=13cm,height=6cm]{./fig/PR_64_IDLE.png}
     \caption{Page Rank 64 GB DRAM setup Native and TeraHeap idle CPU
     as the number of instances increases. Configurations starting with
@@ -326,8 +326,8 @@ accordingly to throughput?}
 	\label{fig:pr_64_idle}
 \end{figure*}
 
-\begin{figure*}[ht]
-        \includegraphics[width=13cm,height=6cm]{./fig/LINR_64.png}
+\begin{figure*}[ht!]
+        \includegraphics[width=13cm,height=6cm]{./fig/LINR_64_IDLE.png}
     \caption{Linear Regression 64 GB DRAM setup Native and TeraHeap
     idle CPU as the number of instances increases. Configurations
     starting with N denote a run with Native instances of Spark and
@@ -338,8 +338,8 @@ accordingly to throughput?}
 	\label{fig:linr_64_idle}
 \end{figure*}
 
-\begin{figure*}[ht]
-        \includegraphics[width=13cm,height=6cm]{./fig/LOGR_64.png}
+\begin{figure*}[ht!]
+        \includegraphics[width=13cm,height=6cm]{./fig/LOGR_64_IDLE.png}
     \caption{Logistic Regression 64 GB DRAM setup Native and TeraHeap
     idle CPU as the number of instances increases. Configurations
     starting with N denote a run with Native instances of Spark and
@@ -350,8 +350,8 @@ accordingly to throughput?}
 	\label{fig:logr_64_idle}
 \end{figure*}
 
-\begin{figure*}[ht]
-        \includegraphics[width=13cm,height=6cm]{./fig/CC_64.png}
+\begin{figure*}[ht!]
+        \includegraphics[width=13cm,height=6cm]{./fig/CC_64_IDLE.png}
     \caption{Connected Component 64 GB DRAM setup Native and TeraHeap
     idle CPU as the number of instances increases. Configurations
     starting with N denote a run with Native instances of Spark and
@@ -383,7 +383,7 @@ instances.
 \subsection{Detailed synopsis of multi-instances evaluation. What
 happens with monetary cost across different cloud platforms?}
 
-\begin{figure*}[ht]
+\begin{figure*}[t!]
         \includegraphics[width=18cm,height=5cm]{./fig/pr_table.png}
     \caption{Page Rank synopsis table. Configurations starting with N
     denote a run with Native instances of Spark and with T with
@@ -392,15 +392,18 @@ happens with monetary cost across different cloud platforms?}
 	\label{fig:pr_table}
 \end{figure*}
 
-\begin{table}[ht!]
+\begin{table}[t!]
   \centering
   \caption{Linear Regression synopsis table. Configurations starting
     with N denote a run with Native instances of Spark and with T with
     TeraHeap. H1 is a run with the memory budget configured to contain
     a bigger size for H1 than PageCache and PC the opposite.}
   \label{tab:linr_table}
-     \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-      \hline 
+        \resizebox{19cm}{!}{
+        \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+      \hline
+\textbf{Conf.} & \textbf{H1 Size/I} & \textbf{Memory/I} & \textbf{Total Mem.} & \textbf{\#I} & \textbf{Exec. Time} & \textbf{CPU Idle} & \textbf{Total MB Proc.} & \textbf{MB/s} & \textbf{MB/s/I} & \textbf{Cost AWS \$} & \textbf{Cost GCP \$} & \textbf{Cost Azure \$} \\
+	\hline 
       N2 H1 & 22 & 28 & 64 & 2 & 3745 & 20 & 134896 & 37 & 18 & 0.6 & 0.58 & 0.67 \\ 
       N2 PC & 11 & 28 & 64 & 2 & 6288 & 21 & 134896 & 22 & 11 & 1.2 & 1.16 & 1.34 \\
       N4 H1 & 11 & 14 & 64 & 4 & 13874 & 7 & 269792 & 20 & 5 & 2.4 & 2.32 & 2.01 \\
@@ -411,16 +414,20 @@ happens with monetary cost across different cloud platforms?}
       T4 PC & 6 & 14 & 64 & 4 & 6176 & 3 & 269792 & 44 & 11 & 1.2 & 1.16 & 1.34 \\ 
       \hline
      \end{tabular}%
+	}
 \end{table}
 
-\begin{table}[ht!]
+\begin{table}[t!]
   \centering
-  \caption{Linear Regression synopsis table. Configurations starting
+  \caption{Logistic Regression synopsis table. Configurations starting
     with N denote a run with Native instances of Spark and with T with
     TeraHeap. H1 is a run with the memory budget configured to contain
     a bigger size for H1 than PageCache and PC the opposite.}
   \label{tab:logr_table}
-     \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+	\resizebox{19cm}{!}{
+	\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+      \hline
+\textbf{Conf.} & \textbf{H1 Size/I} & \textbf{Memory/I} & \textbf{Total Mem.} & \textbf{\#I} & \textbf{Exec. Time} & \textbf{CPU Idle} & \textbf{Total MB Proc.} & \textbf{MB/s} & \textbf{MB/s/I} & \textbf{Cost AWS \$} & \textbf{Cost GCP \$} & \textbf{Cost Azure \$} \\
       \hline
       N2 H1 & 22 & 28 & 64 & 2 & 5127 & 18 & 133348 & 26 & 13 & 1.2 & 1.16 & 0.67 \\
       N2 PC & 11 & 28 & 64 & 2 & 6302 & 20 & 133348 & 21 & 11 & 1.2 & 1.16 & 1.34 \\
@@ -432,17 +439,21 @@ happens with monetary cost across different cloud platforms?}
       T4 PC & 6 & 14 & 64 & 4 & 6138 & 2 & 266696 & 43 & 10 & 1.2 & 1.16 & 1.34 \\
       \hline
      \end{tabular}%
+	}
 \end{table}
 
-\begin{table}[ht!]
+\begin{table}[t!]
   \centering
-  \caption{Linear Regression synopsis table. Configurations starting
+  \caption{Connected Component synopsis table. Configurations starting
     with N denote a run with Native instances of Spark and with T with
     TeraHeap. H1 is a run with the memory budget configured to contain
     a bigger size for H1 than PageCache and PC the opposite.}
   \label{tab:cc_table}
-     \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+        \resizebox{19cm}{!}{
+        \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
       \hline
+\textbf{Conf.} & \textbf{H1 Size/I} & \textbf{Memory/I} & \textbf{Total Mem.} & \textbf{\#I} & \textbf{Exec. Time} & \textbf{CPU Idle} & \textbf{Total MB Proc.} & \textbf{MB/s} & \textbf{MB/s/I} & \textbf{Cost AWS \$} & \textbf{Cost GCP \$} & \textbf{Cost Azure \$} \\
+	\hline
         N2 H1 & 22 & 28 & 64 & 2 & 2958 & 26 & 16980 & 6 & 3 & 0.6 & 0.58 & 0.67 \\
       N2 PC & 11 & 28 & 64 & 2 & 3125 & 31 & 16980 & 5 & 3 & 0.6 & 0.58 & 0.67 \\
       N4 H1 & 11 & 14 & 64 & 4 & 7231 & 7 & 33960 & 5 & 3 & 1.8 & 1.74 & 2.01 \\
@@ -453,6 +464,7 @@ happens with monetary cost across different cloud platforms?}
       T4 PC & 6 & 14 & 64 & 4 & 5487 & 2 & 33960 & 6 & 3 & 1.2 & 1.16 & 1.34 \\
       \hline
      \end{tabular}%
+	}
 \end{table}
 
 Tables \ref{fig:pr_table}, \ref{tab:linr_table}, \ref{tab:logr_table}
@@ -481,4 +493,4 @@ seen by the tables, taking into account that we have an hourly cost,
 TeraHeap seems to be the obvious choice for running Spark workloads
 and save money, because it is able to offer more scalability to the
 user by freeing memory in order to increase CPU utilization and
-increase throuput. 
+increase throughput. 
