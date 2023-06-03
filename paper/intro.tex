@@ -3,52 +3,37 @@
 
 With the exponential growth of data in various fields such as finance,
 healthcare, social media, and e-commerce, there is a significant need
-for more and more system memory from big data analytics frameworks 
-such as Apache Spark \cite{Spark} and Apache Giraph. 
-\note{jk: Add citations}
-The memory pressure that arises when using these kind of frameworks comes from
+for more and more system memory from big data analytics frameworks. 
+The memory pressure that arises when using these kind of frameworks leads to
 long Garbage Collection cycles performed by the Java Virtual Machine.
-\note{jk: I do not understand this
-paragraph. What is the problem. The  data or the Spark? The first
-sentence of each paragraph provides the context of the paragraph.}
-
-%One of the main challenges in Spark clusters \note{jk: is not only in
-%Spark clusters. We do not write a Spark paper. Giraph or Neo4j also
-%face memory pressure issues} is the high computational
-%and memory requirements of big data analytics workloads. \note{Explain
-%in more precise way the computational needs e.g. caching.} 
-This requirement can result in excessive CPU under-utilization, 
+This requirement leads to excessive CPU under-utilization, 
 leading to performance bottlenecks and slow job completion
 times. To address these challenges, researchers have proposed various
-techniques \note{jk: add citations} to optimize the performance of Spark clusters, including
+techniques to optimize the performance of Big data analytics, including
 data partitioning, caching, and resource allocation.
 
 \note{jk: explain why you only focus on the memory limit}
 In this paper, we focus on the memory limit problem of servers
 becoming an obstacle for further throughput increase by not
-allowing applications to furthe utlize the CPU. We conduct an
-analysis \note{jk: DONE you do not propose a tecnique. You make
-evaluation} of the performance of big data analytics using a smart
-heap offloading technique to fast storage devices.
+allowing applications to utilize the CPU. We conduct an
+analysis of the performance of big data analytics using a smart
+technique for offloading the heap to fast storage devices.
 This offloading technique reduces memory pressure by
 moving long-lived objects from the main managed Java
-Heap to a fast storage device such as NVMe. Doing that it saves memory for
-other more useful tasks and leaving space for more CPU utilization.
-Our approach leverages the capabilities of the underlying machine to
+Heap to a fast storage device such as NVMe. By doing that it saves memory for
+other more useful tasks, leaving space for more CPU utilization.
+Offloading the heap leverages the capabilities of the underlying machine to
 create less memory-consuming computation tasks, thereby reducing the
-workload on the Spark workers. Along with that it maintains effective
+workload on the framework workers. Along with that it maintains effective
 per-executor performance under the colocation of multiple executors
-required to achieve max throughput. \note{jk: Please use smaller
-sentences.}
+required to achieve max throughput.
 
-\note{jk: I think you need one or two paragraphs explaining about your
-memthodology. What are you trying to investigate. Why your methodology
-is important. And say why are you using TeraHeap. Why you do not use
-other systems? Why TeraHepa is enough?}
-Specifically, in order to achieve higher throughput and better
-performance for Spark, we use TeraHeap, a secondary managed
+TMO?
+
+Specifically, in order to investigate the heap offloading to fast storage,
+we use TeraHeap, a secondary managed
 memory-mapped heap over an NVMe storage device, which is used to hold
-the Resilient Distributed Datasets (Spark RDDs) instead of the main
+the long lived objects instead of the main
 managed Java Heap and completely remove any
 Serialization/Deserialization and Garbage Collection (GC) cost over
 them.
@@ -58,14 +43,14 @@ by this kind of frameworks when moving data off-heap to/from fast
 storage devices 2) eliminates GC pauses over the secondary heap,
 therefore significantly minimizing overall GC overhead. By offloading
 the managed Java Heap and relaxing computation-intensive tasks, we aim
-to reduce the workload on Spark workers, thereby improving their
+to reduce the workload on executors, thereby improving their
 performance and job throughput. We also explore the trade-offs between
 the cost of offloading and the performance gains achieved.
 
-We demonstrate the effectiveness of our approach using various big
-data analytics workloads on a real-world Spark cluster. We also
-compare our approach with the native Spark distribution and show that
-our approach can be used instead of this distribution to improve
+We demonstrate the effectiveness of heap offloading to fast storage using various big
+data analytics workloads on a real-world cluster. We
+compare TeraHeap with the native Spark distribution and show that
+an approach like TeraHeap could be used instead of this distribution to improve
 performance and server throughput. \note{Here you should provide some
 overall results. Please update this paragraph including Giraph}
 
@@ -74,26 +59,12 @@ The paper makes the following contributions:
     \item{A comprehensive
         evaluation of the performance and cost trade-offs of our proposed heap
         offloading technique, that utilizes fast storage devices to improve
-        server throughput for Apache Spark, against Native Spark.
-        \note{jk: I think is not only Spark} }
+        server throughput for Big Data Analytics.
     \item{A detailed methodology for running Apache Spark and
         understanding how to use it for conducting off-heap
         experiments using the Native Spark or TeraHeap \note{jk: this
         is similar with the first contirbution.}}
-    \item{3) Proves that heap offloading to fast storage devices is a
-        significant research direction. \note{jk: I think this is not
-        a contribution.}}
 \end{itemize}
-
-\note{jk: Remove this paragraph. It is unnecessary.}
-The rest of the paper is organized as follows. In section 2 we discuss
-related work on Spark optimization techniques and offloading
-techniques. In section 3, we describe our experimental methodology in
-order for someone to achieve the desired performance using TeraHeap.
-In section 4, we present our experimental results and evaluate the
-performance and cost trade-offs of our approach. In section 5, we
-discuss future research directions. Finally we conclude the paper in
-section 6 with an outline of our work.
 
 \note{jk: Overall. The first two paragraphs of the introduction should
 show the problem statement. Then 3rd paragraph should summarize the

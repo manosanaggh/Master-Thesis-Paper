@@ -1,29 +1,25 @@
 \section{Conclusions}
 
-In this paper, we proposed a new technique for improving the
-performance and job throughput of Spark clusters by moving parts of
+In this paper, we conducted an analysis of throughput for big data analytics
+using a heap offloading technique that reduces memory pressure by moving parts of
 the managed Java Heap to a secondary memory-mapped heap over fast
-storage devices such as NVMe. Our approach leverages the capabilities
-of the underlying running machine to free computation-intensive tasks
-running on the Spark workers from memory pressure, thereby reducing
-the workload on the workers and improving their performance and job
-throughput.
+storage devices such as NVMe. We offered a detailed methodology on
+how someone could use a system like TeraHeap to run Big Data ANalytics workloads
+to reduce memory pressure and therefore increase his server throughput by utilizng the CPU resources
+in a more efficient way.
 
-Our experimental results demonstrate the effectiveness of our approach
-using various big data analytics workloads on a Spark cluster. We also
-compare our approach with the native Spark distribution and showed
-that our approach can be used instead of this distribution to further
+Our experimental results demonstrate the effectiveness of TeraHeap
+using various Big data analytics workloads on a real-world cluster. We also
+compare TeraHeap with the native Spark distribution and show
+that TeraHeap can be used instead of this distribution to further
 improve performance.
 
-Our work contributes to the growing body of research on improving the
-performance and scalability of Spark clusters for big data analytics
-workloads. Our approach offers a scalable solution for processing
+TeraHeap offers a scalable solution for processing
 increasingly large and complex big data workloads and can be easily
-integrated into existing Spark clusters.
+integrated into existing Big data analytics clusters.
 
-Overall, our offloading technique offers a promising approach to
-improving job throughput for big data analytics workloads on Spark
-clusters, particularly for computation-intensive tasks. With the
+Overall, our analysis showed that using a system like TeraHeap offers a promising approach to
+improving job throughput for big data analytics workloads, particularly for computation-intensive tasks. With the
 increasing demand for efficient and scalable big data processing
-frameworks, our approach provides a valuable contribution to the field
+frameworks, this analysis provides a valuable contribution to the field
 of big data analytics and memory management.

@@ -1,7 +1,7 @@
 \section{Experimental Methodology}
 \label{sec:method}
 
-To evaluate the effectiveness of our proposed approach, we conduct a
+To evaluate the effectiveness of TeraHeap, we conduct a
 set of experiments using various workloads from the Spark Bench suite
 on a real-world cluster. Our experimental methodology consists of
 several steps. First, we set up our research server, using various
@@ -9,12 +9,12 @@ configurations of datacenter machines, including CPU, memory, and
 storage. Next, we install and configure Spark and OpenJDK8 on the
 cluster. We use Spark's default configuration settings for our
 experiments, except for the garbage collector settings, which we tune
-according to our proposed approach.
+according to the requirements for TeraHeap.
 
 We select four workloads from the Spark Bench suite that represent
 different types of data processing, such as machine learning and graph
-processing, (and SQL queries ???). We run each workload using our
-proposed approach and compare it with the performance of the same
+processing, (and SQL queries ???). We run each workload using TeraHeap
+and compare it with the performance of the same
 workload using the default configuration, garbage collector tuning,
 and heap offloading approaches.
 
@@ -25,7 +25,7 @@ individual instance requires less memory therefore memory becomes
 available for more instances to be deployed, achieving more total
 throughput than Native Spark in similar time windows.
 
-To measure the performance of our approach, we use several metrics,
+To measure the performance of TeraHeap, we use several metrics,
 including server throughput, memory usage, and execution time. We
 measure server throughput as the megabytes of the dataset processed
 per second, memory usage as the amount of memory used during data
@@ -40,8 +40,8 @@ In summary, our experimental methodology involves setting up a
 real-world cluster, selecting appropriate workloads, measuring
 performance using several metrics, and repeating each experiment
 several times to ensure statistical significance. By following this
-methodology, we can evaluate the effectiveness of our proposed
-approach for improving server throughput for managed big data
+methodology, we can evaluate the effectiveness of TeraHeap
+for improving server throughput for managed big data
 analytics.
 
 \subsection{Server Characteristics}
@@ -65,7 +65,7 @@ storage devices are designed for fast, random access to data, making
 them ideal for storing and retrieving large amounts of data in big
 data applications. Overall, the server's hardware specifications make
 it a powerful platform for conducting experiments on managed big data
-analytics and evaluating the performance of our proposed approach. 
+analytics and evaluating the performance of TeraHeap. 
 
 \subsection{Native Spark Configuration}
 We use Spark v3.3.0 with Kryo Serializer, a state-of-the-art highly
@@ -139,13 +139,13 @@ they represent different types of big data analytics tasks: PageRank
 and Connected Component are graph-based workloads, while
 LinearRegression and LogisticRegression are machine learning
 workloads. By selecting workloads from both categories, we can
-investigate the performance of our proposed approach across a range of
+investigate the performance of TeraHeap across a range of
 big data analytics tasks. Furthermore, all of them are
 well-established workloads that are commonly used for benchmarking big
 data analytics systems, making them a suitable choice for our
 experiments. Overall, the selection of these workloads allows us to
-evaluate the performance of our approach in a variety of contexts and
-provide insights into the effectiveness of our approach for improving
+evaluate the performance of TeraHeap in a variety of contexts and
+provide insights into the effectiveness of TeraHeap for improving
 server throughput in managed big data analytics systems.
 
 \subsubsection{PageRank}
@@ -154,8 +154,8 @@ importance of nodes in a network. It has become a popular benchmark
 for evaluating the performance of distributed systems, including big
 data analytics systems like Apache Spark. PageRank is computationally
 intensive and requires significant memory and I/O resources, making it
-a suitable workload for evaluating the performance of our proposed
-approach for improving server throughput. Additionally, PageRank is a
+a suitable workload for evaluating the performance of our TeraHeap
+for improving server throughput. Additionally, PageRank is a
 common algorithm in real-world applications, such as search engines
 and social networks, making it relevant for practical use cases.
 
@@ -166,12 +166,12 @@ widely used algorithm in machine learning, and is commonly used for
 regression analysis in fields such as economics, finance, and
 engineering. LinearRegression is computationally intensive and
 requires significant memory and I/O resources, making it a suitable
-workload for evaluating the performance of our proposed approach for
+workload for evaluating the performance of TeraHeap for
 improving server throughput. Furthermore, the inclusion of a machine
 learning workload like LinearRegression allows us to investigate the
-performance of our approach across different types of big data
-analytics tasks and gain insights into the effectiveness of our
-approach for improving server throughput in a range of contexts.
+performance of TeraHeap across different types of big data
+analytics tasks and gain insights into the effectiveness of TeraHeap
+for improving server throughput in a range of contexts.
 
 \subsubsection{Logistic Regression}
 LogisticRegression is a machine learning algorithm that is used to
