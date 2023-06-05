@@ -6,26 +6,19 @@ and not authors name. When you discuss the work in each category try
 to show paper in chronological order.}
 
 Several studies have been conducted to improve the performance of big
-data processing systems. One approach is to utilize memory-aware task
-co-location to improve Spark application throughput, which has been
-investigated by Marco et al. in [3]. \note{jk: Provide more detail
-about their technique} 
-Meanwhile, in [4], Kirisame et
-al. proposed optimal heap limits to reduce browser memory use.
-\note{jk: Again add more details.} Another
-research direction is to leverage far memory to improve job
-throughput, as studied by Amaro et al. in [5]. \note{jk: How this work
-is different for the Marco et al. work.}
-To facilitate memory
-offloading in datacenters, Weiner et al. presented TMO, a transparent
-memory offloading system in [6] \note{jk: what they do. Give more
-details. now is like shopping list}. In cloud computing platforms, Sharma
-et al. proposed per-VM page cache partitioning to improve performance
-in [7]. Chen and Wang introduced Spark on Entropy, a reliable and
-efficient scheduler for low-latency parallel jobs in heterogeneous
-clouds, in [8]. Thamsen et al. developed Mary, Hugo, and Hugo*, three
-learning-based schedulers for distributed data-parallel processing
-jobs on shared clusters in [9] \note{jk: is this related of what we
+data processing systems based on the memory pressure that arises. One approach is to utilize memory-model-based task
+co-location during runtime to improve Spark application throughput, which has been
+investigated by Marco et al. in \cite{Colocation}. They choose a variety of memory-models
+that describe the memory footprint of Spark applications and determine the right memory-model
+for the specific application at runtime. That way they learn how many applications can be colocated
+to achieve better throughput.
+Meanwhile, in \cite{Limits}, the authors investigate the trade-off between lower Garbage Collection overhead and memory usage. The authors propose MemBalancer, a compositional square-root heap limit rule for the
+V8 JavaScript engine that achieves low GC times while also decreasing the browser memory usage.
+In cloud computing platforms, Sharma
+et al. proposed per-VM page cache partitioning in \cite{PC} 
+to get rid-off the interferences that arise with the shared Hypervisor Page Cache.
+\iffalse
+\note{jk: is this related of what we
 are doing? Maybe yes but you need to provide more context}. Additionally, Bhimani et al. proposed
 a lightweight virtualization framework for accelerating big data
 applications on enterprise cloud in [10], while Zhang et al. focused
@@ -33,7 +26,7 @@ on understanding and improving disk-based intermediate data caching in
 Spark in [11]. Finally, Intasorn et al. investigated using compression
 tables to improve HiveQL performance with Spark in a case study on
 NVMe storage devices in [12]. 
- 
+
 \note{I thin this paragraph does not help. It sounds like the previous
 study make a big effort and provide analysis. So, I guess, why do I
 need to read this paper? What is the new that I will learn. Can we
@@ -44,3 +37,4 @@ data processing systems, ranging from memory-aware task co-location
 and memory offloading to scheduler design and virtualization
 frameworks. The findings from these studies can provide insights and
 guidance for future research in the field of big data processing.
+\fi
