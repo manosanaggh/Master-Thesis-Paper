@@ -12,9 +12,11 @@ This requirement leads to excessive CPU under-utilization,
 leading to performance bottlenecks and slow job completion
 times.
 \note{jk: explain why you only focus on the memory limit}
+\par The memory limit problem can better be understood when looking at analyses of traces from big companies e.g. Alibaba \cite{Alibaba}.
+When looking at the results of this analysis, we see that memory usage is at an average of 80\%, while CPU usage stays at 40\%. 
 \par To address the challenges of lack of system memory, researchers have proposed various
-techniques to optimize the performance of Big data analytics, including
-utilizing remote memory, memory scheduling, and offloading to local storage.
+techniques to optimize the performance of applications, including
+utilizing remote memory and memory scheduling.
 Some Meta researchers built a new memory scheduling mechanism to investigate the oportunities
 for reducing memory pressure and improve server throughput in their work called Transparent Memory Offloading in Datacenters (TMO)
 \cite{TMO}. Amaro et. al investigate the utilization of remote memory to improve job throughput \cite{CFM} building a swapping mechnism that uses memory from remote servers as swap memory.
@@ -47,9 +49,7 @@ The paper makes the following contributions:
 \begin{itemize}
     \item{A detailed methodology for running Apache Spark and Giraph using TeraHeap
 	  as a heap offloading mechanism.}
-    \item{A comprehensive evaluation of the performance and cost trade-offs of TeraHeap
+    \item{A comprehensive evaluation of the performance and cost trade-offs of TeraHeap against Native Spark-Giraph
 	  with a single or multiple colocated executors in the same server.
+    \item{A cost estimation of running our experiments in real-world cloud platforms like Amazon EC2, Google Cloud and Microsoft Azure.}
 \end{itemize}
-
-\note{jk: Then in the next paragraph you
-should try to summarize the overall results.}
