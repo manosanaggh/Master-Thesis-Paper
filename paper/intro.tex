@@ -3,64 +3,45 @@
 
 With the exponential growth of data in various fields such as finance,
 healthcare, social media, and e-commerce, there is a significant need
-for more and more system memory from big data analytics frameworks e.g.
-Apache Spark \cite{Spark} and Giraph. 
-The memory pressure that arises when using these kind of frameworks leads to
+for more and more system memory from datacenters. In order
+to process and analyze these data loads, big data analytics frameworks
+are needed e.g. Apache Spark \cite{Spark} and Giraph. 
+The lack of memory when using these kind of frameworks leads to
 long Garbage Collection cycles performed by the Java Virtual Machine.
 This requirement leads to excessive CPU under-utilization, 
 leading to performance bottlenecks and slow job completion
-times. To address these challenges, researchers have proposed various
+times.
+\note{jk: explain why you only focus on the memory limit}
+\par To address the challenges of lack of system memory, researchers have proposed various
 techniques to optimize the performance of Big data analytics, including
 utilizing remote memory, memory scheduling, and offloading to local storage.
-
 Some Meta researchers built a new memory scheduling mechanism to investigate the oportunities
-for reducing memory pressure and improve server throughput in their work called Transparent Memory Offloading in Datacenters (TMO) 
-\cite{TMO}. Amaro et. al investigate the utilization of remote memory to improve job throughput \cite{CFM} building a swapping mechnism that uses memory 
-from remote servers as swap memory. 
-
-\note{jk: explain why you only focus on the memory limit}
-Taking into consideration these previous works,
-in this paper we investigate memory pressure reduction using offloading to fast storage devices.
-We focus on the memory limit problem of servers
-becoming an obstacle for further throughput increase by not
-allowing applications to utilize the CPU. We conduct an
-analysis of the performance of big data analytics using a smart
-technique for offloading the heap to fast storage devices.
-This offloading technique reduces memory pressure by
-moving long-lived objects from the main managed Java
-Heap to a fast storage device such as NVMe. By doing that it saves memory for
-other more useful tasks, leaving space for more CPU utilization.
-Offloading the heap leverages the capabilities of the underlying machine to
-create less memory-consuming computation tasks, thereby reducing the
-workload on the framework workers. Along with that it maintains effective
-per-executor performance under the colocation of multiple executors
-required to achieve max throughput.
-
+for reducing memory pressure and improve server throughput in their work called Transparent Memory Offloading in Datacenters (TMO)
+\cite{TMO}. Amaro et. al investigate the utilization of remote memory to improve job throughput \cite{CFM} building a swapping mechnism that uses memory from remote servers as swap memory.
+\par Having taken into consideration the previous works in this field,
+in this paper, we conduct an analysis of server throughput for big data analytics when using heap offloading to fast local storage devices.
 Specifically, in order to investigate the heap offloading to fast storage,
-we use TeraHeap,\cite{TeraHeap} a secondary managed
+we use TeraHeap \cite{TeraHeap}, a secondary managed
 memory-mapped heap over an NVMe storage device, which is used to hold
 the long lived objects instead of the main
-managed Java Heap and completely remove any
-Serialization/Deserialization and Garbage Collection (GC) cost over
-them.
-
+managed Java Heap.
 TeraHeap 1) eliminates Serialization/Deserialization overheads posed
 by this kind of frameworks when moving data off-heap to/from fast
-storage devices 2) eliminates GC pauses over the secondary heap,
-therefore significantly minimizing overall GC overhead. By offloading
-the managed Java Heap and relaxing computation-intensive tasks, we aim
-to reduce the workload on executors, thereby improving their
-performance and job throughput. We also explore the trade-offs between
-the cost of offloading and the performance gains achieved.
-
-We demonstrate the effectiveness of heap offloading to fast storage using various big
+storage devices 2) reduces GC pauses drastically over the secondary heap.
+By offloading the managed Java Heap and relaxing computation-intensive tasks, we aim
+to reduce the load of Garbage Collection on executors, thereby improving their
+performance and job throughput.
+We investigate the effectiveness of heap offloading to fast storage using various big
 data analytics workloads on a real-world cluster. We choose the parameters for running the workloads
 by investigating the needs of big data analytics in terms of memory budget. We define memory budget as the summary of
 Java Heap, IO Cache and JVM native memory. We
 compare TeraHeap with the native Spark and Giraph distributions and show that
 an approach like TeraHeap could be used instead of this distribution to improve
-performance and server throughput. \note{Here you should provide some
-overall results. Please update this paragraph including Giraph}
+performance and server throughput.
+\par Our experimental results show that reducing Java Garbage Collection overhead by offloading the heap to fast storage devices
+significantly improves server throughput by up to 66\% against native Spark and Giraph. Finally, we also include
+a cost estimation to show that TeraHeap could reduce monetary cost by up to 50\% for running big data analytics, if
+deployed in a world cluster like Amazon's EC2 or Google Cloud Platform or Microsoft Azure Cloud, which are available to everyone.
 
 The paper makes the following contributions: 
 \begin{itemize}
@@ -70,10 +51,5 @@ The paper makes the following contributions:
 	  with a single or multiple colocated executors in the same server.
 \end{itemize}
 
-\note{jk: Overall. The first two paragraphs of the introduction should
-show the problem statement. Then 3rd paragraph should summarize the
-limitations of existing work. Next you should show what this paper
-does. For exaple about methodology. Why it is important? What
-questions are you trying to answer. Then in the next paragraph you
-should try to summarize the overall results. Finally add the
-contributions of the paper as an itemized list.}
+\note{jk: Then in the next paragraph you
+should try to summarize the overall results.}
