@@ -237,12 +237,14 @@ graph.
     \label{fig:gcs_linr_h1_th}
 \end{figure*}
 
+\iffalse
 \begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/gcs_linr_pc_native.png}
     \caption{Number of GCs over time for Page Cache Linear Regression
     Native Spark investigation.}
     \label{fig:gcs_linr_pc_native}
 \end{figure*}
+\fi
 
 \begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/gcs_linr_pc_th.png}
@@ -250,14 +252,29 @@ graph.
     TeraHeap Spark investigation.}
     \label{fig:gcs_linr_pc_th}
 \end{figure*}
-\iffalse
+
 \begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/gcs_pr_h1_th.png}
     \caption{Number of GCs over time for H1 Page Rank TeraHeap Spark
     investigation.}
     \label{fig:gcs_pr_h1_th}
 \end{figure*}
-\fi
+
+\begin{figure*}[ht!]
+    \includegraphics[width=12cm,height=6cm]{./fig/gcs_pr_h1_native.png}
+    \caption{Execution time breakdown for H1 Linear Regression Native
+    Spark investigation.}
+    \label{fig:gcs_pr_pc_th}
+\end{figure*}
+
+\begin{figure*}[ht!]
+    \includegraphics[width=12cm,height=6cm]{./fig/gcs_pr_pc_th.png}
+    \caption{Execution time breakdown for PageCache Page Rank TeraHeap
+    Spark investigation.}
+    \label{fig:gcs_pr_pc_th}
+\end{figure*}
+
+
 \begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/linr_h1_native.png}
     \caption{Execution time breakdown for H1 Linear Regression Native
@@ -272,12 +289,15 @@ graph.
     \label{fig:linr_h1_th}
 \end{figure*}
 
+
+\iffalse
 \begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/linr_pc_native.png}
     \caption{Execution time breakdown for Page Cache Linear Regression
     Native Spark investigation.}
     \label{fig:linr_pc_native}
 \end{figure*}
+\fi
 
 \begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/linr_pc_th.png}
@@ -300,6 +320,14 @@ graph.
 \end{figure*}
 
 \begin{figure*}[ht!]
+    \includegraphics[width=12cm,height=6cm]{./fig/pr_h1_native.png}
+    \caption{Execution time breakdown for PageCache Page Rank TeraHeap
+    Spark investigation.}
+    \label{fig:pr_h1_native}
+\end{figure*}
+
+
+\begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/rw_linr_h1_native.png}
     \caption{Read-Write traffic over time for H1 Linear Regression
     Native Spark investigation.}
@@ -313,12 +341,14 @@ graph.
     \label{fig:rw_linr_h1_th}
 \end{figure*}
 
+\iffalse
 \begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/rw_linr_pc_native.png}
     \caption{Read-Write traffic over time for PageCache Linear
     Regression Native Spark investigation.}
     \label{fig:rw_linr_pc_native}
 \end{figure*}
+\fi
 
 \begin{figure*}[ht!]
     \includegraphics[width=12cm,height=6cm]{./fig/rw_linr_pc_th.png}
@@ -339,6 +369,13 @@ graph.
     \caption{Read-Write traffic over time for PageCache Page Rank
     TeraHeap Spark investigation.}
     \label{fig:rw_pr_pc_th}
+\end{figure*}
+
+\begin{figure*}[ht!]
+    \includegraphics[width=12cm,height=6cm]{./fig/rw_pr_h1_native.png}
+    \caption{Read-Write traffic over time for H1 Page Rank
+    Native Spark investigation.}
+    \label{fig:rw_pr_h1_native}
 \end{figure*}
 
 
@@ -370,50 +407,60 @@ Spark workloads that we are going to use for our evaluation are going
 to perform with different amounts of H1 (Java Heap) and I/O cache.
 Increasing/decreasing H1 automaticaly does the opposite to the I/O
 cache so the mechanism is simple: we manually tune these parameters
-and investigate how the workloads perform. At first we investigate the
-performance of TeraHeap Spark regarding these two parameters. Our
-machine uses 256 GB total DRAM and 16 single-NUMA island CPUs.
+and investigate how the workloads perform. 
+
+Figure \ref{fig:pr_h1_native} shows performance of single-instance Native Spark
+running PageRank with adjustable size for H1 while PageCache is kept
+steady at 16 GB. This graph shows that decreasing the size of H1
+indicates a significant increase to Major GC.
+Figure \ref{fig:gcs_pr_h1_native} justifies these claims by showing the obvious
+decrease of the number of major gcs.
 
 
-Figure 1 shows performance of single-instance TeraHeap Spark
+Figure \ref{fig:pr_h1_th} shows performance of single-instance TeraHeap Spark
 running PageRank with adjustable size for H1 while PageCache is kept
 steady at 16 GB. This graph shows that decreasing the size of H1
 indicates a significant increase to Minor GC and a slight increase to
-Major GC. Figure 2 justifies these claims by showing the obvious
-decrease of the number of minor gcs. Figure 3 shows performance of
+Major GC. Figure \ref{fig:gcs_pr_h1_th} justifies these claims by showing the obvious
+decrease of the number of minor gcs. 
+Figure \ref{fig:pr_pc_th} shows performance of
 single-instance TeraHeap Spark running PageRank with adjustable size
 for PageCache while H1 is kept steady at 44 GB. This graph shows that
 decreasing the size of PageCache indicates no changes to other time.
-Figure 4 justifies these claims by showing the obvious decrease of the
-number of minor gcs.
+Figure \ref{fig:rw_pr_pc_th} justifies these claims by showing read-traffic to be steady.
  
 
 Figure \ref{fig:linr_h1_native} shows performance of single-instance
 Native Spark running LinearRegression with adjustable size for H1
-while PageCache is kept steady at 10 GB. This graph shows that
+while PageCache is kept steady at 8 GB. This graph shows that
 decreasing the size of H1 indicates a significant increase to Major GC
-and a slight increase to S/D. Other time remains the same. Figure
-\ref{fig:gcs_linr_h1_native} and \ref{fig:rw_linr_h1_native} justify
+and a slight increase to S/D. Other time remains the same.
+Figure \ref{fig:gcs_linr_h1_native} and \ref{fig:rw_linr_h1_native} justify
 these numbers by showing the number of minor-major gcs to decrease
 while H1 increases (gc time) and the read-write traffic to remain
-steady (other). Figure \ref{fig:linr_pc_th} shows performance of
-single-instance TeraHeap Spark running LinearRegression with
-adjustable size for PageCache while H1 is kept steady at 40 GB. This
+steady (other). 
+\iffalse
+Figure \ref{fig:linr_pc_native} shows performance of
+single-instance Native Spark running LinearRegression with
+adjustable size for PageCache while H1 is kept steady at 28 GB. This
 graph shows that decreasing the size of PageCache indicates
-significant changes to Other time. GC time should remain the same as
-H1 remains steady. Figure \ref{fig:gcs_linr_pc_th} and
-\ref{fig:rw_linr_pc_th} justify these numbers by showing the number of
-minor-major gcs to remain the same while read traffic decreases as
-PageCache increases. Figure \ref{fig:linr_h1_th} shows performance of
+no changes to Other time. GC time should also remain the same as
+H1 remains steady. Figure \ref{fig:gcs_linr_pc_native} and
+\ref{fig:rw_linr_pc_native} justify these numbers by showing the number of
+minor-major gcs and read traffic to reamain the same. 
+\fi
+
+Figure \ref{fig:linr_h1_th} shows performance of
 single-instance TeraHeap Spark running LinearRegression with
-adjustable size for H1 while PageCache is kept steady at 10 GB. This
+adjustable size for H1 while PageCache is kept steady at 8 GB. This
 graph shows that decreasing the size of H1 indicates no increase to
 any stat. Figure \ref{fig:gcs_linr_h1_th} and \ref{fig:rw_linr_h1_th}
 justify these numbers by showing the number of major gcs to stay the
 same while H1 increases (gc time) and the read-write traffic to remain
-steady (other). Figure \ref{fig:linr_pc_th} shows performance of
+steady (other). 
+Figure \ref{fig:linr_pc_th} shows performance of
 single-instance TeraHeap Spark running LinearRegression with
-adjustable size for PageCache while H1 is kept steady at 40 GB. This
+adjustable size for PageCache while H1 is kept steady at 28 GB. This
 graph shows that decreasing the size of PageCache indicates no changes
 to Other time. So changes to PageCache do not affect this workload.
 Figure \ref{fig:gcs_linr_pc_th} and \ref{fig:rw_linr_pc_th} justify
@@ -540,7 +587,7 @@ monetary cost reduction for organizations renting servers.
 chose a variety of providers like Amazon, Google and Microsoft. This
 way we covered the most known providers and platforms someone would
 choose to run their workloads on. We chose 2 machines from each
-platform identical to the specifications of our 64 and 256 GB DRAM
+platform identical to the specifications of our 64, 128 and 256 GB DRAM
 machines. These are the cheapest machines of that particular category
 offered by the platform. We then used the platform's pricing
 calculator to estimate the cost of renting that machine for the time
