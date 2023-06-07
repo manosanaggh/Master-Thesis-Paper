@@ -3,41 +3,26 @@
     Managed big data analytic frameworks require a lot of memory to process
     large amounts of data.
     %
-    The memory pressure that arises during the data processing
-    prevents the frameworks from utilizing the CPU thus leading to
+    The memory pressure that arises from Garbage Collction during the data processing,
+    prevents the frameworks from effectively utilizing the CPU thus leading to
     low server throughput.
-    %
-	%    This pressure leads to long Garbage Collection
-    %(GC) cycles
-    %leaving no room for useful work. 
     In this paper, we conduct an analysis of server
     throughput for managed big data analytics. We evaluate a smart technique for heap
     offloading to fast storage devices in order to reduce memory pressure.
     %
     We use a framework called TeraHeap that moves objects from the Java
-    managed heap to a secondary heap over a fast storage device. %By moving the data, TeraHeap frees
-    %up heap memory and reduces memory pressure without suffering from storage latencies.  
-    %
-    %By overcoming the memory bound TeraHeap leaves space
-    %to the applications for more CPU utilization.
+    managed heap to a secondary heap over a fast storage device. 
     Our primary focus is to examine its performance under the colocation of
-    multiple instances. 
+    multiple memory-bound instances. 
     %
-    Furthermore, we present a detailed methodology for running Apache Spark and Giraph using TeraHeap. The methodology
-	includes conducting a research about the memory needs of Big data analytics when using offheap mechanisms
-	i.e. Java Heap and IO Cache. 
-	Understanding these needs helps us run the experiments with colocated instances.
-	%reaking down the execution time and explaining
-    %every different metric, provinding results such as server throughput...
-	%TeraHeap is implemented in Oracle's OpenJDK8. In this paper we
-    %evaluate its performance against Native Spark and Giraph using various
-    %workloads of the Spark Bench suite and graphalytics library on a real-world cluster.
-    %
+    Furthermore, we present a detailed methodology for running Apache Spark and Giraph using TeraHeap. 
+    The methodology includes conducting a research about the memory needs of Big data analytics when using offheap mechanisms
+    i.e. Java Heap and IO Cache. Understanding these needs helps us run the experiments with colocated instances.
     Our experimental results show that reducing memory pressure
     by offloading the heap to fast storage devices
-    significantly improves server throughput and CPU utilization by reducing
-    memory usage against native Spark and Giraph. We also include
-    results to show that TeraHeap can reduce monetary cost for running Big data analytics if
+    significantly improves server throughput up to 50\% by reducing
+    memory usage against native Spark and Giraph. Finally, we also include
+    a cost estimation to show that TeraHeap could reduce monetary cost up to 50\% for running Big data analytics if
     deployed in a world cluster like Amazon's EC2 or Google Cloud
     Platform or Microsoft Azure Cloud which are available to everyone. 
 \end{abstract}
