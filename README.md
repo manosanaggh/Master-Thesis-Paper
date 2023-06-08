@@ -1,2 +1,2 @@
 # Master-Thesis-Paper
-Multiple Java Instances paper
+Enter paper directory and run "make" to create paper.pdf.
