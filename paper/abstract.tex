@@ -1,22 +1,21 @@
 \begin{abstract}
-    Nowadays datacenters experience problems with scaling their DRAM
-    capacity.  \note{jk: please rewrite this sentence - is very
-    complex.} This limitation causes big data analytics frameworks,
-    which run on top of the Java Virtual Machine (JVM), to experience
-    lack of sufficient memory. The lack of sufficient memory leads to
-    long garbage collection (GC) cycles during the data processing.
-    \note{jk: Say that they use more memory to reduce this overhead
-    and then conclude with the last sentence}
-    This overhead prevents the frameworks from effectively utilizing
+    Nowadays with the continuous growth of data,
+    there is a need for more and more data processing.
+    In order to process these data loads scientists and engineers use managed big data analytics frameworks
+    which run on top of the Java Virtual Machine.
+    The memory pressure that arises from the big data processing 
+    leads to long garbage collection (GC).
+    In order to avoid this overhead, big data analytics frameworks,
+    increase memory usage and finally reach the memory limit of available DRAM in the server.
+    This limit prevents the frameworks from effectively utilizing
     the CPU thus leading to low server throughput.
 
     In this paper, we conduct an analysis of server throughput for
     managed big data analytics frameworks when offloading the heap to
     fast storage devices. More specifically, we examine, whether
     storing data to fast storage devices instead of the main memory
-    can help increase the throughput of the system by reducing memory
-    pressure. \note{jk: we need to do make the term throughput more
-    specific. E.g. Increase the CPU utilization} 
+    can help increase the CPU utilization of the system by reducing memory
+    pressure. 
     We use a system called TeraHeap that moves objects from
     the Java managed heap to a secondary heap over a fast storage
     device to reduce the Garbage Collection overhead. We examine
