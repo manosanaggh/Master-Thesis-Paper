@@ -222,162 +222,149 @@ merging the components as necessary. The workload is computationally
 intensive and requires a significant amount of memory to store the
 graph.
 
-
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/gcs_linr_h1_native.png}
+\begin{figure}[htbp]
+	\centering
+    \begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/gcs_linr_h1_native.png}
     \caption{Number of GCs over time for H1 Linear Regression Native
     Spark investigation.}
     \label{fig:gcs_linr_h1_native}
-\end{figure*}
+    \end{subfigure}
 
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/gcs_linr_h1_th.png}
+    \begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/gcs_linr_h1_th.png}
     \caption{Number of GCs over time for H1 Linear Regression TeraHeap
     Spark investigation.}
     \label{fig:gcs_linr_h1_th}
-\end{figure*}
+    \end{subfigure}\\[1em]
+\end{figure}
 
-\iffalse
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/gcs_linr_pc_native.png}
-    \caption{Number of GCs over time for Page Cache Linear Regression
-    Native Spark investigation.}
-    \label{fig:gcs_linr_pc_native}
-\end{figure*}
-\fi
-
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/gcs_linr_pc_th.png}
+\begin{figure}[htbp]
+    \begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/gcs_linr_pc_th.png}
     \caption{Number of GCs over time for Page Cache Linear Regression
     TeraHeap Spark investigation.}
-    \label{fig:gcs_linr_pc_th}
-\end{figure*}
+    \label{fig:gcs_linr_pc_th}  
+    \end{subfigure}
 
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/gcs_pr_h1_th.png}
+    \begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/gcs_pr_h1_th.png}
     \caption{Number of GCs over time for H1 Page Rank TeraHeap Spark
     investigation.}
     \label{fig:gcs_pr_h1_th}
-\end{figure*}
+    \end{subfigure}\\[1em]
+\end{figure}
 
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/gcs_pr_h1_native.png}
+\begin{figure}[htbp]
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/gcs_pr_h1_native.png}
     \caption{Execution time breakdown for H1 Linear Regression Native
     Spark investigation.}
-    \label{fig:gcs_pr_pc_th}
-\end{figure*}
+    \label{fig:gcs_pr_h1_native}
+\end{subfigure}
 
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/gcs_pr_pc_th.png}
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/gcs_pr_pc_th.png}
     \caption{Execution time breakdown for PageCache Page Rank TeraHeap
     Spark investigation.}
     \label{fig:gcs_pr_pc_th}
-\end{figure*}
+\end{subfigure}\\[1em]
+\end{figure}
 
-
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/linr_h1_native.png}
+\begin{figure}[htbp]
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/linr_h1_native.png}
     \caption{Execution time breakdown for H1 Linear Regression Native
     Spark investigation.}
     \label{fig:linr_h1_native}
-\end{figure*}
+\end{subfigure}
 
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/linr_h1_th.png}
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/linr_h1_th.png}
     \caption{Execution time breakdown for H1 Linear Regression
     TeraHeap Spark investigation.}
     \label{fig:linr_h1_th}
-\end{figure*}
+\end{subfigure}\\[1em]
+\end{figure}
 
-
-\iffalse
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/linr_pc_native.png}
-    \caption{Execution time breakdown for Page Cache Linear Regression
-    Native Spark investigation.}
-    \label{fig:linr_pc_native}
-\end{figure*}
-\fi
-
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/linr_pc_th.png}
+\begin{figure}[htbp]
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/linr_pc_th.png}
     \caption{Execution time breakdown for Page Cache Linear Regression TeraHeap Spark investigation.}
     \label{fig:linr_pc_th}
-\end{figure*}
+\end{subfigure}
 
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/pr_h1_th.png}
+	\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/pr_h1_th.png}
     \caption{Execution time breakdown for H1 Page Rank TeraHeap Spark
     investigation.} 
     \label{fig:pr_h1_th}
-\end{figure*}
+	\end{subfigure}\\[1em]
+\end{figure}
 
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/pr_pc_th.png}
+\begin{figure}[htbp]
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/pr_pc_th.png}
     \caption{Execution time breakdown for PageCache Page Rank TeraHeap
     Spark investigation.}
     \label{fig:pr_pc_th}
-\end{figure*}
+\end{subfigure}
 
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/pr_h1_native.png}
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/pr_h1_native.png}
     \caption{Execution time breakdown for PageCache Page Rank TeraHeap
     Spark investigation.}
     \label{fig:pr_h1_native}
-\end{figure*}
+\end{subfigure}\\[1em]
+\end{figure}
 
-
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/rw_linr_h1_native.png}
+\begin{figure}[htbp]
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/rw_linr_h1_native.png}
     \caption{Read-Write traffic over time for H1 Linear Regression
     Native Spark investigation.}
     \label{fig:rw_linr_h1_native}
-\end{figure*}
+\end{subfigure}
 
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/rw_linr_h1_th.png}
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/rw_linr_h1_th.png}
     \caption{Read-Write traffic over time for H1 Linear Regression
     TeraHeap Spark investigation.}
     \label{fig:rw_linr_h1_th}
-\end{figure*}
+\end{subfigure}\\[1em]
+\end{figure}
 
-\iffalse
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/rw_linr_pc_native.png}
-    \caption{Read-Write traffic over time for PageCache Linear
-    Regression Native Spark investigation.}
-    \label{fig:rw_linr_pc_native}
-\end{figure*}
-\fi
-
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/rw_linr_pc_th.png}
+\begin{figure}[htbp]
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/rw_linr_pc_th.png}
     \caption{Read-Write traffic over time for PageCache Linear
     Regression TeraHeap Spark investigation.}
     \label{fig:rw_linr_pc_th}
-\end{figure*}
+\end{subfigure}
 
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/rw_pr_h1_th.png}
+	\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/rw_pr_h1_th.png}
     \caption{Read-Write traffic over time for H1 Page Rank TeraHeap
     Spark investigation.}
     \label{fig:rw_pr_h1_th}
-\end{figure*}
+	\end{subfigure}\\[1em]
+\end{figure}
 
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/rw_pr_pc_th.png}
+\begin{figure}[htbp]
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/rw_pr_pc_th.png}
     \caption{Read-Write traffic over time for PageCache Page Rank
     TeraHeap Spark investigation.}
     \label{fig:rw_pr_pc_th}
-\end{figure*}
+\end{subfigure}
 
-\begin{figure*}[ht!]
-    \includegraphics[width=12cm,height=6cm]{./fig/rw_pr_h1_native.png}
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/rw_pr_h1_native.png}
     \caption{Read-Write traffic over time for H1 Page Rank
     Native Spark investigation.}
     \label{fig:rw_pr_h1_native}
-\end{figure*}
-
+\end{subfigure}\\[1em]
+\end{figure}
 
 \subsection{Is Spark in need of Java Heap or more cache for I/O?}
 
