@@ -4,22 +4,16 @@ In this paper, we conducted an analysis of throughput for big data analytics
 using a heap offloading technique that reduces memory pressure by moving parts of
 the managed Java Heap to a secondary memory-mapped heap over fast
 storage devices such as NVMe. We offered a detailed methodology on
-how someone could use a system like TeraHeap to run Big Data ANalytics workloads
+how someone could use a system like TeraHeap to run Big Data Analytics workloads
 to reduce memory pressure and therefore increase his server throughput by utilizng the CPU resources
 in a more efficient way.
 
-Our experimental results demonstrate the effectiveness of TeraHeap
+Our experimental results demonstrate the effectiveness of such a mechanism
 using various Big data analytics workloads on a real-world cluster. We also
-compare TeraHeap with the native Spark distribution and show
-that TeraHeap can be used instead of this distribution to further
-improve performance.
-
-TeraHeap offers a scalable solution for processing
-increasingly large and complex big data workloads and can be easily
-integrated into existing Big data analytics clusters.
+compare TeraHeap with the native Spark-Giraph distribution and show
+that TeraHeap has the potential to further improve performance by reducing GC and eliminating S/D over data.
 
 Overall, our analysis showed that using a system like TeraHeap offers a promising approach to
-improving job throughput for big data analytics workloads, particularly for computation-intensive tasks. With the
-increasing demand for efficient and scalable big data processing
-frameworks, this analysis provides a valuable contribution to the field
+improving server throughput for big data analytics workloads, particularly for computation-intensive tasks. With the
+increasing demand for efficient and scalable big data processing frameworks, this analysis provides a valuable contribution to the field
 of big data analytics and memory management.
