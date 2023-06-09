@@ -64,159 +64,101 @@ Native-TeraHeap Spark instances running LinearRegression with 64 GB
 dataset per instance in our 64 GB DRAM machine. Each instance of Spark
 uses one executor with 8 cores per executor. Available DRAM is 56 GB
 and 8 GB are left to the Operating system, resulting in 64 GB total
-DRAM. 
+DRAM. All configurations utilize 56 of 64 GB total DRAM. 
 Starting from the left of the graph, the first 6 bars show the
 performance of 3 runs. The first run is with 2 colocated Native Spark instances.
 Another run with 2 colocated TH Spark instances with H1 dominating Page Cache
 and a third run with 2 colocated TH Spark instances where Page Cache dominates H1. 
 Each instance of the first 2 runs uses 22 GB DRAM for H1 (Java Heap) and 6 GB for rest of the services.
-The third run uses 11 GB DRAM for H1 and 17 GB for Page Cache for each instance. All configurations use
-a total of 28 GB DRAM per instance and utilize 56 of 64 GB total DRAM. 
-The rest 12 bars show the
-performance of another 3 runs. The first run is with 4 colocated Native Spark instances.
+The third run uses 11 GB DRAM for H1 and 17 GB for Page Cache for each instance. 
+The rest 12 bars show the performance of another 3 runs. The first run is with 4 colocated Native Spark instances.
 Another run with 4 colocated TH Spark instances with H1 dominating Page Cache
 and a third run with 4 colocated TH Spark instances where Page Cache dominates H1. 
 Each instance of the first run uses 11 GB DRAM for H1 (Java Heap) and 3 GB for rest of the services. 
 The second run uses 10 GB DRAM for H1 and 4 GB for Page Cache for each instance. 
 The third run uses 6 GB DRAM for H1 and 8 GB for Page Cache for each instance. 
-All configurations use a total of 28 GB DRAM per instance and utilize 56 of 64 GB total DRAM.
+We have to consider 3 different aspects of analysing the figures with multiple instances.
+One is how much execution time increases compared to the single instance.
+The second is the differences in the time breakdown while number of instances increase for each configuration.
+The third is a comparison between the different configurations while instances increase.
+Considering the second aspect we see that GC and S/D increase dramatically for Native Spark along with significant increase to Other time. GC differences are witnessed because the heap capacity decreases and that causes memory pressure. This pressure leads to increased I/O because the heap is offloaded to the storage device, thus increasing S/D and Other time. TeraHeap Spark shows a slight increase to Major GC while the number of instances increases. This is because of the decreased heap capacity. Other time increases because more objects are moved to TeraHeap but this is a good trade-off because all the GC is absorbed. S/D is completely absorbed by MMIO. Refering to the third aspect, as instances increase in the server the benefit gap between Native and TeraHeap Spark becomes bigger. As Native Spark starves from more GC and S/D, TeraHeap maintains its benefits. 
 
 Figure \ref{fig:pr64} shows the performance of multiple
-Native-TeraHeap Spark instances running PageRank with 64 GB
+Native-TeraHeap Spark instances running PageRank with 8 GB
 dataset per instance in our 64 GB DRAM machine. Each instance of Spark
 uses one executor with 8 cores per executor. Available DRAM is 56 GB
 and 8 GB are left to the Operating system, resulting in 64 GB total
-DRAM.
+DRAM. All configurations utilize 56 of 64 GB total DRAM.
 Starting from the left of the graph, the first 6 bars show the
 performance of 3 runs. The first run is with 2 colocated Native Spark instances.
 Another run with 2 colocated TH Spark instances with H1 dominating Page Cache
 and a third run with 2 colocated TH Spark instances where Page Cache dominates H1.
 Each instance of the first 2 runs uses 22 GB DRAM for H1 (Java Heap) and 6 GB for rest of the services.
-The third run uses 11 GB DRAM for H1 and 17 GB for Page Cache for each instance. All configurations use
-a total of 28 GB DRAM per instance and utilize 56 of 64 GB total DRAM.
-The next 12 bars show the
-performance of another 3 runs. The first run is with 4 colocated Native Spark instances.
+The third run uses 11 GB DRAM for H1 and 17 GB for Page Cache for each instance. 
+The next 12 bars show the performance of another 3 runs. The first run is with 4 colocated Native Spark instances.
 Another run with 4 colocated TH Spark instances with H1 dominating Page Cache
 and a third run with 4 colocated TH Spark instances where Page Cache dominates H1.
 Each instance of the first run uses 11 GB DRAM for H1 (Java Heap) and 3 GB for rest of the services.
 The second run uses 10 GB DRAM for H1 and 4 GB for Page Cache for each instance.
 The third run uses 6 GB DRAM for H1 and 8 GB for Page Cache for each instance.
-All configurations use a total of 28 GB DRAM per instance and utilize 56 of 64 GB total DRAM.
 The last 8 bars refer to 8 colocated instances of TeraHeap Spark only. 
 We were unable to decrease H1 enough to run 8 colocates instance of Native Spark
 because JVM runs out of memory. Each instance of the run uses 4 GB DRAM for H1 (Java Heap) and 3 GB for Page Cache.
 
-Figure \ref{fig:logr64} shows the performance of multiple Native-TeraHeap
-Spark instances running LogisticRegression with 8 GB dataset per
-instance in our 64 GB DRAM machine. Each instance of Spark uses one
-executor with 8 cores per executor. Available DRAM is 56 GB and 8 GB
-are left to the Operating system, resulting in 64 GB total DRAM.
-Starting from the left of the graph, the first 2 bars show the
-performance of Native Spark with each instance using 22 GB DRAM for H1
-(Java Heap) and 6 GB for JVM Native memory and I/O cache resulting in
-a total of 28 GB DRAM per instance and utilizing 56 of 64 GB total
-DRAM. The next 2 bars show the performance of Native Spark with each
-instance using 11 GB DRAM for H1 (Java Heap) and 17 GB for JVM Native
-memory and I/O cache resulting in a total of 28 GB DRAM per instance
-and utilizing 56 of 56 GB total available DRAM. The next 4 bars show
-the performance of Native Spark with each instance using 11 GB DRAM
-for H1 (Java Heap) and 3 GB for JVM Native memory and I/O cache
-resuting in a total of 14 GB DRAM per instance and utilizing 56 of 56
-GB total available DRAM. The next 4 bars show the performance of
-TeraHeap Spark with increased PageCache and reduced H1 with each
-instance using 9 GB DRAM for H1 (Java Heap) and 5 GB for JVM Native
-memory and I/O cache resuting in a total of 14 GB DRAM per instance
-and utilizing 56 of 56 GB total available DRAM. The next 2 bars show
-the performance of TeraHeap Spark with each instance using 22 GB DRAM
-for H1 (Java Heap) and 6 GB for JVM Native memory and I/O cache
-resulting in a total of 28 GB DRAM per instance and utilizing 56 of 56
-GB total available DRAM. The next 2 bars show the performance of
-TeraHep Spark with each instance using 11 GB DRAM for H1 (Java Heap)
-and 17 GB for JVM Native memory and I/O cache resulting in a total of
-28 GB DRAM per instance and utilizing 56 of 56 GB total available
-DRAM. The next 4 bars show the performance of TeraHeap Spark with each
-instance using 11 GB DRAM for H1 (Java Heap) and 3 GB for JVM Native
-memory and I/O cache resuting in a total of 14 GB DRAM per instance
-and utilizing 56 of 56 GB total available DRAM. The next 4 bars show
-the performance of TeraHeap Spark with increased PageCache and reduced
-H1 with each instance using 6 GB DRAM for H1 (Java Heap) and 8 GB for
-JVM Native memory and I/O cache resuting in a total of 14 GB DRAM per
-instance and utilizing 56 of 56 GB total available DRAM.  By looking
-at this graph it is clear that Spark suffers by both S/D and GC, but
-more specifically when it comes to LogisticRegression we witness S/D
-to increase dramaticaly as we increase the number of Spark instances
-running. These overheads are absorbed by TeraHeap. Finally someone
-would prefer to have a bigger heap than I/O cache when running
-LogisticRegression.
+Figure \ref{fig:logr64} shows the performance of multiple
+Native-TeraHeap Spark instances running Logistic Regression with 64 GB
+dataset per instance in our 64 GB DRAM machine. Each instance of Spark
+uses one executor with 8 cores per executor. Available DRAM is 56 GB
+and 8 GB are left to the Operating system, resulting in 64 GB total
+DRAM. All configurations utilize 56 of 64 GB total DRAM.
+Starting from the left of the graph, the first 6 bars show the
+performance of 3 runs. The first run is with 2 colocated Native Spark instances.
+Another run with 2 colocated TH Spark instances with H1 dominating Page Cache
+and a third run with 2 colocated TH Spark instances where Page Cache dominates H1.
+Each instance of the first 2 runs uses 22 GB DRAM for H1 (Java Heap) and 6 GB for rest of the services.
+The third run uses 11 GB DRAM for H1 and 17 GB for Page Cache for each instance. 
+The next 12 bars show the performance of another 3 runs. The first run is with 4 colocated Native Spark instances.
+Another run with 4 colocated TH Spark instances with H1 dominating Page Cache
+and a third run with 4 colocated TH Spark instances where Page Cache dominates H1.
+Each instance of the first run uses 11 GB DRAM for H1 (Java Heap) and 3 GB for rest of the services.
+The second run uses 10 GB DRAM for H1 and 4 GB for Page Cache for each instance.
+The third run uses 6 GB DRAM for H1 and 8 GB for Page Cache for each instance.
 
-Figure \ref{fig:cc64} shows the performance of multiple Native-TeraHeap
-Spark instances running ConnectedComponent with 8 GB dataset per
-instance in our 64 GB DRAM machine. Each instance of Spark uses one
-executor with 8 cores per executor. Available DRAM is 56 GB and 8 GB
-are left to the Operating system, resulting in 64 GB total DRAM.
-Starting from the left of the graph, the first 2 bars show the
-performance of Native Spark with each instance using 22 GB DRAM for H1
-(Java Heap) and 6 GB for JVM Native memory and I/O cache resulting in
-a total of 28 GB DRAM per instance and utilizing 56 of 64 GB total
-DRAM. The next 2 bars show the performance of Native Spark with each
-instance using 11 GB DRAM for H1 (Java Heap) and 17 GB for JVM Native
-memory and I/O cache resulting in a total of 28 GB DRAM per instance
-and utilizing 56 of 56 GB total available DRAM. The next 4 bars show
-the performance of Native Spark with each instance using 11 GB DRAM
-for H1 (Java Heap) and 3 GB for JVM Native memory and I/O cache
-resuting in a total of 14 GB DRAM per instance and utilizing 56 of 56
-GB total available DRAM. The next 2 bars show the performance of
-TeraHeap Spark with each instance using 22 GB DRAM for H1 (Java Heap)
-and 6 GB for JVM Native memory and I/O cache resulting in a total of
-28 GB DRAM per instance and utilizing 56 of 56 GB total available
-DRAM. The next 2 bars show the performance of TeraHep Spark with each
-instance using 11 GB DRAM for H1 (Java Heap) and 17 GB for JVM Native
-memory and I/O cache resulting in a total of 28 GB DRAM per instance
-and utilizing 56 of 56 GB total available DRAM. The next 4 bars show
-the performance of TeraHeap Spark with each instance using 11 GB DRAM
-for H1 (Java Heap) and 3 GB for JVM Native memory and I/O cache
-resuting in a total of 14 GB DRAM per instance and utilizing 56 of 56
-GB total available DRAM. The next 4 bars show the performance of
-TeraHeap Spark with increased PageCache and reduced H1 with each
-instance using 6 GB DRAM for H1 (Java Heap) and 8 GB for JVM Native
-memory and I/O cache resuting in a total of 14 GB DRAM per instance
-and utilizing 56 of 56 GB total available DRAM.  By looking at this
-graph it is clear that Spark suffers by both S/D and GC, but more
-specifically when it comes to ConnectedComponent we witness Major GC
-to increase dramaticaly as we increase the number of Spark instances
-running. These overheads are absorbed by TeraHeap. Finally someone
-would prefer to have a bigger heap than I/O cache when running
-ConnectedComponent.
+Figure \ref{fig:cc64} shows the performance of multiple
+Native-TeraHeap Spark instances running Connected Component with 8 GB
+dataset per instance in our 64 GB DRAM machine. Each instance of Spark
+uses one executor with 8 cores per executor. Available DRAM is 56 GB
+and 8 GB are left to the Operating system, resulting in 64 GB total
+DRAM. All configurations utilize 56 of 64 GB total DRAM.
+Starting from the left of the graph, the first 6 bars show the
+performance of 3 runs. The first run is with 2 colocated Native Spark instances.
+Another run with 2 colocated TH Spark instances with H1 dominating Page Cache
+and a third run with 2 colocated TH Spark instances where Page Cache dominates H1.
+Each instance of the first 2 runs uses 22 GB DRAM for H1 (Java Heap) and 6 GB for rest of the services.
+The third run uses 11 GB DRAM for H1 and 17 GB for Page Cache for each instance. 
+The next 12 bars show the performance of another 3 runs. The first run is with 4 colocated Native Spark instances.
+Another run with 4 colocated TH Spark instances with H1 dominating Page Cache
+and a third run with 4 colocated TH Spark instances where Page Cache dominates H1.
+Each instance of the first run uses 11 GB DRAM for H1 (Java Heap) and 3 GB for rest of the services.
+The second run uses 10 GB DRAM for H1 and 4 GB for Page Cache for each instance.
+The third run uses 6 GB DRAM for H1 and 8 GB for Page Cache for each instance.
 
-Figure \ref{fig:pr256} shows the performance of multiple Native-TeraHeap
-Spark instances running PageRank with 32 GB dataset per instance in
-our 256 GB DRAM machine. Each instance of Spark uses one executor with
-8 cores per executor. Available DRAM is 240 GB and 16 GB are left to
-the Operating system, resulting in 256 GB total DRAM. Starting from
-the left of the graph, the first 4 bars show the performance of Native
-Spark with each instance using 44 GB DRAM for H1 (Java Heap) and 16 GB
-for JVM Native memory and I/O cache resulting in a total of 60 GB DRAM
-per instance and utilizing 240 of 256 GB total DRAM. The next 6 bars
-show the performance of Native Spark with each instance using 32 GB
-DRAM for H1 (Java Heap) and 8 GB for JVM Native memory and I/O cache
-resulting in a total of 40 GB DRAM per instance and utilizing 240 of
-240 GB total available DRAM. The next 7 bars show the performance of
-Native Spark with each instance using 27 GB DRAM for H1 (Java Heap)
-and 7 GB for JVM Native memory and I/O cache resuting in a total of 34
-GB DRAM per instance and utilizing 240 of 240 GB total available DRAM.
-The next 7 bars show the performance of TeraHeap Spark with each
-instance using 27 GB DRAM for H1 (Java Heap) and 7 GB for JVM Native
-memory and I/O cache resuting in a total of 34 GB DRAM per instance
-and utilizing 240 of 240 GB total available DRAM. The last 7 bars show
-the performance of Native Spark with each instance using 14 GB DRAM
-for H1 (Java Heap) and 20 GB for JVM Native memory and I/O cache
-resuting in a total of 34 GB DRAM per instance and utilizing 240 of
-240 total DRAM. By looking at this graph it is clear that Spark
-suffers by both S/D and GC, but more specifically when it comes to
-PageRank we witness Major GC to increase dramaticaly as we increase
-the number of Spark instances running. These overheads are absorbed by
-TeraHeap. Finally someone would prefer to have a bigger heap than I/O
-cache when running PageRank.
+Figure \ref{fig:pr256} shows the performance of multiple
+Native-TeraHeap Spark instances running PageRank with 32 GB
+dataset per instance in our 256 GB DRAM machine. Each instance of Spark
+uses one executor with 8 cores per executor. Available DRAM is 240 GB
+and 16 GB are left to the Operating system, resulting in 256 GB total
+DRAM. All configurations utilize 240 of 256 GB total DRAM.
+Starting from the left of the graph, the first 8 bars show the
+performance of 2 runs. The first run is with 4 colocated Native Spark instances.
+Another run with 4 colocated TH Spark instances with H1 dominating Page Cache.
+Each instance of the first 8 runs uses 48 GB DRAM for H1 (Java Heap) and 12 GB for rest of the services including Page Cache.
+The next 21 bars show the performance of another 3 runs. The first run is with 7 colocated Native Spark instances.
+Another run with 7 colocated TH Spark instances with H1 dominating Page Cache
+and a third run with 7 colocated TH Spark instances where Page Cache dominates H1.
+Each instance of the first run uses 27 GB DRAM for H1 (Java Heap) and 7 GB for rest of the services.
+The second run uses 27 GB DRAM for H1 and 7 GB for Page Cache for each TH instance.
+The third run uses 14 GB DRAM for H1 and 20 GB for Page Cache for each TH instance.
 
 \subsection{Is the CPU utilization of the server increasing
 accordingly to throughput?}
