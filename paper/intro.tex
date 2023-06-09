@@ -2,7 +2,7 @@
 \label{sec:intro}
 
 With the exponential growth of data in various fields such as
-healthcare and social media, managed big data frameworks (e.g, Spark,
+healthcare and social media, managed big data frameworks (e.g, Spark \cite{Spark},
 Giraph, and Flink) require large amount of DRAM. 
 These frameworks, during processing, generate large amount of objects
 in the managed heap that span multiple computation stages.
@@ -18,9 +18,9 @@ collection (GC) cycles.
 
 To reduce the frequency of GC, the heap capacity increases to withstand the object load.
 Along with GC, the number of managed big data analytics frameworks instances increase
-in the server to match the increased needs for data processing. The result of this practice
-is that the underlying machine runs out of memory. Furthermore the memory resources
-in datacenters are low compared to the available CPU cores.
+in the server to match the increased needs for data processing utilizing all available DRAM. The result of this practice
+is that the underlying machine runs out of memory, while the GC overhead is still high. 
+Furthermore the memory resources in datacenters are low compared to the available CPU cores.
 This leads to the problem where some cores stay idle, because the memory/core is not enough.
 
 The memory-per-core problem can better be understood when looking at the
@@ -29,8 +29,8 @@ When looking at the results of an Alibaba trace analysis \cite{Alibaba}, we see 
 is at an average of 80\%, while CPU usage stays at 40\%. This trace clearly shows that DRAM utilization
 is high, while the CPU is under-utilized. In Facebook's Twine presentation \cite{Twine},
 they used a cluster of machines where each machine had 40 cores and 80 GB DRAM. This
-means that memory/core was 2 GB which shows that memory capacity is not enough and most of the time
-the CPU is going to be idle.
+means that memory/core was 2 GB which shows that memory capacity is not enough and most of the time many
+the CPU cores are going to be idle.
 
 To address the problem of DRAM capacity limitation, recent work
 proposed solutions that extend the managed heaps over local flash
@@ -60,19 +60,19 @@ data analytics workloads on a real-world cluster. We choose the
 parameters for running the workloads by investigating the needs of big
 data analytics in memory budget. We define memory budget as
 the summary of Java Heap, IO Cache and JVM native memory. We compare
-TeraHeap with the native Spark and Giraph distributions and show the potential
+TeraHeap with the native Spark and Giraph distributions and show the potential of
 an approach like TeraHeap to improve performance and server throughput.
 
 Our experimental results show that reducing Java Garbage Collection
 overhead by offloading the heap to fast storage devices significantly
-improves server throughput by up to 66\% against native Spark and
-Giraph. Finally, we also include a cost estimation to show that
+improves server throughput by up to 66\% against native Spark. 
+Finally, we also include a cost estimation to show that
 TeraHeap could reduce monetary cost by up to 50\% for running big data
 analytics, if deployed in a world cluster like Amazon's EC2 or Google
 Cloud Platform or Microsoft Azure Cloud, which are available to
 everyone.
 
-The paper makes the following contributions: 
+To summarize, this paper makes the following contributions: 
 \begin{itemize}
     \item{A detailed methodology for running Apache Spark and Giraph using TeraHeap
 	  as a heap offloading mechanism.}
