@@ -59,6 +59,13 @@
 
 \subsection{Experiments with colocated instances}
 
+Here we look at the colocated experiments of Spark and Giraph.
+We explain each figure from 2 aspects:
+\begin{itemize}
+\item{The differences in the time breakdown while number of instances increase for each configuration.}
+\item{A comparison between the different configurations while instances increase.}
+\end{itemize}
+
 Figure \ref{fig:linr64} shows the performance of multiple
 Native-TeraHeap Spark instances running LinearRegression with 64 GB
 dataset per instance in our 64 GB DRAM machine. Each instance of Spark
@@ -77,11 +84,7 @@ and a third run with 4 colocated TH Spark instances where Page Cache dominates H
 Each instance of the first run uses 11 GB DRAM for H1 (Java Heap) and 3 GB for rest of the services. 
 The second run uses 10 GB DRAM for H1 and 4 GB for Page Cache for each instance. 
 The third run uses 6 GB DRAM for H1 and 8 GB for Page Cache for each instance. 
-We have to consider 3 different aspects of analysing the figures with multiple instances.
-One is how much execution time increases compared to the single instance.
-The second is the differences in the time breakdown while number of instances increase for each configuration.
-The third is a comparison between the different configurations while instances increase.
-Considering the second aspect we see that GC and S/D increase dramatically for Native Spark along with significant increase to Other time. GC differences are witnessed because the heap capacity decreases and that causes memory pressure. This pressure leads to increased I/O because the heap is offloaded to the storage device, thus increasing S/D and Other time. TeraHeap Spark shows a slight increase to Major GC while the number of instances increases. This is because of the decreased heap capacity. Other time increases because more objects are moved to TeraHeap but this is a good trade-off because all the GC is absorbed. S/D is completely absorbed by MMIO. Refering to the third aspect, as instances increase in the server the benefit gap between Native and TeraHeap Spark becomes bigger. As Native Spark starves from more GC and S/D, TeraHeap maintains its benefits. 
+Considering the first aspect we see that GC and S/D increase dramatically for Native Spark along with significant increase to Other time. GC differences are witnessed because the heap capacity decreases and that causes memory pressure. TeraHeap Spark shows a slight increase to Major GC while the number of instances increases. This is because of the decreased heap capacity. Other time increases because more objects are moved to TeraHeap and read/write traffic increases but this is a good trade-off because all the GC is absorbed. S/D is completely absorbed by MMIO. From the third aspect, as instances increase in the server the benefit gap between Native and TeraHeap Spark becomes bigger. As Native Spark starves from more GC and S/D, TeraHeap maintains its benefits. 
 
 Figure \ref{fig:pr64} shows the performance of multiple
 Native-TeraHeap Spark instances running PageRank with 8 GB
@@ -104,6 +107,7 @@ The third run uses 6 GB DRAM for H1 and 8 GB for Page Cache for each instance.
 The last 8 bars refer to 8 colocated instances of TeraHeap Spark only. 
 We were unable to decrease H1 enough to run 8 colocates instance of Native Spark
 because JVM runs out of memory. Each instance of the run uses 4 GB DRAM for H1 (Java Heap) and 3 GB for Page Cache.
+Considering the first aspect we see that Minor and Major GC increase dramatically for Native Spark along with significant increase to Other time. Minor and Major GC differences are witnessed because the heap capacity decreases and that causes memory pressure. TeraHeap Spark shows a slight increase to Major GC while the number of instances increases. This is because of the decreasing heap capacity. Other time increases because more objects are moved to TeraHeap but this is a good trade-off because all the GC is absorbed. S/D is completely absorbed by MMIO. From the second aspect, as instances increase in the server the benefit gap between Native and TeraHeap Spark becomes bigger. As Native Spark starves from more GC and S/D, TeraHeap maintains its benefits.
 
 Figure \ref{fig:logr64} shows the performance of multiple
 Native-TeraHeap Spark instances running Logistic Regression with 64 GB
@@ -123,6 +127,7 @@ and a third run with 4 colocated TH Spark instances where Page Cache dominates H
 Each instance of the first run uses 11 GB DRAM for H1 (Java Heap) and 3 GB for rest of the services.
 The second run uses 10 GB DRAM for H1 and 4 GB for Page Cache for each instance.
 The third run uses 6 GB DRAM for H1 and 8 GB for Page Cache for each instance.
+Considering the first aspect we see that GC and S/D increase dramatically for Native Spark along with significant increase to Other time. GC differences are witnessed because the heap capacity decreases and that causes memory pressure. TeraHeap Spark shows a slight increase to Major GC while the number of instances increases. This is because of the decreased heap capacity. Other time increases because more objects are moved to TeraHeap and read/write traffic increases but this is a good trade-off because all the GC is absorbed. S/D is completely absorbed by MMIO. From the third aspect, as instances increase in the server the benefit gap between Native and TeraHeap Spark becomes bigger. As Native Spark starves from more GC and S/D, TeraHeap maintains its benefits. 
 
 Figure \ref{fig:cc64} shows the performance of multiple
 Native-TeraHeap Spark instances running Connected Component with 8 GB
@@ -142,6 +147,7 @@ and a third run with 4 colocated TH Spark instances where Page Cache dominates H
 Each instance of the first run uses 11 GB DRAM for H1 (Java Heap) and 3 GB for rest of the services.
 The second run uses 10 GB DRAM for H1 and 4 GB for Page Cache for each instance.
 The third run uses 6 GB DRAM for H1 and 8 GB for Page Cache for each instance.
+Considering the first aspect we see that Minor and Major GC increase dramatically for Native Spark along with significant increase to Other time. Minor and Major GC differences are witnessed because the heap capacity decreases and that causes memory pressure. TeraHeap Spark shows a slight increase to Major GC while the number of instances increases. This is because of the decreasing heap capacity. Other time increases because more objects are moved to TeraHeap but this is a good trade-off because all the GC is absorbed. S/D is completely absorbed by MMIO. From the second aspect, as instances increase in the server the benefit gap between Native and TeraHeap Spark becomes bigger. As Native Spark starves from more GC and S/D, TeraHeap maintains its benefits.
 
 Figure \ref{fig:pr256} shows the performance of multiple
 Native-TeraHeap Spark instances running PageRank with 32 GB
@@ -159,6 +165,7 @@ and a third run with 7 colocated TH Spark instances where Page Cache dominates H
 Each instance of the first run uses 27 GB DRAM for H1 (Java Heap) and 7 GB for rest of the services.
 The second run uses 27 GB DRAM for H1 and 7 GB for Page Cache for each TH instance.
 The third run uses 14 GB DRAM for H1 and 20 GB for Page Cache for each TH instance.
+Considering the first aspect we see that Minor and Major GC increase dramatically for Native Spark along with significant increase to Other time. Minor and Major GC differences are witnessed because the heap capacity decreases and that causes memory pressure. TeraHeap Spark shows a slight increase to Major GC while the number of instances increases. This is because of the decreasing heap capacity. Other time increases because more objects are moved to TeraHeap but this is a good trade-off because all the GC is absorbed. S/D is completely absorbed by MMIO. From the second aspect, as instances increase in the server the benefit gap between Native and TeraHeap Spark becomes bigger. As Native Spark starves from more GC and S/D, TeraHeap maintains its benefits.
 
 \subsection{Is the CPU utilization of the server increasing
 accordingly to throughput?}
@@ -173,9 +180,24 @@ accordingly to throughput?}
     a bigger size for H1 than PageCache and PC the opposite. E.g. T2
     PC is a run of 2 concurrent TeraHeap instances with exactly the
     same configuration.}
-	\label{fig:pr_64_thr}
+\label{fig:pr_64_thr}
 \end{subfigure}
-	\begin{subfigure}[b]{0.48\textwidth}
+        \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\linewidth]{./fig/PR_64_USR.png}
+    \caption{Page Rank 64 GB DRAM setup Native and TeraHeap User CPU utilization
+    as the number of instances increases. Configurations starting with
+    N denote a run with Native instances of Spark and with T with
+    TeraHeap. H1 is a run with the memory budget configured to contain
+    a bigger size for H1 than PageCache and PC the opposite. E.g. T2
+    PC is a run of 2 concurrent TeraHeap instances with exactly the
+    same configuration.}
+		\label{fig:pr_64_usr}
+	\end{subfigure}\\[1em]
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+        \begin{subfigure}[b]{0.48\textwidth}
         \includegraphics[width=\linewidth]{./fig/LINR_64_THR.png}
     \caption{Linear Regression 64 GB DRAM setup Native and TeraHeap
     throughput as the number of instances increases. Configurations
@@ -184,13 +206,9 @@ accordingly to throughput?}
     configured to contain a bigger size for H1 than PageCache and PC
     the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap
     instances with exactly the same configuration.}
-	\label{fig:linr_64_thr}
-	\end{subfigure}\\[1em]
-\end{figure}
-
-\begin{figure}[htbp]
-	\centering
-	\begin{subfigure}[b]{0.48\textwidth}
+		\label{fig:linr_64_thr}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.48\textwidth}
         \includegraphics[width=\linewidth]{./fig/LOGR_64_THR.png}
     \caption{Logistic Regression 64 GB DRAM setup Native and TeraHeap
     throughput as the number of instances increases. Configurations
@@ -199,9 +217,39 @@ accordingly to throughput?}
     configured to contain a bigger size for H1 than PageCache and PC
     the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap
     instances with exactly the same configuration.}
-	\label{fig:logr_64_thr}
-\end{subfigure}
-	\begin{subfigure}[b]{0.48\textwidth}
+		\label{fig:logr_64_thr}
+        \end{subfigure}\\[1em]
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+        \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\linewidth]{./fig/LINR_64_USR.png}
+    \caption{Linear Regression 64 GB DRAM setup Native and TeraHeap
+    User CPU utilization as the number of instances increases. Configurations
+    starting with N denote a run with Native instances of Spark and
+    with T with TeraHeap. H1 is a run with the memory budget
+    configured to contain a bigger size for H1 than PageCache and PC
+    the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap
+    instances with exactly the same configuration.}
+		\label{fig:linr_64_usr}
+        \end{subfigure}
+   \begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/LOGR_64_USR.png}
+    \caption{Logistic Regression 64 GB DRAM setup Native and TeraHeap
+    User CPU utilization as the number of instances increases. Configurations
+    starting with N denote a run with Native instances of Spark and
+    with T with TeraHeap. H1 is a run with the memory budget
+    configured to contain a bigger size for H1 than PageCache and PC
+    the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap
+    instances with exactly the same configuration.}
+	   \label{fig:logr_64_usr}
+    \end{subfigure}\\[1em]
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+        \begin{subfigure}[b]{0.48\textwidth}
         \includegraphics[width=\linewidth]{./fig/CC_64_THR.png}
     \caption{Connected Component 64 GB DRAM setup Native and TeraHeap
     throughput as the number of instances increases.Configurations
@@ -211,83 +259,48 @@ accordingly to throughput?}
     the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap
     instances with exactly the same configuration. }
 		\label{fig:cc_64_thr}
-	\end{subfigure}\\[1em]
-\end{figure}
-
-\begin{figure}[htbp]
-	\centering
-	\begin{subfigure}[b]{0.48\textwidth}
-        \includegraphics[width=\linewidth]{./fig/PR_64_IDLE.png}
-    \caption{Page Rank 64 GB DRAM setup Native and TeraHeap idle CPU
-    as the number of instances increases. Configurations starting with
-    N denote a run with Native instances of Spark and with T with
-    TeraHeap. H1 is a run with the memory budget configured to contain
-    a bigger size for H1 than PageCache and PC the opposite. E.g. T2
-    PC is a run of 2 concurrent TeraHeap instances with exactly the
-    same configuration.}
-	\label{fig:pr_64_idle}
-\end{subfigure}
-	\begin{subfigure}[b]{0.48\textwidth}
-        \includegraphics[width=\linewidth]{./fig/LINR_64_IDLE.png}
-    \caption{Linear Regression 64 GB DRAM setup Native and TeraHeap
-    idle CPU as the number of instances increases. Configurations
-    starting with N denote a run with Native instances of Spark and
-    with T with TeraHeap. H1 is a run with the memory budget
-    configured to contain a bigger size for H1 than PageCache and PC
-    the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap
-    instances with exactly the same configuration.}
-	\label{fig:linr_64_idle}
-	\end{subfigure}\\[1em]
-\end{figure}
-
-\begin{figure}[htbp]
-	\centering
-    \begin{subfigure}[b]{0.48\textwidth}
-    \includegraphics[width=\linewidth]{./fig/LOGR_64_IDLE.png}
-    \caption{Logistic Regression 64 GB DRAM setup Native and TeraHeap
-    idle CPU as the number of instances increases. Configurations
-    starting with N denote a run with Native instances of Spark and
-    with T with TeraHeap. H1 is a run with the memory budget
-    configured to contain a bigger size for H1 than PageCache and PC
-    the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap
-    instances with exactly the same configuration.}
-    \label{fig:logr_64_idle}
-    \end{subfigure}
+	\end{subfigure}
 \begin{subfigure}[b]{0.48\textwidth}
-        \includegraphics[width=\linewidth]{./fig/CC_64_IDLE.png}
+        \includegraphics[width=\linewidth]{./fig/CC_64_USR.png}
     \caption{Connected Component 64 GB DRAM setup Native and TeraHeap
-    idle CPU as the number of instances increases. Configurations
+    User CPU utilization as the number of instances increases. Configurations
     starting with N denote a run with Native instances of Spark and
     with T with TeraHeap. H1 is a run with the memory budget
     configured to contain a bigger size for H1 than PageCache and PC
     the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap
     instances with exactly the same configuration.}
-	\label{fig:cc_64_idle}
+	\label{fig:cc_64_usr}
 \end{subfigure}\\[1em]
 \end{figure}
 
+
+The main goal for colocating tasks is to increase the CPU utilization and achieve better
+throughput. CPU utilization is split to 2 parts. 
+User utilization includes all CPU cycles that were executed in user-space threads.
+It includes GC cycles, S/D cycles and mutator tasks except I/O.
+System utilization includes all CPU cycles that were executed in kernel-space threads.
+This includes I/O carried out by GC (TeraHeap) and mutator I/O.
+Therefore we have to focus to User utilization which includes the effective CPU cycles done by the application.
 By looking at figures \ref{fig:pr_64_thr}, \ref{fig:linr_64_thr},
 \ref{fig:logr_64_thr} and \ref{fig:cc_64_thr} we see that Native
 Spark's throughput decreases as the number of colocated
-instances-executors increase in the server. The main goal for
-colocating tasks is to increase the CPU utilization and achieve better
-throughput as effectively as possible as if running each instance
-isolated. While Native Spark fails to provide scalability, TH Spark
-achieves nearly double the throughput of Native Spark and is also able
-to scale beyond 4 instances.
+instances-executors increase in the server.
+This is justified by GC and S/D that increase as instances increase and by the increased User utilization
+(\ref{fig:pr_64_usr}, \ref{fig:linr_64_usr}, \ref{fig:logr_64_usr}, \ref{fig:cc_64_usr}).
+TeraHeap achieves higher throughput than Native Spark and that is also justified by the increased User utilization.
+Having higher user utilization and lower GC and S/D means that effective CPU utilization is really higher, since more
+work is done by mutator threads.
 
-Figures \ref{fig:pr_64_idle}, \ref{fig:linr_64_idle},
-\ref{fig:logr_64_idle} and \ref{fig:cc_64_idle}  show the percentage
-of idle CPU while the number of colocated instances grows. CPU idle
-should decrease in this particular concept and that is something
-proven in the figure. In PageRank graph we notice TeraHeap with 2
-instances achieving less idle CPU percentage than Native Spark with 4
-instances.
+\subsection{Single instance vs colocated instances}
+When running colocated instances the goal is that the execution 
+of all instances is close to the summary of execution of all instances run isolated.
+As seen in tables, most of the times we are not even close. To achieve that
+we need a scheduling policy to dynamically resize H1 and Page Cache based on runtime decisions.
 
-\subsection{Detailed synopsis of multi-instances evaluation. What
+\subsection{What
 happens with monetary cost across different cloud platforms?}
 
-
+\iffalse
 \begin{table}[htbp]
   \centering
 	\begin{subtable}[b]{0.45\linewidth}
@@ -339,7 +352,43 @@ happens with monetary cost across different cloud platforms?}
 \end{subtable}
 	\vspace{1em}
 \end{table}
-
+\fi
+\iffalse
+%\begin{center}%[htbp]
+ %   \centering
+  %  \caption{Page Rank synopsis table}
+	%\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+		\begin{tabularx}{\linewidth}{*{17}{X}}
+	    \hline
+        Configuration & H1 Size / I & Memory / I & Total memory & \#I & Exec. Time & User util. & System util. & IO Wait & CPU Idle & Total MB Processed & MB/s & MB/s/I & Cost AWS \$ & Cost GCP \$ & Cost Azure \$ \\
+        \hline
+        N2-small – single & 22 & 28 & 64 & 1 & 1762 & 32 & 2 & 1 & 65 & 8490 & 5 & 5 & 0.6 & 0.58 & 0.67 \\
+        N2 - small & 22 & 28 & 64 & 2 & 3563 & 66 & 5 & 2 & 27 & 16980 & 5 & 2 & 0.6 & 0.58 & 0.67 \\
+        N4 – small – single & 11 & 14 & 64 & 1 & 1783 & 29 & 2 & 1 & 68 & 8490 & 5 & 5 & 0.6 & 0.58 & 0.67 \\
+        N4 - small & 11 & 14 & 64 & 4 & 8195 & 84 & 6 & 2 & 8 & 33960 & 4 & 1 & 1.8 & 1.74 & 2.01 \\
+        N8 – small & 4 & 7 & 64 & 8 & OOM & 0 & 0 & 0 & ** & 0 & 0 & 0 & *** & *** \\
+        T2 H1- small – single & 22 & 28 & 64 & 1 & 1146 & 46 & 2 & 1 & 51 & 8490 & 7 & 7 & 0.6 & 0.58 & 0.67 \\
+        T2 H1 – small & 22 & 28 & 64 & 2 & 2545 & 89 & 4 & 1 & 6 & 16980 & 7 & 3 & 0.6 & 0.58 & 0.67 \\
+        T2 PC- small – single & 11 & 28 & 64 & 1 & 966 & 45 & 2 & 1 & 52 & 8490 & 9 & 9 & 0.6 & 0.58 & 0.67 \\
+        T2 PC – small & 11 & 28 & 64 & 2 & 2385 & 87 & 4 & 0 & 9 & 16980 & 7 & 4 & 0.6 & 0.58 & 0.67 \\
+        T4 H1 – small – single & 11 & 14 & 64 & 1 & 984 & 43 & 3 & 1 & 53 & 8490 & 9 & 9 & 0.6 & 0.58 & 0.67 \\
+        T4 H1 – small & 11 & 14 & 64 & 4 & 5554 & 94 & 5 & 0 & 1 & 33960 & 6 & 2 & 1.2 & 1.16 & 1.34 \\
+        T4 PC – small – single & 6 & 14 & 64 & 1 & 922 & 42 & 2 & 2 & 54 & 8490 & 9 & 9 & 0.6 & 0.58 & 0.67 \\
+        T4 PC – small & 6 & 14 & 64 & 4 & 5880 & 94 & 5 & 0 & 1 & 33960 & 6 & 2 & 1.2 & 1.16 & 1.34 \\
+        T8 – small – single & 4 & 7 & 64 & 1 & 1037 & 39 & 2 & 1 & 58 & 8490 & 8 & 8 & 0.6 & 0.58 & 0.67 \\
+        T8 – small & 4 & 7 & 64 & 8 & 12305 & 95 & 5 & 0 & 0 & 67920 & 6 & 1 & 2.4 & 2.32 & 2.68 \\
+        N4 - big & 48 & 60 & 256 & 4 & 13542 & 78 & 7 & 7 & 8 & 135872 & 10 & 3 & 6.4 & *** & *** \\
+        T4 – big & 48 & 60 & 256 & 4 & 9284 & 91 & 8 & 1 & 1 & 135782 & 16 & 4 & 1.8 & *** & *** \\
+        N7 – big & 27 & 34 & 256 & 7 & 32763 & 80 & 8 & 12 & 0 & 237776 & 7 & 1 & 14.4 & *** & *** \\
+        T7 H1 – big & 27 & 34 & 256 & 7 & 19443 & 92 & 7 & 1 & 0 & 237776 & 12 & 2 & 9.6 & *** & *** \\
+        T7 PC – big & 14 & 34 & 256 & 7 & 16485 & 93 & 7 & 1 & 0 & 237776 & 14 & 2 & 8 & *** & *** \\
+        \hline
+	\bottomrule
+    \end{tabularx}
+%	\label{tab:pr_table}
+%\end{center}
+\fi
+\iffalse
 \begin{table}[t!]
   \centering
   \caption{Logistic Regression synopsis table. Configurations starting
@@ -385,31 +434,15 @@ happens with monetary cost across different cloud platforms?}
      \end{tabular}%
 	}
 \end{table}
+\fi
 
 Tables \ref{tab:pr_table}, \ref{tab:linr_table}, \ref{tab:logr_table}
-and \ref{tab:cc_table} show a detailed synopsis of the performance and
-AWS, GCP and Azure costs of deploying multiple instances of Spark
-using both techniques. Each setup is run using 2 different amounts for
-H1 (80 and 40\%). While the number of instances increases TeraHeap
-appears to maintain throughput while Native Spark has significant
-throughput decrease. In several occassions, if we compare Native's to
-TeraHeap's throughput we notice TeraHeap having more than 100\%
-increase compared to Native. In PageRank's 64 DB DRAM setup TeraHeap
-manages to scale to 8 instances while Native Spark runs out of memory.
-Furthermore when looking at the PageRank table it becomes clear that
-TeraHeap achieves a higher CPU utilization, because of the S/D
-elimination and less I/O. Despite TeraHeap's better performance, the
-total time taken for all instances to complete surpasses the time it
-would take to run the same number of single isolated instances one
-after the other. This means that in order to achieve better
-performance we would need a scheduling policy to decide H1 and
-PageCache amount for each workload running. This is something
-discussed in the next section. Moreover, regarding the monetary cost
-across different cloud platforms such as AWS EC2 (Amazon Web Services
-Cloud), Google Cloud Platform (GCP) and Microsoft Azure, we witness
-that all providers offer a similar cost for identical machines. As
-seen by the tables, taking into account that we have an hourly cost,
-TeraHeap seems to be the obvious choice for running Spark workloads
-and save money, because it is able to offer more scalability to the
-user by freeing memory in order to increase CPU utilization and
-increase throughput. 
+and \ref{tab:cc_table} show 
+Amazon Web Services Cloud (EC2), GCP (Google Cloud Platform) and Microsoft Azure costs of deploying multiple instances of Spark
+using both techniques. 
+We witness that all providers offer a similar cost for identical machines to our server. 
+As seen by the tables, taking into account that we have an hourly cost,
+TeraHeap could be used for running colocated Spark and Giraph workloads
+and save money. Reducing the GC and S/D makes a huge difference in the execution time
+and therefore running with TeraHeap decreases the hours needed to rent the machines.
+
