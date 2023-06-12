@@ -27,12 +27,14 @@ The memory-per-core problem can better be understood when looking at
 the resource usage and the characteristics of the servers of big
 companies e.g. Alibaba and Facebook. When looking at the results of an
 Alibaba trace analysis \cite{Alibaba}, we see that memory usage is at
-an average of 80\%, while CPU usage stays at 40\%. This trace clearly
+an average of 80\%, while CPU usage stays at 40\% \note{jk: I think
+this statement is much more appropriate for the previous paragraph}. This trace clearly
 shows that DRAM utilization is high, while the CPU is under-utilized.
 In Facebook's Twine presentation \cite{Twine}, they used a cluster of
 machines where each machine had 40 cores and 80 GB DRAM. This means
 that memory/core was 2 GB which shows that memory capacity is not
-enough and most of the time many the CPU cores are going to be idle.
+enough and most of the time many the CPU cores are going to be idle
+\note{jk: I do not understand. Please try to write more precise.}.
 
 To address the problem of DRAM capacity limitation, recent work
 proposed solutions that extend the managed heaps over local flash
@@ -42,7 +44,10 @@ a memory scheduling mechanism. On the other hand, CFM \cite{CFM}
 utilizes remote DRAM as swap memory in order to increase total memory capacity
 and reduce memory pressure. Of both works, only TMO shows
 evaluation against managed big data analytics frameworks without
-targetting the core obstacles like GC.
+targetting the core obstacles like GC \note{jk: Please read again TMO
+and try to state better what they do and what they do not. In their
+paper they do not mention anything about managed big data analytics.
+So, keep the statement about GC.}
 
 This paper provides a methdological analysis of server throughput 
 focused on managed big data analytics frameworks.
