@@ -1,43 +1,37 @@
 \begin{abstract}
-    Today, managed big data frameworks, such as Spark, Giraph, and
-    Flink demand large amount of memory to process massive volume
+    Today, managed big data frameworks, such as Spark and Giraph
+    demand large amount of memory to process massive volume
     datasets. The memory pressure that arises from the big data processing leads to
-    long garbage collection (GC). 
-
-    In order to avoid this overhead, big
-    data analytics frameworks, increase memory usage and finally reach
-    the memory limit of available DRAM in the server. This limit
+    long garbage collection (GC). In order to avoid this overhead, big
+    data analytics frameworks, increase heap capacity and finally reach
+    the memory limit of available DRAM in the server. Another approach
+    is moving part of the managed heap to a storage device. However, this results to
+    excessive Serialization/Deserialization (S/D) overheads. These limits
     prevents the frameworks from effectively utilizing the CPU thus
     leading to low server throughput.
 
-    In this paper, we conduct an analysis of server throughput for
-    managed big data analytics frameworks when offloading the heap to
-    fast storage devices. More specifically, we examine, whether
+    In this paper, we conduct an methodological analysis of server throughput for
+    managed big data analytics frameworks. More specifically, we examine, whether
     storing data to fast storage devices instead of the main memory
-    can help increase the CPU utilization of the system by reducing memory
-    pressure.
-
-    We use a system called TeraHeap that moves objects from
+    can help increase the effective CPU utilization of the server by reducing memory
+    pressure. We use a system called TeraHeap that moves objects from
     the Java managed heap to a secondary heap over a fast storage
-    device to reduce the Garbage Collection overhead. We examine
-    whether reducing the Java Garbage Collection overhead leads to
+    device to reduce the GC overhead and eliminate S/D over data. We examine
+    whether reducing these overheads leads to
     more effective utilization of the available CPU by the
-    application. Our primary focus is to analyze the system's
-    performance under the colocation of multiple memory-bound
-    instances.   Furthermore, we present a detailed methodology for
-    running Apache Spark and Giraph using TeraHeap. The methodology
-    includes conducting a research about the memory needs, i.e. Java
+    application. We focus on analyzing the system's
+    performance under the collocation of multiple memory-bound
+    instances. Our detailed methodology includes conducting a research about the memory needs, i.e. Java
     Heap and IO Cache, of different big data analytics workloads when
-    using Spark-Giraph with native JVM or JVM with TeraHeap.
-    Understanding these needs helps us during the evaluation of
-    running colocated instances.
+    using Spark and Giraph with native JVM or JVM with TeraHeap.
+    Understanding these needs helps us during the evaluation of instance collocation.
 
     Our experimental results show that reducing Java Garbage
     Collection overhead by offloading the heap to fast storage devices
     significantly improves server throughput by up to 66\% against
-    native Spark and Giraph. Finally, we also include a cost
-    estimation to show that TeraHeap could reduce monetary cost by up
-    to 50\% for running big data analytics, if deployed in a world
+    native Spark and... Finally, we also include a cost
+    estimation to show that using an approach like TeraHeap could reduce monetary cost by up
+    to 50\% for running big data analytics in a world
     cluster like Amazon's EC2 or Google Cloud Platform or Microsoft
     Azure Cloud, which are available to everyone.
 \end{abstract}

@@ -17,31 +17,30 @@ collection (GC) cycles.
 %data -> memory -> reduce GC -> memory-per-core bound -> CPU under-utilization 
 
 To reduce the frequency of GC, the heap capacity increases to
-facilitate the big number of allocated objects. In addition to
+facilitate the big number of allocated objects. Apart from
 increasing heap size, managed big data frameworks move objects to
 storage devices to reduce the memory pressure by offloading the heap. 
 However, these data need to be converted to byte streams to be stored in the storage device.
 This leads to huge serialization/deserialization overhead.
-%Big data analytics frameworks instances increase in the server to match
-%the increased needs for data processing utilizing all available DRAM.
-%\note{Jk: Again I do not understand!!!}
+Furthermore, due to the increased needs for data processing, there is a need to collocate
+many isolated managed big data framework instances. In order to maximize throughput,
+the number of instances should increase to consume all available DRAM.
 The result of this practice is that the underlying machine runs out of
-memory, while the GC overhead is still high \note{jk: Why?}.
-This leads to the problem where some cores stay idle, because the
-memory/core is not enough.
+memory, while the GC overhead is still high. DRAM is not enough to satisfy both the needs
+for increased collocation and low GC.
+The remaining GC overhead leads to the problem where some cores idle and most of the CPU utilization is wasted
+on GC and S/D, because the avalaible memory/core is not enough.
 
 The memory-per-core problem can better be understood when looking at
 the resource usage and the characteristics of the servers of big
-companies e.g. Alibaba and Facebook. When looking at the results of an
-Alibaba trace analysis \cite{Alibaba}, we see that memory usage is at
-an average of 80\%, while CPU usage stays at 40\% \note{jk: I think
-this statement is much more appropriate for the previous paragraph}. This trace clearly
+companies e.g. Alibaba and Facebook. When looking at the results of
+Alibaba's traces analyses (\cite{Alibaba}, \cite{Alibaba1}, \cite{Alibabacolocated}) we see that memory usage is at
+an average of 80\%, while CPU usage stays at 40\%. This trace clearly
 shows that DRAM utilization is high, while the CPU is under-utilized.
 In Facebook's Twine presentation \cite{Twine}, they used a cluster of
 machines where each machine had 40 cores and 80 GB DRAM. This means
-that memory/core was 2 GB which shows that memory capacity is not
-enough and most of the time many the CPU cores are going to be idle
-\note{jk: I do not understand. Please try to write more precise.}.
+that ratio of GB for memory/core was 2. This shows that memory capacity for each core is low. Most of the time many the CPU cores are going to be idle
+because a few of them will be enough to carry out the work.
 
 To address the problem of DRAM capacity limitation, recent work
 proposed solutions that extend the managed heaps over local flash
