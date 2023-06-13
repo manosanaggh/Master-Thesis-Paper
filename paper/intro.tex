@@ -2,24 +2,31 @@
 \label{sec:intro}
 
 With the exponential growth of data in various fields such as
-healthcare and social media, managed big data frameworks (e.g, Spark
-\cite{Spark}, Giraph\note{jk: Please be carefull and add citations},
-and Flink) require large capacity of DRAM. These frameworks, during
-processing, generate large amount of objects in the managed heap that
-span multiple computation stages. The memory pressure that arises in
-the managed heap leads to long frequent garbage collection (GC)
-cycles.
+healthcare and social media, managed big data frameworks (e.g, Apache Spark \cite{Spark} and
+Apache Giraph \cite{Giraph}) require large amount of DRAM. 
+These frameworks, during processing, generate large amount of objects
+in the managed heap that span multiple computation stages.
+The memory pressure that arises in the managed heap leads to long frequent garbage
+collection (GC) cycles.
+%memory ressure -> GC
+%large part of CPU utilization goes to GC.
+%not useful work
+%This
+%requirement leads to excessive CPU under-utilization, leading to
+%performance bottlenecks and slow job completion times.
+%data -> memory -> reduce GC -> memory-per-core bound -> CPU under-utilization 
 
 To reduce the frequency of GC, the heap capacity increases to
-withstand the object load \note{jk: I do not usnderstand this
-sentence. What is load? Please be precise}. Along with GC, the number of managed big
-data analytics frameworks instances increase in the server to match
-the increased needs for data processing utilizing all available DRAM.
-\note{Jk: Again I do not understand!!!}
+facilitate the big number of allocated objects. In addition to
+increasing heap size, managed big data frameworks move objects to
+storage devices to reduce the memory pressure by offloading the heap. 
+However, these data need to be converted to byte streams to be stored in the storage device.
+This leads to huge serialization/deserialization overhead.
+%Big data analytics frameworks instances increase in the server to match
+%the increased needs for data processing utilizing all available DRAM.
+%\note{Jk: Again I do not understand!!!}
 The result of this practice is that the underlying machine runs out of
-memory, while the GC overhead is still high \note{jk: Why?}. Furthermore the memory
-resources in datacenters are low compared to the available CPU cores
-\note{jk: How do you know that? Are you Google?}.
+memory, while the GC overhead is still high \note{jk: Why?}.
 This leads to the problem where some cores stay idle, because the
 memory/core is not enough.
 
@@ -42,12 +49,8 @@ storage devices (e.g., NVMe SSD) or remote memory. On the one hand,
 TMO \cite{TMO} offloads cold memory to fast storage devices using
 a memory scheduling mechanism. On the other hand, CFM \cite{CFM}
 utilizes remote DRAM as swap memory in order to increase total memory capacity
-and reduce memory pressure. Of both works, only TMO shows
-evaluation against managed big data analytics frameworks without
-targetting the core obstacles like GC \note{jk: Please read again TMO
-and try to state better what they do and what they do not. In their
-paper they do not mention anything about managed big data analytics.
-So, keep the statement about GC.}
+and reduce memory pressure. Of both works, neither show
+evaluation against managed big data analytics frameworks.
 
 This paper provides a methdological analysis of server throughput 
 focused on managed big data analytics frameworks.
