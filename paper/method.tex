@@ -3,12 +3,12 @@
 
 In our methodology we answer the following questions:
 \begin{itemize}
-	\item{What are our server characteristics?}
-	\item{What are our configurations of Spark and Giraph with and without using TeraHeap?}
+	%\item{What are our server characteristics?}
+	%\item{What are our configurations of Spark and Giraph with and without using TeraHeap?}
 	\item{What workloads did we choose to run for our experiments and why?}
 	\item{Are Spark and Giraph in need of more Java Heap or more cache for IO?}
 	%\item{What kind of metrics should someone use to be accurate when measuring performance?}
-	\item{Why would someone choose to run the workloads concurently and not one by one?}
+	%\item{Why would someone choose to run the workloads concurently and not one by one?}
 	\item{Is cost a contributing factor to pursuing higher throughput for a server?}
 \end{itemize}
 
@@ -92,7 +92,7 @@ results of the experiments conducted.
 \subsection{Native Giraph Configuration}
 Empty
 
-\subsection{TeraHeap}
+\subsection{TeraHeap background and Spark-Giraph configurations for TeraHeap}
 \subsubsection{What is TeraHeap?}
 TeraHeap is a high-capacity managed heap that is memory-mapped over a
 fast storage device (preferrably block-addresable NVMe or
@@ -127,11 +127,11 @@ as Giraph is unaware of the presence of a second heap.
 For our experiments, we selected four specific workloads from two
 different categories of the Spark Bench suite \cite{Spark-Bench}: Page Rank (PR) and Connected
 Component (CC) from GraphX and Linear Regression (LinR) and Logistic Regression (LogR)
-from MLLib. For Giraph we choose PageRank, Connected Component and Community detection 
-using label propagation (CDLP) from LDBC Graphalytics \cite{ldbc}. The primary reason for selecting these workloads is that
-they represent different types of algorithms: PR, CC
+from MLLib. For Giraph we choose PageRank, Weakly Connected Component and Community detection 
+using label propagation (CDLP) from LDBC Graphalytics \cite{ldbc}. The primary reason for selecting these workloads for Spark is that
+they represent different types of algorithms: PR, CC 
 and are graph-based workloads, while LinR and LogR are machine learning
-workloads. Furthermore, all of them are
+workloads. Giraph is a graph processing framework so we used only graph workloads. Furthermore, all of them are
 well-established workloads that are commonly used for benchmarking big
 data analytics systems, making them a suitable choice for our
 experiments. Overall, the selection of these workloads allows us to
@@ -189,132 +189,107 @@ merging the components as necessary. The workload is computationally
 intensive and requires a significant amount of memory to store the
 graph.
 
-\begin{figure}[htbp]
+\subsubsection{Weakly Connected Component}
+empty
+
+\subsubsection{Community Detection Label Propagation}
+empty
+
+\subsubsection{}
+\begin{figure}[thbp]
 	\centering
-    \begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\linewidth]{./fig/gcs_linr_h1_native.png}
     \caption{Number of GCs over time for H1 Linear Regression Native
     Spark investigation.}
     \label{fig:gcs_linr_h1_native}
-    \end{subfigure}
 
-    \begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\linewidth]{./fig/gcs_linr_h1_th.png}
     \caption{Number of GCs over time for H1 Linear Regression TeraHeap
     Spark investigation.}
     \label{fig:gcs_linr_h1_th}
-    \end{subfigure}\\[1em]
 \end{figure}
 
-\begin{figure}[htbp]
-    \begin{subfigure}[b]{0.48\textwidth}
+\begin{figure}[thbp]
     \includegraphics[width=\linewidth]{./fig/gcs_linr_pc_th.png}
     \caption{Number of GCs over time for Page Cache Linear Regression
     TeraHeap Spark investigation.}
     \label{fig:gcs_linr_pc_th}  
-    \end{subfigure}
 
-    \begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\linewidth]{./fig/gcs_pr_h1_th.png}
     \caption{Number of GCs over time for H1 Page Rank TeraHeap Spark
     investigation.}
     \label{fig:gcs_pr_h1_th}
-    \end{subfigure}\\[1em]
 \end{figure}
 
-\begin{figure}[htbp]
-\begin{subfigure}[b]{0.48\textwidth}
+\begin{figure}[thbp]
     \includegraphics[width=\linewidth]{./fig/gcs_pr_h1_native.png}
     \caption{Execution time breakdown for H1 Linear Regression Native
     Spark investigation.}
     \label{fig:gcs_pr_h1_native}
-\end{subfigure}
 
-\begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\linewidth]{./fig/gcs_pr_pc_th.png}
     \caption{Execution time breakdown for PageCache Page Rank TeraHeap
     Spark investigation.}
     \label{fig:gcs_pr_pc_th}
-\end{subfigure}\\[1em]
 \end{figure}
 
-\begin{figure}[htbp]
-\begin{subfigure}[b]{0.48\textwidth}
+\begin{figure}[thbp]
     \includegraphics[width=\linewidth]{./fig/linr_h1_native.png}
     \caption{Execution time breakdown for H1 Linear Regression Native
     Spark investigation.}
     \label{fig:linr_h1_native}
-\end{subfigure}
 
-\begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\linewidth]{./fig/linr_h1_th.png}
     \caption{Execution time breakdown for H1 Linear Regression
     TeraHeap Spark investigation.}
     \label{fig:linr_h1_th}
-\end{subfigure}\\[1em]
 \end{figure}
 
-\begin{figure}[htbp]
-\begin{subfigure}[b]{0.48\textwidth}
+\begin{figure}[thbp]
     \includegraphics[width=\linewidth]{./fig/linr_pc_th.png}
     \caption{Execution time breakdown for Page Cache Linear Regression TeraHeap Spark investigation.}
     \label{fig:linr_pc_th}
-\end{subfigure}
 
-	\begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\linewidth]{./fig/pr_h1_th.png}
     \caption{Execution time breakdown for H1 Page Rank TeraHeap Spark
     investigation.} 
     \label{fig:pr_h1_th}
-	\end{subfigure}\\[1em]
 \end{figure}
 
-\begin{figure}[htbp]
-\begin{subfigure}[b]{0.48\textwidth}
+\begin{figure}[thbp]
     \includegraphics[width=\linewidth]{./fig/pr_pc_th.png}
     \caption{Execution time breakdown for PageCache Page Rank TeraHeap
     Spark investigation.}
     \label{fig:pr_pc_th}
-\end{subfigure}
 
-\begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\linewidth]{./fig/pr_h1_native.png}
     \caption{Execution time breakdown for PageCache Page Rank TeraHeap
     Spark investigation.}
     \label{fig:pr_h1_native}
-\end{subfigure}\\[1em]
 \end{figure}
 
-\begin{figure}[htbp]
-\begin{subfigure}[b]{0.48\textwidth}
+\begin{figure}[thbp]
     \includegraphics[width=\linewidth]{./fig/rw_pr_pc_th.png}
     \caption{Read-Write traffic over time for PageCache Page Rank
     TeraHeap Spark investigation.}
     \label{fig:rw_pr_pc_th}
-\end{subfigure}
 
-\begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\linewidth]{./fig/rw_linr_h1_th.png}
     \caption{Read-Write traffic over time for H1 Linear Regression
     TeraHeap Spark investigation.}
     \label{fig:rw_linr_h1_th}
-\end{subfigure}\\[1em]
 \end{figure}
 
-\begin{figure}[htbp]
-\begin{subfigure}[b]{0.48\textwidth}
+\begin{figure}[thbp]
     \includegraphics[width=\linewidth]{./fig/rw_linr_pc_th.png}
     \caption{Read-Write traffic over time for PageCache Linear
     Regression TeraHeap Spark investigation.}
     \label{fig:rw_linr_pc_th}
-\end{subfigure}
 
-	\begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\linewidth]{./fig/rw_pr_h1_th.png}
     \caption{Read-Write traffic over time for H1 Page Rank TeraHeap
     Spark investigation.}
     \label{fig:rw_pr_h1_th}
-	\end{subfigure}\\[1em]
 \end{figure}
 
 \subsection{Java Heap and I/O cache investigation}
