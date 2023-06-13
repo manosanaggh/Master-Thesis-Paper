@@ -46,7 +46,9 @@
 \end{subfigure}\\[1em]
 \end{figure}
 
-\begin{figure}[ht!]
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\linewidth]{./fig/pr256.png}
     \caption{Execution time breakdown for multiple instances of
     PageRank using the 256 GB total DRAM setup. E.g. 44-60-256-Native
@@ -54,6 +56,16 @@
     parallel and uses 44 GB H1 - 60 GB total cgroup DRAM and 256 GB
     total DRAM for the machine.} 
     \label{fig:pr256}
+	\end{subfigure}
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\linewidth]{./fig/linr128.png}
+    \caption{Execution time breakdown for multiple instances of
+    LinearRegression using the 128 GB total DRAM setup. E.g.
+    22-28-64-Native 1 indicates the first of the 2-4-8 instances that
+    was run in parallel and uses 22 GB H1 - 28 GB total cgroup DRAM
+    and 64 GB total DRAM for the machine.}
+    \label{fig:linr128}
+\end{subfigure}
 \end{figure}
 
 
@@ -270,6 +282,58 @@ accordingly to throughput?}
     the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap
     instances with exactly the same configuration.}
 	\label{fig:cc_64_usr}
+\end{subfigure}\\[1em]
+\end{figure}
+
+\begin{figure}[htbp]
+        \centering
+        \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\linewidth]{./fig/PR_256_THR.png}
+    \caption{Page Rank 256 GB DRAM setup Native and TeraHeap
+    throughput as the number of instances increases.Configurations
+    starting with N denote a run with Native instances of Spark and
+    with T with TeraHeap. H1 is a run with the memory budget
+    configured to contain a bigger size for H1 than PageCache and PC
+    the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap
+    instances with exactly the same configuration. }
+                \label{fig:pr_256_thr}
+        \end{subfigure}
+\begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\linewidth]{./fig/LINR_128_THR.png}
+    \caption{Linear Regression 128 GB DRAM setup Native and TeraHeap
+    throughput as the number of instances increases. Configurations
+    starting with N denote a run with Native instances of Spark and
+    with T with TeraHeap. H1 is a run with the memory budget
+    configured to contain a bigger size for H1 than PageCache and PC
+    the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap
+    instances with exactly the same configuration.}
+        \label{fig:linr_128_thr}
+\end{subfigure}\\[1em]
+\end{figure}
+
+\begin{figure}[htbp]
+        \centering
+        \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\linewidth]{./fig/PR_256_USR.png}
+    \caption{Page Rank 256 GB DRAM setup Native and TeraHeap
+    User CPU utilization as the number of instances increases.Configurations
+    starting with N denote a run with Native instances of Spark and
+    with T with TeraHeap. H1 is a run with the memory budget
+    configured to contain a bigger size for H1 than PageCache and PC
+    the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap
+    instances with exactly the same configuration. }
+                \label{fig:pr_256_usr}
+        \end{subfigure}
+\begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\linewidth]{./fig/LINR_128_USR.png}
+    \caption{Linear Regression 128 GB DRAM setup Native and TeraHeap
+    User CPU utilization as the number of instances increases. Configurations
+    starting with N denote a run with Native instances of Spark and
+    with T with TeraHeap. H1 is a run with the memory budget
+    configured to contain a bigger size for H1 than PageCache and PC
+    the opposite. E.g. T2 PC is a run of 2 concurrent TeraHeap
+    instances with exactly the same configuration.}
+        \label{fig:linr_128_usr}
 \end{subfigure}\\[1em]
 \end{figure}
 

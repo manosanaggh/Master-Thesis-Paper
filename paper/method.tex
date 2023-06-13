@@ -1,51 +1,6 @@
 \section{Experimental Methodology}
 \label{sec:method}
 
-\iffalse
-To evaluate the effectiveness of TeraHeap's heap offloading approach, we conduct a
-set of experiments using various workloads from the Spark Bench suite
-and graphalytics library for Giraph
-on a real-world cluster. Our experimental methodology consists of
-several steps. First, we install and configure Spark, Giraph and OpenJDK8 on the
-cluster. We use Spark's-Giraph's default configuration settings for our
-experiments, except for the garbage collector settings, which we tune
-according to the requirements for TeraHeap.
-
-We select four workloads from the Spark Bench suite that represent
-different types of data processing, such as machine learning and graph
-processing, (and SQL queries ???). We run each workload using TeraHeap
-and compare it with the performance of the same
-workload using the default configuration, garbage collector tuning,
-and heap offloading approaches.
-
-When running multiple colocated instances of a frameowork,
-we utilize all the available DRAM provided by our server leaving 8-10
-GB for the Operating System, while increasing the number of
-instances that are executed. We show that by using TeraHeap, each
-individual instance requires less memory therefore memory becomes
-available for more instances to be deployed, achieving more total
-throughput than Native Spark-Giraph in similar time windows.
-
-To measure the performance of TeraHeap, we use several metrics,
-including server throughput, memory usage, and execution time. We
-measure server throughput as the megabytes of the dataset processed
-per second, memory usage as the amount of memory used during data
-processing, and execution time as the time taken to complete the
-workload.
-
-We repeat each experiment several times to ensure statistical
-significance and calculate the mean and standard deviation of the
-metrics for each approach.
-
-In summary, our experimental methodology involves setting up a
-real-world cluster, selecting appropriate workloads, measuring
-performance using several metrics, and repeating each experiment
-several times to ensure statistical significance. By following this
-methodology, we can evaluate the effectiveness of TeraHeap
-for improving server throughput for managed big data
-analytics.
-\fi
-
 In our methodology we answer the following questions:
 \begin{itemize}
 	\item{What are our server characteristics?}
@@ -104,9 +59,9 @@ it a powerful platform for conducting experiments on managed big data
 analytics and evaluating the performance of TeraHeap. 
 
 \subsection{Native Spark Configuration}
-We use Spark v3.3.0 (\cite{Tuning}, \cite{Conf}, \cite{Monitoring}) with Kryo Serializer, a state-of-the-art highly
+We use Spark v3.3.0 (\cite{Tuning}, \cite{Conf}, \cite{Monitoring}) with Kryo Serializer \cite{Kryo}, a state-of-the-art highly
 optimized S/D Library for Java that Spark recommends. We run Spark
-with Native OpenJDK8 as a baseline. We use the Parallel Scavenge
+with Native OpenJDK8 \cite{JDK8} as a baseline. We use the Parallel Scavenge
 garbage collector which is the one TeraHeap is implemented for.
 Parallel Scavenge is also the go-to collector for applications that
 need high throughput like Spark. We use an executor with 8 executor
@@ -170,10 +125,10 @@ as Giraph is unaware of the presence of a second heap.
 
 \subsection{Workloads}
 For our experiments, we selected four specific workloads from two
-different categories of the Spark Bench suite: Page Rank (PR) and Connected
+different categories of the Spark Bench suite \cite{Spark-Bench}: Page Rank (PR) and Connected
 Component (CC) from GraphX and Linear Regression (LinR) and Logistic Regression (LogR)
 from MLLib. For Giraph we choose PageRank, Connected Component and Community detection 
-using label propagation (CDLP). The primary reason for selecting these workloads is that
+using label propagation (CDLP) from LDBC Graphalytics \cite{ldbc}. The primary reason for selecting these workloads is that
 they represent different types of algorithms: PR, CC
 and are graph-based workloads, while LinR and LogR are machine learning
 workloads. Furthermore, all of them are
@@ -444,7 +399,7 @@ These include heap capacity, which is the amount of memory allocated
 GC time is also an
 important metric, as it measures the amount of time spent by the JVM
 garbage collector in freeing up memory. Serialization/deserialization
-time, measured using a Java async profiler, is important for
+time, measured using Java async-profiler \cite{Profiler}, is important for
 understanding how much time is spent in this operation, which can be a
 bottleneck for some workloads. Other time, which is simply the
 difference between total time and GC and serialization/deserialization
@@ -545,7 +500,7 @@ and faster workload completion offers tangible benefits in terms of
 monetary cost reduction for organizations renting servers. 
 
 In order to estimate the cost of our evaluation in real-world public clusters we
-chose a variety of providers like Amazon, Google and Microsoft. This
+chose a variety of providers like Amazon \cite{EC2}, Google \cite{GCP} and Microsoft \cite{Azure}. This
 way we covered the most known providers and platforms someone would
 choose to run their workloads on. We chose 2 machines from each
 platform identical to the specifications of our 64, 128 and 256 GB DRAM
