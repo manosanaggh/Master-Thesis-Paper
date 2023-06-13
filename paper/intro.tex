@@ -28,8 +28,8 @@ the number of instances should increase to consume all available DRAM.
 The result of this practice is that the underlying machine runs out of
 memory, while the GC overhead is still high. DRAM is not enough to satisfy both the needs
 for increased collocation and low GC.
-The remaining GC overhead leads to the problem where some cores idle and most of the CPU utilization is wasted
-on GC and S/D, because the avalaible memory/core is not enough.
+The remaining GC and S/D overhead lead to the problem where some cores idle and most of the CPU utilization is wasted
+on them, because the avalaible memory/core is not enough.
 
 The memory-per-core problem can better be understood when looking at
 the resource usage and the characteristics of the servers of big
