@@ -381,20 +381,24 @@ happens with monetary cost across different cloud platforms?}
 	\vspace{1em}
 \end{table}
 \fi
-\iffalse
+%\iffalse
 %\begin{center}%[htbp]
  %   \centering
   %  \caption{Page Rank synopsis table}
-	%\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-		\begin{tabularx}{\linewidth}{*{17}{X}}
+\begin{table*}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+		%\begin{tabularx}{\linewidth}{*{17}{X}}
 	    \hline
-        Configuration & H1 Size / I & Memory / I & Total memory & \#I & Exec. Time & User util. & System util. & IO Wait & CPU Idle & Total MB Processed & MB/s & MB/s/I & Cost AWS \$ & Cost GCP \$ & Cost Azure \$ \\
+        \multirow{2}{*}{Configuration} & H1       & \multirow{2}{*}{Mem / I} & Total & \multirow{2}{*}{\#I} & Exec. & User  & System & I/O  & CPU  & Total MB  & \multirow{2}{*}{MB/s} & \multirow{2}{*}{MB/s/I} & Cost   & Cost   & Cost \\
+                                       & Size / I &                          & memory &                     & Time  & util. & util.  & Wait & Idle & Processed &                       &                         & AWS \$ & GCP \$ & Azure \$ \\
+        \hline
         \hline
         N2-small – single & 22 & 28 & 64 & 1 & 1762 & 32 & 2 & 1 & 65 & 8490 & 5 & 5 & 0.6 & 0.58 & 0.67 \\
         N2 - small & 22 & 28 & 64 & 2 & 3563 & 66 & 5 & 2 & 27 & 16980 & 5 & 2 & 0.6 & 0.58 & 0.67 \\
         N4 – small – single & 11 & 14 & 64 & 1 & 1783 & 29 & 2 & 1 & 68 & 8490 & 5 & 5 & 0.6 & 0.58 & 0.67 \\
         N4 - small & 11 & 14 & 64 & 4 & 8195 & 84 & 6 & 2 & 8 & 33960 & 4 & 1 & 1.8 & 1.74 & 2.01 \\
-        N8 – small & 4 & 7 & 64 & 8 & OOM & 0 & 0 & 0 & ** & 0 & 0 & 0 & *** & *** \\
+        N8 – small & 4 & 7 & 64 & 8 & OOM & 0 & 0 & 0 & ** & 0 & 0 & 0 & *** & *** & *** \\
         T2 H1- small – single & 22 & 28 & 64 & 1 & 1146 & 46 & 2 & 1 & 51 & 8490 & 7 & 7 & 0.6 & 0.58 & 0.67 \\
         T2 H1 – small & 22 & 28 & 64 & 2 & 2545 & 89 & 4 & 1 & 6 & 16980 & 7 & 3 & 0.6 & 0.58 & 0.67 \\
         T2 PC- small – single & 11 & 28 & 64 & 1 & 966 & 45 & 2 & 1 & 52 & 8490 & 9 & 9 & 0.6 & 0.58 & 0.67 \\
@@ -412,10 +416,12 @@ happens with monetary cost across different cloud platforms?}
         T7 PC – big & 14 & 34 & 256 & 7 & 16485 & 93 & 7 & 1 & 0 & 237776 & 14 & 2 & 8 & *** & *** \\
         \hline
 	\bottomrule
-    \end{tabularx}
+\end{tabular}
+}
+\end{table*}
 %	\label{tab:pr_table}
 %\end{center}
-\fi
+%\fi
 \iffalse
 \begin{table}[t!]
   \centering
