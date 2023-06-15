@@ -2,45 +2,53 @@
 \label{sec:intro}
 
 With the exponential growth of data in various fields such as
-healthcare and social media, managed big data frameworks (e.g, Apache Spark \cite{Spark} and
-Apache Giraph \cite{Giraph}) require large amount of DRAM. 
-These frameworks, during processing, generate large amount of objects
-in the managed heap that span multiple computation stages.
-The memory pressure that arises in the managed heap leads to long frequent garbage
-collection (GC) cycles.
-%memory ressure -> GC
-%large part of CPU utilization goes to GC.
-%not useful work
-%This
-%requirement leads to excessive CPU under-utilization, leading to
-%performance bottlenecks and slow job completion times.
-%data -> memory -> reduce GC -> memory-per-core bound -> CPU under-utilization 
+healthcare and social media, managed big data frameworks (e.g, Apache
+Spark \cite{Spark} and Apache Giraph \cite{Giraph}) require large
+amount of DRAM. These frameworks, during processing, generate large
+amount of objects in the managed heap that span multiple computation
+stages. The memory pressure that arises in the managed heap leads to
+\note{jk: I do not know if the GC is long. I think we should stress
+the frequency and this prevent the progress of the application} long
+frequent garbage collection (GC) cycles.
 
 To reduce the frequency of GC, the heap capacity increases to
-facilitate the big number of allocated objects. Apart from
-increasing heap size, managed big data frameworks move objects to
-storage devices to reduce the memory pressure by offloading the heap. 
-However, these data need to be converted to byte streams to be stored in the storage device.
-This leads to huge serialization/deserialization overhead.
-Furthermore, due to the increased needs for data processing, there is a need to collocate
-many isolated managed big data framework instances. In order to maximize throughput,
-the number of instances should increase to consume all available DRAM.
-The result of this practice is that the underlying machine runs out of
-memory, while the GC overhead is still high. DRAM is not enough to satisfy both the needs
-for increased collocation and low GC.
-The remaining GC and S/D overhead lead to the problem where some cores idle and most of the CPU utilization is wasted
-on them, because the avalaible memory/core is not enough.
+facilitate the big number of allocated objects. \note{jk: This
+sentence is not connected with the previous one. Please think what do
+you want to say.} Apart from increasing
+heap size, managed big data frameworks move objects to storage devices
+to reduce the memory pressure by offloading the heap \note{jk: the do
+not offload the heap. They offload objects. Please use the appropriate
+words!}. However, these
+data need to be converted to byte streams to be stored in the storage
+device. This leads to high serialization/deserialization overhead.
+\note{jk: This is sentence is not connected with the previous. Also
+how the statement for this sentence it does not sound correct. Re
+write it. This parargaraph contains multiple arguments. The first
+sentence of the paragraph should describe the content of the
+paragraph.} Furthermore, due to the increased needs for data processing, there is
+a need to collocate many isolated managed big data framework
+instances. In order to maximize throughput, the number of instances
+should increase to consume all available DRAM. The result of this
+practice is that the underlying machine runs out of memory, while the
+GC overhead is still high. DRAM is not enough to satisfy both the
+needs for increased collocation and low GC. The remaining GC and S/D
+overhead lead to the problem where some cores idle and most of the CPU
+utilization is wasted on them, because the avalaible memory/core is
+not enough. \note{jk: Please rewrite the whole paragraph.}
 
 The memory-per-core problem can better be understood when looking at
 the resource usage and the characteristics of the servers of big
 companies e.g. Alibaba and Facebook. When looking at the results of
-Alibaba's traces analyses (\cite{Alibaba}, \cite{Alibaba1}, \cite{Alibabacolocated}) we see that memory usage is at
-an average of 80\%, while CPU usage stays at 40\%. This trace clearly
-shows that DRAM utilization is high, while the CPU is under-utilized.
-In Facebook's Twine presentation \cite{Twine}, they used a cluster of
+Alibaba's traces analyses (\cite{Alibaba}, \cite{Alibaba1},
+\cite{Alibabacolocated}) we see that memory usage is at an average of
+80\%, while CPU usage stays at 40\%. This trace clearly shows that
+DRAM utilization is high, while the CPU is under-utilized. In
+Facebook's Twine presentation \cite{Twine}, they used a cluster of
 machines where each machine had 40 cores and 80 GB DRAM. This means
-that ratio of GB for memory/core was 2. This shows that memory capacity for each core is low. Most of the time many the CPU cores are going to be idle
-because a few of them will be enough to carry out the work.
+that ratio of GB for memory/core was 2. This shows that memory
+capacity for each core is low. Most of the time many the CPU cores are
+going to be idle because a few of them will be enough to carry out the
+work.
 
 To address the problem of DRAM capacity limitation, recent work
 proposed solutions that extend the managed heaps over local flash
@@ -48,8 +56,10 @@ storage devices (e.g., NVMe SSD) or remote memory. On the one hand,
 TMO \cite{TMO} offloads cold memory to fast storage devices using
 a memory scheduling mechanism. On the other hand, CFM \cite{CFM}
 utilizes remote DRAM as swap memory in order to increase total memory capacity
-and reduce memory pressure. Of both works, neither show
-evaluation against managed big data analytics frameworks.
+and reduce memory pressure. \noteOf both works, neither show
+evaluation against managed big data analytics frameworks \note{jk: CFM
+in the evaluation uses Spark. Please read the related work
+and write each sentence very carefully.}.
 
 This paper provides a methdological analysis of server throughput 
 focused on managed big data analytics frameworks.
@@ -81,11 +91,18 @@ analytics, if deployed in a world cluster like Amazon's EC2 or Google
 Cloud Platform or Microsoft Azure Cloud, which are available to
 everyone.
 
+\note{jk: I do not understand the differences between first and second
+contributions. You need to mention the methodology}
 To summarize, this paper makes the following contributions: 
 \begin{itemize}
-    \item{A detailed methodology for running Apache Spark and Giraph using TeraHeap
-	  as a heap offloading mechanism.}
-    \item{A comprehensive evaluation of the performance and cost trade-offs of TeraHeap against Native Spark-Giraph
-	  with a single or multiple colocated executors in the same server.
-    \item{A cost estimation of running our experiments in real-world cloud platforms like Amazon EC2, Google Cloud and Microsoft Azure.}
+    \item{A detailed methodology for running Apache Spark and Giraph
+        using TeraHeap as a heap offloading mechanism.}
+
+    \item{A comprehensive evaluation of the performance and cost
+        trade-offs of TeraHeap against Native Spark and Giraph with a
+        single or multiple colocated executors in the same server.}
+
+    \item{A cost estimation of running our experiments in real-world
+        cloud platforms like Amazon EC2, Google Cloud and Microsoft
+        Azure.}
 \end{itemize}
