@@ -1,6 +1,113 @@
 \section{Evaluation}
 \label{sec:eval}
 
+\begin{table}[t!]
+  \centering
+  \caption{Server Specifications}
+  \label{tab:server-specs}
+  \begin{tabular}{|c|c|}
+    \hline
+    \textbf{Component} & \textbf{Specification} \\
+    \hline
+    Memory & 8x DDR4 32-GB \\
+    CPU & 2x Intel Xeon E5-2630 2.4 GHz \\
+    Cores per CPU & 16 \\
+    NUMA Islands & 2 \\
+    Cores per NUMA island & 16 \\
+    L1 Cache & 512 KB \\
+    L2 Cache & 2 MB \\
+    L3 (LLC) Cache & 20 MB \\
+    Storage & 2x 1.8 TB KVS NVMe \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Server Characteristics}
+In \ref{tab:server-specs} we see the characteristics of our server.
+The server used in our experiments is a high-performance machine with
+hardware specifications found in real-world clusters.
+It is equipped with 8x DDR4 32-GB 2.4 GHz 64-bit DIMMs, providing a
+total of 256 GB of memory. The DDR4 memory technology is known for its
+high bandwidth and low power consumption, making it ideal for
+data-intensive applications like big data analytics. The server also
+features 2x Intel Xeon E5-2630 2.4 GHz 16-core 64-bit CPUs, split into 2
+NUMA islands. Each core has 512 KB L1, 2 MB L2, and 20 MB L3 (LLC) cache.
+The Xeon E5-2630 CPU is a high-performance processor designed for data
+centers, offering a high core count, high clock speed, and advanced
+features like hyper-threading and Turbo Boost. The large L3 cache
+helps reduce memory latency, enabling faster data access for CPU-bound
+workloads. In addition to the powerful CPUs and memory, the server
+also has 2x KVS NVMe storage devices. NVMe is a high-performance
+storage technology that uses PCIe to connect directly to the CPU,
+providing low latency and high throughput. The KVS (Key-Value Store)
+storage devices are designed for fast, random access to data, making
+them ideal for storing and retrieving large amounts of data in big
+data applications. Overall, the server's hardware specifications make
+it a powerful platform for conducting experiments on managed big data
+analytics and evaluating the performance of TeraHeap.
+
+\subsection{Native Spark Configuration}
+We use Spark v3.3.0 (\cite{Building}, \cite{Tuning}, \cite{Conf}, \cite{Monitoring}) with Kryo Serializer \cite{Kryo}, a state-of-the-art highly
+optimized S/D Library for Java that Spark recommends. We run Spark
+with Native OpenJDK8 \cite{JDK8} as a baseline. We use the Parallel Scavenge
+garbage collector which is the one TeraHeap is implemented for.
+Parallel Scavenge is also the go-to collector for applications that
+need high throughput like Spark. We use an executor with 8 executor
+threads for each instance of Spark we deploy on our server. For
+Parallel Scavenge, we use 8 GC Threads for minor GC and the
+single-threaded old generation collector. Spark storage level
+is configured to MEMORY-AND-DISK to place executor memory (heap) in DRAM and cache RDDs \cite{RDD}
+in the on-heap cache, up to 50\% of the total heap size. Any remaining
+RDDs are serialized in the off-heap cache over an NVMe SSD. This
+device is also used by Spark for shuffling. We run each instance of
+Spark in a cgroup containing two JVM instances, one for Spark driver
+and one for Spark executor and all the processes needed to measure
+performance for this instance. Each cgroup has a limited DRAM Budget.
+A part of the budget is the capacity of the Java Heap which, for the
+rest of the paper, we call H1. We do this to be sure that
+every instance of Spark running on our server has a fair amount of
+DRAM available for it to use. We choose to try two different amounts
+for H1, 40\% and 80\% of total DRAM budget. 80\% heap/DRAM is the go-to
+percentage for RedHat in its datacenters \cite{redhatblog}. What
+remains is used by JVM for Native memory (i.e. CodeCache), Spark and Giraph
+drivers and for the operating system's Page Cache (PC) when using TeraHeap.
+In order to avoid inter-NUMA island interference,
+we shut down the 16 cores belonging to the second island
+thus leaving 16 active cores. We also turn off the swapper, because it
+adds significant overhead and makes it difficult to understand the
+results of the experiments conducted.
+
+\subsection{Native Giraph Configuration}
+Empty
+
+\subsection{TeraHeap background and Spark-Giraph configurations for TeraHeap}
+\subsubsection{What is TeraHeap?}
+TeraHeap is a high-capacity managed heap that is memory-mapped over a
+fast storage device (preferrably block-addresable NVMe or
+byte-addresable NVM). The high speeds these kind of devices operate
+in, erase any overhead caused by the use of MMIO. MMIO keeps the objects that reside in the storage
+device deserialized, thus eliminating the need for Serialization/Deserialization  TeraHeap is designed
+as an extension of the main Java Heap and is region-based. It holds specific long-lived
+objects that have the same lifetime span in specific regions. This enables TeraHeap to
+operate as a GC-free heap that can delete entire regions of objects at
+once without the need to scan the heap over and over again for dead
+objects. This would be a performance kill as it would require scans
+over the storage device.
+
+\subsubsection{Spark Configuration}
+The configuration for TeraHeap is pretty much the same as for Native
+Spark, with some necessary differences. TeraHeap
+is mapped to a different storage device (NVMe) than that Spark is
+using for shuffling. We do this in order for TeraHeap to utilize its
+device to its fullest. MMIO allows TeraHeap Spark to run in
+MEMORY-ONLY storage level as Spark remains unaware of using any device and
+the OS takes control of the I/O.
+
+\subsubsection{Giraph Configuration}
+For Giraph we map TeraHeap to a different NVMe storage device that the one we
+use for Zookeeper. TeraHeap works in the same way as Spark in MEMORY-ONLY storage level
+as Giraph is unaware of the presence of a second heap.
+
 \begin{figure}[thbp]
 \centering
     \includegraphics[width=\linewidth]{./fig/linr64.png}
@@ -318,12 +425,6 @@ This is justified by GC and S/D that increase as instances increase and by the i
 TeraHeap achieves higher throughput than Native Spark and that is also justified by the increased User utilization.
 Having higher user utilization and lower GC and S/D means that effective CPU utilization is really higher, since more
 work is done by mutator threads.
-
-\subsection{Single instance vs colocated instances}
-When running colocated instances the goal is that the execution 
-of all instances is close to the summary of execution of all instances run isolated.
-As seen in tables, most of the times we are not even close. To achieve that
-we need a scheduling policy to dynamically resize H1 and Page Cache based on runtime decisions.
 
 \subsection{What
 happens with monetary cost across different cloud platforms?}

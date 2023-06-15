@@ -1,56 +1,23 @@
 \section{Related Work}
 
 We group the related work in the two following categories:
-%
-(1) policy systems for instance collocation and
-%
-(2) analyses on managed big data frameworks.
+\begin{itemize}
+\item{Works that examine collocation of workloads}
+\item{Other analyses on managed big data frameworks}
+\end{itemize}
 
-\note{the title of each subsection should be the same with (1) and
-(2). Be consistent and use the same terminology.}
+\subsection{Work that examine the collocation of workloads}
+To our best knowledge there is limited work in investigating workload co-location. Here we refer to some works does in this area.
 
-\subsection{Scheduling systems for instance collocation}
-One approach is to utilize memory-model-based task co-location during
-runtime to improve Spark application throughput, which has been
-investigated by Marco et al. in \cite{Colocation}. They choose a
-variety of memory-models that describe the memory footprint of Spark
-applications and determine the right memory-model for the specific
-application at runtime. That way they learn how many applications can
-be colocated to achieve better throughput. However... 
+Baig et al. in \cite{NUMA} investigate how Spark-based workloads are impacted by the effects of NUMA-placement decisions. This is something we do not do in our work, because we run our experiments in a single NUMA island to avoid NUMA effects that could complicate the understanding of GC, S/D and the aspects of execution that we investigate. Apart from that difference they investigate the performance of co-located spark workers where each worker runs in a different NUMA island. They count remote memory accesses and context switches in CPU. Chen et al. in \cite{interference} analyze the characteristics of co-located workloads running in containers on the same server from the perspective of hardware events. These events include inctructions per cycle, branch prediction misses and dTLB misses. They also show the execution time of co-located workloads, but they do not provide further analysis or breakdown.
 
-\subsection{Analyses on managed big data frameworks}
+\subsection{Other analyses on managed big data frameworks}
 
-Jiang et al. in \cite{inmem} study the behavior of Spark Workloads in
-comparison to those of Giraph, CloudSuite, SPEC CPU2006, TPC-C, and
-DesktopCloud on system and microarchitectural level. However, they do
-not provide any detailed methodology on how to run the workloads, any
-breakdowns to execution time of the workloads and any collocated
-experiments. Ousterhout et al. \cite{makingsense} provide a
-methodology for quantifying performance bottlenecks in distributed
-computation frameworks, and use it to analyze the Spark’s performance.
-The limitations of this work is the evaluation against only 2 SQL
-workloads. Batarfi et al. \cite{giraphgraphalytics} analyze the
-performance of many graph processing frameworks including Giraph
-without any specific methodology and breakdown of the execution. They
-just use plain metrics and try to understand performance based on them
-without any further analysis. They also only show results for graph
-processing and do not target other areas like machine learning. Baig
-et al. in \cite{NUMA} investigate how Spark-based workloads are
-impacted by the effects of NUMA-placement decisions and they also
-evaluate with collocated instances. However they do not show any
-breakdown of the execution that could provide insights on how GC and
-S/D are affected by NUMA placement. Furthermore, their work is
-evaluated only aganst Spark. Ahmed et al. \cite{hibench} investigate
-the most impacting parameters, under resource utilization, input
-splits, and shuffle, to compare the performance between Hadoop and
-Spark, using an implemented cluster in our laboratory. The problem is
-that they do not provide any detailed methodology, only evaluate
-against two workloads and fail to provide execution breakdown. Chen et
-al. in \cite{interference} analyze the characteristics of co-located
-workloads running in containers on the same server from the
-perspective of hardware events. Their work lacks on methodology
-because it provides only a speculation of the performance degradation
-when workloads are collocated. They also do not evaluate against
-managed big data frameworks. 
+Here we refer to other evaluation works targetting managed big data frameworks.
+These works do not provide analyses for workload co-location.
 
-\cite{CoLoc},\cite{SLA}, \cite{Hadoop-based}, \cite{splitserve}
+Jiang et al. in \cite{inmem} study the behavior of Spark Workloads in comparison to those of Giraph, CloudSuite, SPEC CPU2006,
+TPC-C, and DesktopCloud on system (i.e. disk utilization, memory bandwidth)  and microarchitectural level (instructions per cycle). This work
+also provides an analysis for Spark and Giraph examining the behaviour from a different scope than ours. However, it does not provide a breakdown to the execution time of the workloads (i.e. GC, S/D) or CPU utilization analysis.
+Ousterhout et al. \cite{makingsense} provide a methodology based on dynamic logging and profiling for quantifying performance bottlenecks in distributed computation frameworks, and use it to analyze the Spark’s performance. They refer and measure S/D, GC and CPU utilization but they don't refer to co-located workloads or target other frameworks. Batarfi et al. \cite{giraphgraphalytics} analyze the performance of many graph processing frameworks including Giraph. They provide results on RAM usage, CPU utilization and execution time. However, they investigate a different aspect from execution time. They break it down to the time taken by each phase of the workload execution.  They also only show results for graph processing and do not target other areas like machine learning as we do. Furthermore, their work is evaluated only aganst Spark. 
+
