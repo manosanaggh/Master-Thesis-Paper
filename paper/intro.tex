@@ -7,34 +7,29 @@ Spark \cite{Spark} and Apache Giraph \cite{Giraph}) require large
 amount of DRAM. These frameworks, during processing, generate large
 amount of objects in the managed heap that span multiple computation
 stages. The memory pressure that arises in the managed heap leads to
-\note{jk: I do not know if the GC is long. I think we should stress
-the frequency and this prevent the progress of the application} long
-frequent garbage collection (GC) cycles.
+frequent garbage collection (GC) cycles. Frequent GCs waste CPU cycles 
+and prevent application execution.
 
-To reduce the frequency of GC, the heap capacity increases to
-facilitate the big number of allocated objects. \note{jk: This
-sentence is not connected with the previous one. Please think what do
-you want to say.} Apart from increasing
-heap size, managed big data frameworks move objects to storage devices
-to reduce the memory pressure by offloading the heap \note{jk: the do
-not offload the heap. They offload objects. Please use the appropriate
-words!}. However, these
-data need to be converted to byte streams to be stored in the storage
-device. This leads to high serialization/deserialization overhead.
-\note{jk: This is sentence is not connected with the previous. Also
-how the statement for this sentence it does not sound correct. Re
-write it. This parargaraph contains multiple arguments. The first
-sentence of the paragraph should describe the content of the
-paragraph.} Furthermore, due to the increased needs for data processing, there is
-a need to collocate many isolated managed big data framework
-instances. In order to maximize throughput, the number of instances
-should increase to consume all available DRAM. The result of this
+To reduce the frequency of GC and optimize performance, users of big data
+frameworks try two different approaches. First, they increase heap capacity to
+facilitate the big number of allocated objects. Apart from increasing
+heap size, they use mechanisms offfered by the frameoworks 
+to offload objects from the heap to storage devices. However, these
+objects need to be serialized to byte streams to be stored in the storage
+device or to be deserialized into memory objects to be loaded back to memory. 
+This practice leads to high serialization/deserialization overhead.
+
+Furthermore, due to the increased needs for data processing, there is
+a need to co-locate many isolated managed big data framework
+instances. Co-locating workloads increases available resource utilization
+thus increasing the throughput in server. 
+In order to maximize throughput, the number of instances
+increase to utilize all available DRAM. The result of this
 practice is that the underlying machine runs out of memory, while the
-GC overhead is still high. DRAM is not enough to satisfy both the
-needs for increased collocation and low GC. The remaining GC and S/D
-overhead lead to the problem where some cores idle and most of the CPU
-utilization is wasted on them, because the avalaible memory/core is
-not enough. \note{jk: Please rewrite the whole paragraph.}
+ overhead of GC and S/D is still high. The remaining GC and S/D
+overheads lead to the problem of wasting the CPU resources. This
+leads to the conclusion that the avalaible memory/core is
+not enough for both the Garbage Collector and the application.
 
 The memory-per-core problem can better be understood when looking at
 the resource usage and the characteristics of the servers of big
@@ -56,51 +51,53 @@ storage devices (e.g., NVMe SSD) or remote memory. On the one hand,
 TMO \cite{TMO} offloads cold memory to fast storage devices using
 a memory scheduling mechanism. On the other hand, CFM \cite{CFM}
 utilizes remote DRAM as swap memory in order to increase total memory capacity
-and reduce memory pressure. \noteOf both works, neither show
-evaluation against managed big data analytics frameworks \note{jk: CFM
-in the evaluation uses Spark. Please read the related work
-and write each sentence very carefully.}.
+and reduce memory pressure. Of both works, only CFM shows
+evaluation against managed big data analytics frameworks. However, this evaluation
+includes only one Spark workload and is not focused on analytics.
 
-This paper provides a methdological analysis of server throughput 
+This paper provides a methodological analysis of server throughput 
 focused on managed big data analytics frameworks.
-We investigate the off-heap direction of offloading the heap
-to fast storage devices.
+We investigate the off-heap direction of offloading the objects from the
+managed heap to fast storage devices.
 Specifically, we use TeraHeap \cite{TeraHeap}, a secondary managed
 memory-mapped heap over an NVMe storage device, which is used to hold
 the long lived objects instead of the main managed Java Heap. TeraHeap
 1) eliminates Serialization/Deserialization overheads posed by this
 kind of frameworks when moving data off-heap to/from fast storage
 devices 2) reduces GC pauses drastically over the secondary heap. By
-offloading the managed Java Heap and relaxing computation-intensive
-tasks, we aim to reduce the load of Garbage Collection on executors,
-thereby improving their performance and job throughput. We investigate
-the effectiveness of this approach using various big
-data analytics workloads on a real-world cluster. We choose the
-parameters for running the workloads by investigating the needs of big
-data analytics in memory budget. We define memory budget as
+using TeraHeap, we aim to investigate the impact of reducing GC and S/D
+to server throughput under workload co-location. We evaluate
+the effectiveness of this approach by running 2 widely used
+managed big data frameworks, Apache Spark and Giraph. We
+specificaly run 4 workloads for Spark and 3 workloads for Giraph.
+We choose the optimal configuration for running these workloads by investigating the needs of both
+frameworks in memory budget. We define memory budget as
 the summary of Java Heap, IO Cache and JVM native memory. We compare
-TeraHeap with the native Spark and Giraph distributions and show the potential of
-an approach like TeraHeap to improve performance and server throughput.
+TeraHeap with the native Spark and Giraph distributions under workload
+co-location and analyze their performance using several metrics like
+GC, S/D, I/O and CPU utilization. Finally, we estimate the cost of running these
+experiments in public world clusters like Amazon EC2, Google Cloud Platform (GCP)
+and Microsoft Azure Cloud.
 
 Our experimental results show that reducing Java Garbage Collection
-overhead by offloading the heap to fast storage devices significantly
+overhead and S/D by offloading the heap to fast storage devices significantly
 improves server throughput by up to 66\% against native Spark. 
 Finally, we also include a cost estimation to show that
 TeraHeap could reduce monetary cost by up to 50\% for running big data
-analytics, if deployed in a world cluster like Amazon's EC2 or Google
-Cloud Platform or Microsoft Azure Cloud, which are available to
-everyone.
+analytics, if deployed in a world cluster like EC2, GCP or Microsoft Azure Cloud, which are available to
+the public.
 
-\note{jk: I do not understand the differences between first and second
-contributions. You need to mention the methodology}
 To summarize, this paper makes the following contributions: 
 \begin{itemize}
-    \item{A detailed methodology for running Apache Spark and Giraph
-        using TeraHeap as a heap offloading mechanism.}
+    \item{A detailed methodology for running co-located Apache Spark and Giraph
+        workloads with or without TeraHeap.
+	We explore the memory needs of each offloading approach in Java Heap and IO Cache. We then use 
+	the optimal setup to run the max number of co-located workloads to utilize all available DRAM.}
 
-    \item{A comprehensive evaluation of the performance and cost
-        trade-offs of TeraHeap against Native Spark and Giraph with a
-        single or multiple colocated executors in the same server.}
+    \item{A comprehensive evaluation of both Spark and Giraph with or without the use TeraHeap.
+	    We run 4 Spark and 3 Giraph workloads,
+	    analyzing different aspects of performance like GC, S/D, I/O
+		and CPU utilization.}
 
     \item{A cost estimation of running our experiments in real-world
         cloud platforms like Amazon EC2, Google Cloud and Microsoft

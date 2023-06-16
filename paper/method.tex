@@ -1,38 +1,37 @@
 \section{Experimental Methodology}
 \label{sec:method}
 
-In the methodology we answer the following questions:
+In this section we discuss our methodological decisions.
+
+Our methodology answers the following questions:
 \begin{itemize}
 	\item{What workloads did we choose to run for our experiments and why?}
-	\item{Are Spark and Giraph in need of more Java Heap or more cache for IO?}
-	%\item{What kind of metrics should someone use to be accurate when measuring performance?}
+	\item{What is the optimal memory budget for running Apache Spark and Giraph?}
+	\item{What kind of metrics did we use to analyze performance and why?}
 	\item{Is cost a contributing factor to pursuing higher throughput for a server?}
 \end{itemize}
 
 \subsection{Workloads}
-For our experiments, we selected four specific workloads from two
+For our experiments with Spark, we selected four specific workloads from two
 different categories of the Spark Bench suite \cite{Spark-Bench}: Page Rank (PR) and Connected
-Component (CC) from GraphX and Linear Regression (LinR) and Logistic Regression (LogR)
-from MLLib. For Giraph we choose PageRank, Weakly Connected Component and Community detection 
+Component (CC) from GraphX (SAIT) and Linear Regression (LinR) and Logistic Regression (LogR)
+from MLLib (SAIT). For Giraph we choose PageRank, Weakly Connected Component and Community detection 
 using label propagation (CDLP) from LDBC Graphalytics \cite{ldbc}. The primary reason for selecting these workloads for Spark is that
-they represent different types of algorithms: PR, CC 
-and are graph-based workloads, while LinR and LogR are machine learning
-workloads. Giraph is a graph processing framework so we used only graph workloads. Furthermore, all of them are
-well-established workloads that are commonly used for benchmarking big
+they represent different types of algorithms: PR and CC are graph-based workloads, while LinR and LogR are machine learning
+workloads. Giraph is a graph processing framework so we only used graph workloads. All of these
+workloads are well-established and commonly used for benchmarking big
 data analytics systems, making them a suitable choice for our
 experiments. Overall, the selection of these workloads allows us to
-evaluate the performance of TeraHeap in a variety of contexts and
-provide insights into the effectiveness of such an approach for improving
-server throughput in managed big data analytics systems.
+evaluate the performance of Spark and Giraph in a variety of contexts. Furthermore it allows us to
+provide insights into the performance of both frameworks with or without using TeraHeap.
 
 \subsubsection{PageRank}
 PageRank is a widely used graph-based algorithm that measures the
 importance of nodes in a network. It has become a popular benchmark
 for evaluating the performance of distributed systems, including big
-data analytics systems like Apache Spark. PageRank is computationally
+data analytics systems like Apache Spark and Giraph. PageRank is computationally
 intensive and requires significant memory and I/O resources, making it
-a suitable workload for evaluating the performance of our TeraHeap
-for improving server throughput. Additionally, PageRank is a
+a suitable workload for evaluating performance of managed big data frameworks. Additionally, PageRank is a
 common algorithm in real-world applications, such as search engines
 and social networks, making it relevant for practical use cases.
 
@@ -43,12 +42,7 @@ widely used algorithm in machine learning, and is commonly used for
 regression analysis in fields such as economics, finance, and
 engineering. LinearRegression is computationally intensive and
 requires significant memory and I/O resources, making it a suitable
-workload for evaluating the performance of TeraHeap for
-improving server throughput. Furthermore, the inclusion of a machine
-learning workload like LinearRegression allows us to investigate the
-performance of TeraHeap across different types of big data
-analytics tasks and gain insights into the effectiveness of TeraHeap
-for improving server throughput in a range of contexts.
+workload for evaluating the performance of managed big data frameworks.
 
 \subsubsection{Logistic Regression}
 LogisticRegression is a machine learning algorithm that is used to
@@ -61,7 +55,7 @@ labels. The LogisticRegression workload involves training a logistic
 regression model on the dataset, using an iterative optimization
 algorithm such as gradient descent. The workload is computationally
 intensive and requires a significant amount of memory to store the
-dataset and model parameters.
+dataset and model parameters, therefore a suitable choise for our experiments..
 
 \subsubsection{Connected Component}
 ConnectedComponent is a graph algorithm that is used to identify the
@@ -73,7 +67,7 @@ edges and vertices. The ConnectedComponent workload involves iterating
 over the graph, identifying the connected components of each node, and
 merging the components as necessary. The workload is computationally
 intensive and requires a significant amount of memory to store the
-graph.
+graph, therefore a suitable choise for our experiments.
 
 \subsubsection{Weakly Connected Component}
 empty
@@ -85,37 +79,37 @@ empty
 \begin{figure}[thbp]
 	\centering
     \includegraphics[width=\linewidth]{./fig/gcs_linr_h1_native.png}
-    \caption{Number of GCs over time for H1 Linear Regression Native
+    \caption{Number of Minor and Major GCs over heap size for H1 Linear Regression Native
     Spark investigation.}
     \label{fig:gcs_linr_h1_native}
 
     \includegraphics[width=\linewidth]{./fig/gcs_linr_h1_th.png}
-    \caption{Number of GCs over time for H1 Linear Regression TeraHeap
+    \caption{Number of Minor and Major GCs over heap size for H1 Linear Regression TeraHeap
     Spark investigation.}
     \label{fig:gcs_linr_h1_th}
 \end{figure}
 
 \begin{figure}[thbp]
     \includegraphics[width=\linewidth]{./fig/gcs_linr_pc_th.png}
-    \caption{Number of GCs over time for Page Cache Linear Regression
+    \caption{Number of Minor and Major GCs over heap size for Page Cache Linear Regression
     TeraHeap Spark investigation.}
     \label{fig:gcs_linr_pc_th}  
 
     \includegraphics[width=\linewidth]{./fig/gcs_pr_h1_th.png}
-    \caption{Number of GCs over time for H1 Page Rank TeraHeap Spark
+    \caption{Number of Minor and Major GCs over heap size for H1 Page Rank TeraHeap Spark
     investigation.}
     \label{fig:gcs_pr_h1_th}
 \end{figure}
 
 \begin{figure}[thbp]
     \includegraphics[width=\linewidth]{./fig/gcs_pr_h1_native.png}
-    \caption{Execution time breakdown for H1 Linear Regression Native
-    Spark investigation.}
+    \caption{Number of Minor and Major GCs over heap size for H1 Page Rank Native Spark
+    investigation.}
     \label{fig:gcs_pr_h1_native}
 
     \includegraphics[width=\linewidth]{./fig/gcs_pr_pc_th.png}
-    \caption{Execution time breakdown for PageCache Page Rank TeraHeap
-    Spark investigation.}
+    \caption{Number of Minor and Major GCs over Page Cache size for Page Cache Page Rank TeraHeap Spark
+    investigation.}
     \label{fig:gcs_pr_pc_th}
 \end{figure}
 
@@ -149,37 +143,38 @@ empty
     \label{fig:pr_pc_th}
 
     \includegraphics[width=\linewidth]{./fig/pr_h1_native.png}
-    \caption{Execution time breakdown for PageCache Page Rank TeraHeap
+    \caption{Execution time breakdown for H1 Page Rank Native
     Spark investigation.}
     \label{fig:pr_h1_native}
 \end{figure}
 
 \begin{figure}[thbp]
     \includegraphics[width=\linewidth]{./fig/rw_pr_pc_th.png}
-    \caption{Read-Write traffic over time for PageCache Page Rank
+    \caption{Read-Write traffic over Page Cache size for PageCache Page Rank
     TeraHeap Spark investigation.}
     \label{fig:rw_pr_pc_th}
 
     \includegraphics[width=\linewidth]{./fig/rw_linr_h1_th.png}
-    \caption{Read-Write traffic over time for H1 Linear Regression
+    \caption{Read-Write traffic over H1 size for H1 Linear Regression
     TeraHeap Spark investigation.}
     \label{fig:rw_linr_h1_th}
 \end{figure}
 
 \begin{figure}[thbp]
     \includegraphics[width=\linewidth]{./fig/rw_linr_pc_th.png}
-    \caption{Read-Write traffic over time for PageCache Linear
-    Regression TeraHeap Spark investigation.}
+    \caption{Read-Write traffic over Page Cache size for PageCache Linear
+    Regression TeraHeap Spark investigation. H1 is }
     \label{fig:rw_linr_pc_th}
 
     \includegraphics[width=\linewidth]{./fig/rw_pr_h1_th.png}
-    \caption{Read-Write traffic over time for H1 Page Rank TeraHeap
+    \caption{Read-Write traffic over H1 size for H1 Page Rank TeraHeap
     Spark investigation.}
     \label{fig:rw_pr_h1_th}
 \end{figure}
 
-\subsection{Java Heap and I/O cache investigation}
+\subsection{Java Heap and I/O cache investigation for Spark and Giraph}
 
+\subsection{Spark investigation}
 Spark's memory management is critical for the performance of big data
 analytics applications. In Spark, memory is divided into two
 regions: execution memory, and storage memory. Execution memory
@@ -192,37 +187,46 @@ MEMORY-AND-DISK, and DISK-ONLY, to allow users to balance between
 memory usage and data availability. We choose MEMORY-AND-DISK for Native Spark 
 to cache 50\% of the RDDs in memory and 50\%s off-heap, in the storage device,
 to balance memory and storage usage. Spark needs significant amounts
-of memory even with the use of an off-heap compute cache. Spark uses
-direct I/O to cache RDDs off-heap, while TeraHeap uses MMIO and is in need
-of the Linux PageCache. Since our spark applications run within a
+of memory even with the use of an off-heap compute cache. Since our spark applications run within a
 memory-limited cgroup in order to assure fair performance in-between
-instances, that means that we have to investigate how the different
-Spark workloads are performing with different amounts of H1 (Java Heap) for Native-TeraHeap Spark and Giraph and 
-and of I/O cache for TeraHeap Spark-Giraph.
+isolated workloads, that means that we have to investigate how the different
+Spark workloads are performing with different amounts of H1 (Java Heap) for Native-TeraHeap Spark ann I/O cache for Native-TeraHeap Spark.
 Increasing/decreasing H1 automaticaly does the opposite to the I/O
 cache, because of the cgroup memory limit. 
-Doing this investigation helps us run the colocated experiments using appropriate memory budget
-configurations. Moreover we confirm that using a heap amount of 80\% to total DRAM for a group of processes
-is the right baseline.
+We condut this investigation to choose the appropriate configuration to run the co-located experiments.
+The appropriate configuration is the one with the optimal performance.
+We find this configuration by hand by exploring how H1 and Page Cache affect 2 workloads.
+We do this by keeping one of the metrics stable to a certain value and we then adjust the other.
 We break the execution time to Major GC, Minor GC and Other time which includes time going to IO from applications threads.
 
 Figure \ref{fig:pr_h1_native} shows performance of single-instance Native Spark
 running PageRank with adjustable size for H1 while available DRAM for the rest of the services is kept
 steady at 16 GB. This graph shows that decreasing the size of H1
-indicates a significant increase to Major GC.
-Figure \ref{fig:gcs_pr_h1_native} justifies these claims by showing the obvious
+indicates a significant increase to Major GC. Both the second and the third configuration
+increase performance by 20\% compared to the first. However the second consumes
+30\% more DRAM when the third consumes 50\% more DRAM. We therefore choose the second configuration
+as it provides same performance with the third and less DRAM consumption.
+Figure \ref{fig:gcs_pr_h1_native} justifies the Major GC changes by showing the obvious
 decrease of the number of major gcs.
 
 Figure \ref{fig:pr_h1_th} shows performance of single-instance TeraHeap Spark
 running PageRank with adjustable size for H1 while avalaible DRAM for Page Cache is kept
 steady at 16 GB. This graph shows that decreasing the size of H1
 indicates a significant increase to Minor GC and a slight increase to
-Major GC. Figure \ref{fig:gcs_pr_h1_th} justifies these claims by showing the obvious
+Major GC. 
+The second and third configuration consume 30\% and 50\% more DRAM than the first,
+and they provide 15\% and 20\% speedup accordingly. We choose the second configuration 
+due to increased performance and only slightly higher DRAM consumption than the third.
+Figure \ref{fig:gcs_pr_h1_th} justifies the difference in Major GC time by showing the obvious
 decrease of the number of minor gcs. 
+
 Figure \ref{fig:pr_pc_th} shows performance of
 single-instance TeraHeap Spark running PageRank with adjustable size
 for Page Cache while H1 is kept steady at 44 GB. This graph shows that
 decreasing the size of PageCache indicates no changes to other time.
+All configurations have the same performance. Therefore we choose the second
+which is directly comparable to the one we chose for TeraHeap, despite not being the ideal in terms
+of total need in DRAM. We do this to help ourselves analyze the performance of the co-located workloads using this configuration.
 Figure \ref{fig:rw_pr_pc_th} justifies these claims by showing read-traffic to be steady.
 
 Figure \ref{fig:linr_h1_native} shows performance of single-instance
@@ -230,14 +234,20 @@ Native Spark running LinearRegression with adjustable size for H1
 while PageCache is kept steady at 8 GB. This graph shows that
 decreasing the size of H1 indicates a significant increase to Major GC
 and a slight increase to S/D. Other time remains the same.
-Figure \ref{fig:gcs_linr_h1_native} by showing the number of minor-major gcs to decrease
+The last 2 bars speedup execution by 30\% while consuming more than 50\% of DRAM.
+Therefore we choose the last which consumes a slightly lower DRAM budget.
+Figure \ref{fig:gcs_linr_h1_native} justifies the behaviour of Major GC by showing the number of minor-major gcs to decrease
 while H1 increases (gc time). 
 
 Figure \ref{fig:linr_h1_th} shows performance of
 single-instance TeraHeap Spark running LinearRegression with
 adjustable size for H1 while PageCache is kept steady at 8 GB. This
 graph shows that decreasing the size of H1 indicates no increase to
-GC. Figure \ref{fig:gcs_linr_h1_th} and \ref{fig:rw_linr_h1_th}
+GC. 
+All configurations provide the nearly the same performance with slight changes.
+Therefore we choose the second because it is the most optimal in combination with
+low DRAM consumption. 
+Figure \ref{fig:gcs_linr_h1_th} and \ref{fig:rw_linr_h1_th}
 justify these numbers by showing the number of major gcs to stay the
 same while H1 increases (gc time) and the read-write traffic to remain
 steady (other). 
@@ -246,9 +256,38 @@ single-instance TeraHeap Spark running LinearRegression with
 adjustable size for PageCache while H1 is kept steady at 28 GB. This
 graph shows that decreasing the size of PageCache indicates no changes
 to Other time. So changes to PageCache do not affect this workload.
+All configurations pose no differences to execution time so we choose the 
+third one despite consuming more DRAM. We do this because it is directly comparable
+in terms of DRAM budget with the one we have chosen for Native Spark for this workload.
 Figure \ref{fig:gcs_linr_pc_th} and \ref{fig:rw_linr_pc_th} justify
 these numbers by showing the number of minor-major gcs as well as
 read-write traffic to remain the same.
+
+\subsubsection{Giraph Investigation}
+\begin{figure}[thbp]
+    \includegraphics[width=\linewidth]{./fig/g_pr_pc_th.png}
+    \caption{Execution time breakdown for PageCache PR TeraHeap
+    Giraph investigation.}
+    \label{fig:g_pr_pc_th}
+
+    \includegraphics[width=\linewidth]{./fig/g_pr_h1_native.png}
+    \caption{Execution time breakdown for H1 PR Native
+    Giraph investigation.}
+    \label{fig:g_pr_h1_native}
+\end{figure}
+
+\begin{figure}[thbp]
+    \includegraphics[width=\linewidth]{./fig/g_pr_h1_th.png}
+    \caption{Execution time breakdown for PageCache PR TeraHeap
+    Giraph investigation.}
+    \label{fig:g_pr_pc_th}
+
+    \includegraphics[width=\linewidth]{./fig/g_cdlp_h1_native.png}
+    \caption{Execution time breakdown for H1 CDLP Native
+    Giraph investigation.}
+    \label{fig:g_pr_h1_native}
+\end{figure}
+
 
 \iffalse
 \subsection{Metrics} 
@@ -368,5 +407,5 @@ platform identical to the specifications of our 64, 128 and 256 GB DRAM
 machines. These are the cheapest machines of that particular category
 offered by the platform. We then used the platform's pricing
 calculator to estimate the cost of renting that machine for the time
-needed for each configuration to finish execution of all instances. Finally, we noticed that the price for
+needed for each configuration to finish execution of all instances. We noticed that the price for
 renting the storage device is really amenable to the cost for renting the machine.
