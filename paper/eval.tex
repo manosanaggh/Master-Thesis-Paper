@@ -52,30 +52,12 @@ optimized S/D Library for Java that Spark recommends. We run Spark
 with Native OpenJDK8 \cite{JDK8} as a baseline. We use the Parallel Scavenge
 garbage collector which is the one TeraHeap is implemented for.
 Parallel Scavenge is also the go-to collector for applications that
-need high throughput like Spark. We use an executor with 8 executor
-threads for each instance of Spark we deploy on our server. For
-Parallel Scavenge, we use 8 GC Threads for minor GC and the
-single-threaded old generation collector. Spark storage level
+need high throughput like Spark. We use one executor with 8
+threads for each instance of Spark we deploy on our server \cite{TeraHeap}. Spark storage level
 is configured to MEMORY-AND-DISK to place executor memory (heap) in DRAM and cache RDDs \cite{RDD}
 in the on-heap cache, up to 50\% of the total heap size. Any remaining
 RDDs are serialized in the off-heap cache over an NVMe SSD. This
-device is also used by Spark for shuffling. We run each instance of
-Spark in a cgroup containing two JVM instances, one for Spark driver
-and one for Spark executor and all the processes needed to measure
-performance for this instance. Each cgroup has a limited DRAM Budget.
-A part of the budget is the capacity of the Java Heap which, for the
-rest of the paper, we call H1. We do this to be sure that
-every instance of Spark running on our server has a fair amount of
-DRAM available for it to use. We choose to try two different amounts
-for H1, 40\% and 80\% of total DRAM budget. 80\% heap/DRAM is the go-to
-percentage for RedHat in its datacenters \cite{redhatblog}. What
-remains is used by JVM for Native memory (i.e. CodeCache), Spark and Giraph
-drivers and for the operating system's Page Cache (PC) when using TeraHeap.
-In order to avoid inter-NUMA island interference,
-we shut down the 16 cores belonging to the second island
-thus leaving 16 active cores. We also turn off the swapper, because it
-adds significant overhead and makes it difficult to understand the
-results of the experiments conducted.
+device is also used by Spark for shuffling. 
 
 \subsection{Native Giraph Configuration}
 Empty
@@ -111,48 +93,38 @@ thus Giraph is unaware of the presence of a second heap.
 \begin{figure}[thbp]
 \centering
     \includegraphics[width=\linewidth]{./fig/linr64.png}
-    \caption{Execution time breakdown for multiple instances of
-    LinearRegression using the 64 GB total DRAM setup. E.g.
-    22-28-64-Native 1 indicates the first of the 2-4-8 instances that
-    was run in parallel and uses 22 GB H1 - 28 GB total cgroup DRAM
-    and 64 GB total DRAM for the machine.}
+    \caption{Execution time breakdown for multiple instances of Spark
+    Linear Regression in the 4 GB memory-per-core scenario. X axis shows each configuration.
+	For example, 22 H1 + 6 OS - N2 is a run with two co-located instances of Native Spark (T4 for TeraHeap) with 22 GB memory for H1 and 6 for the OS to be used as Page Cache. Y axis shows execution time in seconds.}
     \label{fig:linr64}
     \includegraphics[width=\linewidth]{./fig/pr64.png}
-    \caption{Execution time breakdown for multiple instances of
-    PageRank using the 64 GB total DRAM setup. E.g. 22-28-64-Native 1
-    indicates the first of the 2-4-8 instances that was run in
-    parallel and uses 22 GB H1 - 28 GB total cgroup DRAM and 64 GB
-    total DRAM for the machine.}
+    \caption{Execution time breakdown for multiple instances of Spark
+    Page Rank in the 4 GB memory-per-core scenario. X axis shows each configuration.
+        For example, 22 H1 + 6 OS - N2 is a run with two co-located instances of Native Spark (T4 for TeraHeap) with 22 GB memory for H1 and 6 for the OS to be used as Page Cache. Y axis shows execution time in seconds.}
     \label{fig:pr64}
 \end{figure}
 
 \begin{figure}[thbp]
 	\centering
     \includegraphics[width=\linewidth]{./fig/logr64.png}
-    \caption{Execution time breakdown for multiple instances of
-    Logistic Regression using the 64 GB total DRAM setup. E.g.
-    22-28-64-Native 1 indicates the first of the 2-4-8 instances that
-    was run in parallel and uses 22 GB H1 - 28 GB total cgroup DRAM
-    and 64 GB total DRAM for the machine.}
+    \caption{Execution time breakdown for multiple instances of Spark
+    Logistic Regression in the 4 GB memory-per-core scenario. X axis shows each configuration.
+        For example, 22 H1 + 6 OS - N2 is a run with two co-located instances of Native Spark (T4 for TeraHeap) with 22 GB memory for H1 and 6 for the OS to be used as Page Cache. Y axis shows execution time in seconds.}
     \label{fig:logr64}
 
     \includegraphics[width=\linewidth]{./fig/cc64.png}
-    \caption{Execution time breakdown for multiple instances of
-    Connected Component using the 64 GB total DRAM setup. E.g.
-    22-28-64-Native 1 indicates the first of the 2-4-8 instances that
-    was run in parallel and uses 22 GB H1 - 28 GB total cgroup DRAM
-    and 64 GB total DRAM for the machine.}
+    \caption{Execution time breakdown for multiple instances of Spark
+    Connected Component in the 4 GB memory-per-core scenario. X axis shows each configuration.
+	For example, 22 H1 + 6 OS - N2 is a run with two co-located instances of Native Spark (T4 for TeraHeap) with 22 GB memory for H1 and 6 for the OS to be used as Page Cache. Y axis shows execution time in seconds.}
     \label{fig:cc64}
 \end{figure}
 
 \begin{figure}[thbp]
 	\centering
     \includegraphics[width=\linewidth]{./fig/pr256.png}
-    \caption{Execution time breakdown for multiple instances of
-    PageRank using the 256 GB total DRAM setup. E.g. 44-60-256-Native
-    1 indicates the first of the 2-4-8 instances that was run in
-    parallel and uses 44 GB H1 - 60 GB total cgroup DRAM and 256 GB
-    total DRAM for the machine.} 
+    \caption{Execution time breakdown for multiple instances of Spark
+    Page Rank in the 16 GB memory-per-core scenario. X axis shows each configuration.
+	For example, 48 H1 + 12 OS - N4 is a run with two co-located instances of Native Spark (T4 for TeraHeap) with 22 GB memory for H1 and 6 for the OS to be used as Page Cache. Y axis shows execution time in seconds.}
     \label{fig:pr256}
     \includegraphics[width=\linewidth]{./fig/linr128.png}
     \caption{Execution time breakdown for multiple instances of
@@ -163,15 +135,18 @@ thus Giraph is unaware of the presence of a second heap.
     \label{fig:linr128}
 \end{figure}
 
+\subsection{Experiments with single instance}
 
 \subsection{Experiments with colocated instances}
 
-Here we look at the colocated experiments of Spark and Giraph.
+Here we look at the colocated experiments of Spark and Giraph in all memory-per-core categories.
 We explain each figure from 2 aspects:
 \begin{itemize}
 \item{The differences in the time breakdown while number of instances increase for each configuration.}
 \item{A comparison between the different configurations while instances increase.}
 \end{itemize}
+
+\subsubsection{4 GB DRAM / core}
 
 Figure \ref{fig:linr64} shows the performance of multiple
 Native-TeraHeap Spark instances running LinearRegression with 64 GB
@@ -261,31 +236,81 @@ The third run uses 6 GB DRAM for H1 and 8 GB for Page Cache for each instance.
 Considering the first aspect we see that Minor and Major GC increase dramatically for Native Spark along with significant increase to Other time. Minor and Major GC differences are witnessed because the heap capacity decreases and that causes memory pressure. TeraHeap Spark shows a slight increase to Major GC while the number of instances increases. This is because of the decreasing heap capacity. Other time increases because more objects are moved to TeraHeap but this is a good trade-off because all the GC is absorbed. S/D is completely absorbed by MMIO. From the second aspect, as instances increase in the server the benefit gap between Native and TeraHeap Spark becomes bigger. For Native Spark 2 co-located instances have 57\% speedup in execution time compared to 4 co-located instances and provide 27\% more average throughput. For TH H1 2 co-located instances have 54\% speedup in execution time compared to 4 co-located instances and provides 8\% less throughput. For TH PC performance is the same with TH H1. So choosing H1 or PC setup for TH does not have any up or downsides. Native PC setup is not shown in the figure because PC does not have any impact and decreasing H1 obviously downgrades performance compared to Native H1.
 From the second aspect, as instances increase in the server the benefit gap between Native and TeraHeap Spark becomes bigger. As Native Spark starves from more GC and S/D, TeraHeap maintains its benefits. TeraHeap has 21 and 15\% speedup and 10\% more throughput for 2 and 4 instances when compared to the corresponding Native runs.
 
+\subsection{8 GB DRAM / core}
+
+Figure \ref{fig:linr128} shows the performance of multiple
+Native-TeraHeap Spark instances running LinearRegression with 128 GB
+dataset per instance in our 128 GB DRAM machine.
+Starting from the left of the graph, the first 6 bars show the
+performance of 3 runs. The first run is with 2 colocated Native Spark instances.
+Another run with 2 colocated TH Spark instances with H1 dominating Page Cache
+and a third run with 2 colocated TH Spark instances where Page Cache dominates H1.
+Each instance of the first 2 runs uses 48 GB DRAM for H1 (Java Heap) and 12 GB for rest of the services.
+The third run uses 24 GB DRAM for H1 and 36 GB for Page Cache for each instance.
+The rest 8 bars show the performance of another 2 runs. The first run is with 4 colocated Native Spark instances.
+Another run with 4 colocated TH Spark instances with H1 dominating Page Cache
+and a third run with 4 colocated TH Spark instances where Page Cache dominates H1.
+Each instance of the first run uses 24 GB DRAM for H1 (Java Heap) and 6 GB for rest of the services.
+The second run uses 24 GB DRAM for H1 and 6 GB for Page Cache for each instance.
+Considering the first aspect we see that GC and S/D increase dramatically for TeraHeap Spark along with significant increase to Other time. GC differences are witnessed because the heap capacity decreases and that causes memory pressure. TeraHeap Spark shows a slight increase to Major GC while the number of instances increases. This is because of the decreased heap capacity. For Native Spark 2 co-located instances have 57\% speedup in execution time compared to 4 co-located instances and provide 18\% more average throughput. For TH H1 2 co-located instances have 50\% speedup in execution time compared to 4 co-located instances and provide the same average throughput. For TH PC 2 co-located instances have 50\% speedup in execution time compated to 4 co-located instances and provide the same average throughput. So choosing H1 or PC setup for TH does not make any up or downsides. Native PC setup is not shown in the figure because PC does not have any impact and decreasing H1 would obviously downgrade performance compared to Native H1.
+S/D is completely absorbed by MMIO. From the third aspect, as instances increase in the server the benefit gap between Native and TeraHeap Spark becomes bigger. As Native Spark starves from more GC and S/D, TeraHeap maintains its benefits. That is shown by the speedups where TeraHeap has 50\% speedup and 73\% and 77\% more average throughput for 2 and 4 instances when compared to the corresponding Native runs.
+
+Figure \ref{fig:g_pr128} shows the performance of multiple
+Native-TeraHeap Giraph instances running Page Rank with 13 GB
+dataset per instance in our 128 GB DRAM machine.
+Starting from the left of the graph, the first 6 bars show the
+performance of 3 runs. The first run is with 2 colocated Native Giraph instances.
+Another run with 2 colocated TH Giraph instances with H1 dominating Page Cache
+and a third run with 2 colocated TH Instances instances where Page Cache dominates H1.
+Each instance of the first 2 runs uses 48 GB DRAM for H1 (Java Heap) and 12 GB for rest of the services.
+The third run uses 24 GB DRAM for H1 and 36 GB for Page Cache for each instance.
+The rest 4 bars show the performance of another run. The run is with 4 colocated TeraHeap Giraph instances.
+Each instance uses 24 GB DRAM for H1 (Java Heap) and 6 GB for rest of the services.
+Considering the first aspect Native Giraph does not scale to 4 instances and runs out of memory. TeraHeap Giraph shows significant increase to Major GC while the number of instances increases. This is because of the decreased heap capacity. For TH H1 2 co-located instances have 57\% speedup in execution time compared to 4 co-located instances and provide the same average throughput. For TH PC 2 co-located instances have 51\% speedup in execution time compated to 4 co-located instances and provide the same average throughput. So choosing H1 setup for TH has a slight positive effect. Native PC setup is not shown in the figure because PC does not have any impact and decreasing H1 would obviously downgrade performance compared to Native H1.
+From the third aspect, TeraHeap is able to scale to 4 instances while Native runs out of memory. TeraHeap has 11\% speedup and 13\% more average throughput for 2 instances when compared to the corresponding Native runs.
+
+Figure \ref{fig:g_cdlp128} shows the performance of multiple
+Native-TeraHeap Giraph instances running CDLP with 13 GB
+dataset per instance in our 128 GB DRAM machine.
+Starting from the left of the graph, the first 6 bars show the
+performance of 3 runs. The first run is with 2 colocated Native Giraph instances.
+Another run with 2 colocated TH Giraph instances with H1 dominating Page Cache
+and a third run with 2 colocated TH Instances instances where Page Cache dominates H1.
+Each instance of the first 2 runs uses 48 GB DRAM for H1 (Java Heap) and 12 GB for rest of the services.
+The third run uses 24 GB DRAM for H1 and 36 GB for Page Cache for each instance.
+The rest 4 bars show the performance of another run. The run is with 4 colocated TeraHeap Giraph instances.
+Each instance uses 24 GB DRAM for H1 (Java Heap) and 6 GB for rest of the services.
+Considering the first aspect Native Giraph does not scale to 4 instances and runs out of memory. TeraHeap Giraph shows significant increase to Major GC while the number of instances increases. This is because of the decreased heap capacity. For TH H1 2 co-located instances have 63\% speedup in execution time compared to 4 co-located instances and provide 27\% more average throughput. For TH PC 2 co-located instances have 61\% speedup in execution time compared to 4 co-located instances and 27\% more average throughput. So choosing H1 setup for TH has no positive effects. Native PC setup is not shown in the figure because PC does not have any impact and decreasing H1 would obviously downgrade performance compared to Native H1.
+From the third aspect, TeraHeap is able to scale to 4 instances while Native runs out of memory. TeraHeap has 9\% speedup and 7\% more average throughput for 2 instances when compared to the corresponding Native runs.
+
+
+\subsubsection{16 GB DRAM / core}
+
 Figure \ref{fig:pr256} shows the performance of multiple
 Native-TeraHeap Spark instances running PageRank with 32 GB
-dataset per instance in our 256 GB DRAM machine. Each instance of Spark
-uses one executor with 8 cores per executor. Available DRAM is 240 GB
-and 16 GB are left to the Operating system, resulting in 256 GB total
-DRAM. All configurations utilize 240 of 256 GB total DRAM.
-Starting from the left of the graph, the first 8 bars show the
-performance of 2 runs. The first run is with 4 colocated Native Spark instances.
+dataset per instance in our 256 GB DRAM machine.
+The graph, shows the
+performance of 3 runs. The first run is with 4 colocated Native Spark instances.
 Another run with 4 colocated TH Spark instances with H1 dominating Page Cache.
 Each instance of the first 8 runs uses 48 GB DRAM for H1 (Java Heap) and 12 GB for rest of the services including Page Cache.
-The next 21 bars show the performance of another 3 runs. The first run is with 7 colocated Native Spark instances.
-Another run with 7 colocated TH Spark instances with H1 dominating Page Cache
-and a third run with 7 colocated TH Spark instances where Page Cache dominates H1.
 Each instance of the first run uses 27 GB DRAM for H1 (Java Heap) and 7 GB for rest of the services.
 The second run uses 27 GB DRAM for H1 and 7 GB for Page Cache for each TH instance.
 The third run uses 14 GB DRAM for H1 and 20 GB for Page Cache for each TH instance.
-Considering the first aspect we see that Minor and Major GC increase dramatically for Native Spark along with significant increase to Other time. Minor and Major GC differences are witnessed because the heap capacity decreases and that causes memory pressure. TeraHeap Spark shows a slight increase to Major GC while the number of instances increases. This is because of the decreasing heap capacity. Other time increases because more objects are moved to TeraHeap but this is a good trade-off because all the GC is absorbed. S/D is completely absorbed by MMIO. From the second aspect, as instances increase in the server the benefit gap between Native and TeraHeap Spark becomes bigger. As Native Spark starves from more GC and S/D, TeraHeap maintains its benefits.
+Considering the first aspect we see that GC and S/D increase dramatically for TeraHeap Spark along with significant increase to Other time. GC differences are witnessed because the heap capacity decreases and that causes memory pressure. TeraHeap Spark shows a slight increase to Minor GC while the number of instances increases. This is because of the decreased heap capacity. For Native Spark 2 co-located instances have 57\% speedup in execution time compared to 4 co-located instances and provide 18\% more average throughput. For TH H1 2 co-located instances have 50\% speedup in execution time compared to 4 co-located instances and provide the same average throughput. For TH PC 2 co-located instances have 50\% speedup in execution time compated to 4 co-located instances and provide the same average throughput. So choosing H1 or PC setup for TH does not make any up or downsides. Native PC setup is not shown in the figure because PC does not have any impact and decreasing H1 would obviously downgrade performance compared to Native H1.
+S/D is completely absorbed by MMIO. From the third aspect, as instances increase in the server the benefit gap between Native and TeraHeap Spark becomes bigger. As Native Spark starves from more GC and S/D, TeraHeap maintains its benefits. That is shown by the speedups where TeraHeap has 50\% speedup and 73\% and 77\% more average throughput for 2 and 4 instances when compared to the corresponding Native runs.
+
+\subsubsection{Accuracy of experiments}
+
+We repeated all experiments with 1,2 and 4 instances a second time to estimate standard deviation. Table \ref{tab:std-dev} shows that 
+all experiments have less than 5\% standard deviation. Also co-located experiments have under 7\% difference in-between the end of execution of each co-located instance. This is important because when one instance finishes the rest have less interference than the one finished.
 
 \begin{table}[t!]
   \centering
-  \caption{Server Specifications}
-  \label{tab:server-specs}
-  \begin{tabular}{|c|c|}
+  \caption{Standard deviation for each configuration and number of co-located instances}
+  \label{tab:std-dev}
+  \begin{tabular}{|c|c|c|}
     \hline
-	  \textbf{Conf.} & \textbf{#I} & \textbf{St. dev \%} \\
+	  \textbf{Conf.} & \textbf{\#I} & \textbf{St. dev \%} \\
     \hline
 	  PR-64 Native & 2 & 2\\
 	  PR-64 Native & 4 & 4\\
