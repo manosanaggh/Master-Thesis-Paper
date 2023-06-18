@@ -9,15 +9,15 @@ Our methodology answers the following questions:
 	\item{How do we investigate the memory per core problem?}
 	\item{How do we choose the configurations for running the co-located experiments?}
 	\item{How do we decide what percentage of total cgroup DRAM to use for Java Heap for each cgroup?}
-	\item{What kind of metrics did we use to analyze performance and why?}
+%	\item{What kind of metrics did we use to analyze performance and why?}
 	\item{Is cost a contributing factor to pursuing higher throughput for a server?}
 \end{itemize}
 
 \subsection{Workloads}
 For our experiments with Spark, we selected four specific workloads from two
 different categories of the Spark Bench suite \cite{Spark-Bench}: Page Rank (PR) and Connected
-Component (CC) from GraphX (SAIT) and Linear Regression (LinR) and Logistic Regression (LogR)
-from MLLib (SAIT). For Giraph we choose PageRank, Weakly Connected Component and Community detection 
+Component (CC) from GraphX \cite{GraphX} and Linear Regression (LinR) and Logistic Regression (LogR)
+from MLLib \cite{MLLib}. For Giraph we choose PageRank and Community detection 
 using label propagation (CDLP) from LDBC Graphalytics \cite{ldbc}. The primary reason for selecting these workloads for Spark is that
 they represent different types of algorithms: PR and CC are graph-based workloads, while LinR and LogR are machine learning
 workloads. Giraph is a graph processing framework so we only used graph workloads. All of these
@@ -71,34 +71,40 @@ merging the components as necessary. The workload is computationally
 intensive and requires a significant amount of memory to store the
 graph, therefore a suitable choise for our experiments.
 
-\subsubsection{Weakly Connected Component}
-The Weakly Connected Components (WCC) workload, as part of the Graphalytics benchmark, focuses on identifying and extracting the weakly connected components within a graph. A weakly connected component is a subgraph where there exists a path between any two nodes, considering the graph's undirected nature. The WCC workload involves traversing the graph and grouping the nodes into connected components. This workload plays a crucial role in various graph-based applications, such as social network analysis, community detection, and network connectivity analysis. By identifying weakly connected components, researchers and practitioners gain insights into the structure and connectivity patterns of complex networks. The WCC workload in the Graphalytics benchmark provides a standardized framework to evaluate the performance of graph processing systems in terms of graph traversal, component identification, and scalability.
-
 \subsubsection{Community Detection Label Propagation}
 The Community Detection using Label Propagation (CDLP) workload, another key component of the Graphalytics benchmark, aims to identify communities within a graph based on label propagation techniques. The CDLP workload assigns labels to nodes iteratively, with each node adopting the most frequently occurring label among its neighbors. This iterative process propagates labels throughout the graph, eventually converging to stable communities. Community detection is a fundamental task in graph analysis, enabling researchers to uncover groups of nodes that exhibit strong internal connectivity. It has applications in social network analysis, recommendation systems, and anomaly detection. The CDLP workload in the Graphalytics benchmark provides a standardized evaluation of graph processing systems' performance in terms of community detection scalability, convergence, and accuracy. By benchmarking CDLP, researchers and practitioners can compare the efficiency and effectiveness of different graph processing platforms and algorithms for community detection tasks.
 
 \subsection{Memory-per-core}
-We decide to investigate performance in three memory-per-core scenarios. One is 4 GB / core 
+We decide to investigate performance in two memory-per-core scenarios. One is 4 GB / core 
 which is the current trend in datacenters as seen in the introduction section. The other
-two are 8 GB / core and 16 GB / core. For the 4 GB / core scenario we use a ramdisk to 
+is 8 GB / core which is the current trend. For the 4 GB / core scenario we use a ramdisk to 
 allocate 192 GB of memory in our server thus leaving 64 GB available memory with 16 cores. In this setup, we run 4
 workloads with Native-TH Spark. For the 8 GB / core scenario we run 1 workload with Native-TH Spark and 2 workloads with Native-TH Giraph. We choose 8 GB / core for Giraph because it experiences more memory presssure than Spark. This happens because it does not have
 an aggresive memory offloading mechanism. For this setup we also use a ramdisk to allocate 128 GB of memory thus leaving 
-128 GB with 16 cores. For the 16 GB / core scenario we run 1 workload with Native-TH Spark. Here we don't need to use a ramdisk because
-we need all the available DRAM of the machine. Table 1 summarizes all setups with the coresponding workloads and datasets.
+128 GB with 16 cores. 
+%For the 16 GB / core scenario we run 1 workload with Native-TH Spark. Here we don't need to use a ramdisk because
+%we need all the available DRAM of the machine. 
+Table 1 summarizes all setups with the coresponding workloads and datasets.
 
-\subsection{Choosing the method to run the co-located experiments}
+\subsection{Choosing the configurations to run the co-located experiments}
 To utilize all the available DRAM of the machine we choose a simple method. 
 We divide the total DRAM of the machine by the number of co-located workloads we run for each experiment.
 For simplicity and time management we choose the numbers 1,2,4,8. However, there are 2 problems with that decision
 than we need to overcome. The first is that we need a number that is exactly divided by these numbers to give the same amount of DRAM to
 all cgroups. The second is that we need to leave some memory to the OS for system tasks. For the 4 GB memory/core scenario we utilize
 56 GB out of 64 GB total DRAM and leave the rest 8 GB to the OS which is a safe option. For the 8 GB memory/core scenario we utilize
-120 out of 128 GB total DRAM and leave the rest 8 GB to the OS. For the 16 GB memory/core scenario we utilize 240 out of 252 GB total DRAM.
-4 GB are reserved by the OS at boot time thus the system gives us 252 GB DRAM instead of 256. In all scenarios we choose the number closer to
-the total available DRAM except for the 16 GB scenario where 248 is the closest to 252 that can be divided with 1,2,4 and 8. We do this because 4 GB might be too little DRAM for the OS system tasks.
+120 out of 128 GB total DRAM and leave the rest 8 GB to the OS. 
+%For the 16 GB memory/core scenario we utilize 240 out of 252 GB total DRAM.
+%4 GB are reserved by the OS at boot time thus the system gives us 252 GB DRAM instead of 256. 
+In both scenarios we choose the number closer to
+the total available DRAM except for the 16 GB scenario where 248 is the closest to 252 that can be divided with 1,2,4 and 8. We do this because 4 GB might be too little DRAM for the OS system tasks. After having perfomed these calculations we run each experiment isolated and break down the execution time to know how each experiment performs isolated. Then we run the co-located experiments and study the interference and CPU utilization compared to the isolated experiments. We also examine these parameters in terms of increasing number of instances and between the 2 different offloading techniques. 
 
 \subsection{Cgroup DRAM percentage for Java Heap}
+We use cgroups \cite{cgroups} to restrict the DRAM for all processes in a single instance of Spark and Giraph.
+For cgroups we choose as a baseline an 80\% of total cgroup DRAM budget for H1 as RedHat does from June 2023 \cite{redhatblog}.
+The rest 20\% remains to the OS to be used for Page Cache.
+For TeraHeap we also run experiments with 40\% for H1 to investigate what happens when Page Cache dominates H1.
+For Native Spark and Giraph we do not report results for those experiments because we saw that Page Cache makes no difference.
 
 
 \iffalse
@@ -315,7 +321,7 @@ read-write traffic to remain the same.
 \end{figure}
 \fi
 
-
+\iffalse
 \subsection{Metrics} 
 When measuring performance, it's
 important to choose metrics that provide a comprehensive view of the
@@ -342,7 +348,7 @@ data processed and the number of minor and major garbage collections,
 as measured using jstat, can also provide valuable insights into
 system behavior. By considering a range of metrics, one can get a more
 accurate and comprehensive view of the performance of Spark instances.
-
+\fi
 \iffalse
 \subsection{Benefits of colocating instances} 
 Concurrent execution of workloads provides several benefits.
