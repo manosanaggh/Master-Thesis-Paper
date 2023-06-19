@@ -27,6 +27,7 @@ experiments. Overall, the selection of these workloads allows us to
 evaluate the performance of Spark and Giraph in a variety of contexts. Furthermore it allows us to
 provide insights into the performance of both frameworks with or without using TeraHeap.
 
+
 \subsubsection{PageRank}
 PageRank is a widely used graph-based algorithm that measures the
 importance of nodes in a network. It has become a popular benchmark
@@ -75,6 +76,25 @@ graph, therefore a suitable choise for our experiments.
 The Community Detection using Label Propagation (CDLP) workload, another key component of the Graphalytics benchmark, aims to identify communities within a graph based on label propagation techniques. The CDLP workload assigns labels to nodes iteratively, with each node adopting the most frequently occurring label among its neighbors. This iterative process propagates labels throughout the graph, eventually converging to stable communities. Community detection is a fundamental task in graph analysis, enabling researchers to uncover groups of nodes that exhibit strong internal connectivity. It has applications in social network analysis, recommendation systems, and anomaly detection. The CDLP workload in the Graphalytics benchmark provides a standardized evaluation of graph processing systems' performance in terms of community detection scalability, convergence, and accuracy. By benchmarking CDLP, researchers and practitioners can compare the efficiency and effectiveness of different graph processing platforms and algorithms for community detection tasks.
 
 \subsection{Memory-per-core}
+
+\begin{table}[t!]
+  \centering
+  \caption{Configurations}
+  \label{tab:setups}
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+	  \textbf{Workload} & \textbf{Framework} & \textbf{Dataset (GB)} & \textbf{DRAM GB / core} \\
+    \hline
+	  PR & Spark,Giraph & 8,13 & 4,8 \\
+	  LinR & Spark & 64, 128 & 4,8 \\
+    	LogR & Spark & 64 & 4 \\
+	  CC & Spark & 8 & 4 \\
+	  CDLP & Giraph & 13 & 8 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+
 We decide to investigate performance in two memory-per-core scenarios. One is 4 GB / core 
 which is the current trend in datacenters as seen in the introduction section. The other
 is 8 GB / core which is the current trend. For the 4 GB / core scenario we use a ramdisk to 
@@ -84,7 +104,7 @@ an aggresive memory offloading mechanism. For this setup we also use a ramdisk t
 128 GB with 16 cores. 
 %For the 16 GB / core scenario we run 1 workload with Native-TH Spark. Here we don't need to use a ramdisk because
 %we need all the available DRAM of the machine. 
-Table 1 summarizes all setups with the coresponding workloads and datasets.
+Table \ref{tab:setups} summarizes all setups with the coresponding workloads and datasets.
 
 \subsection{Choosing the configurations to run the co-located experiments}
 To utilize all the available DRAM of the machine we choose a simple method. 

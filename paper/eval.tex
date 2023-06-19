@@ -427,8 +427,8 @@ all experiments have less than 5\% standard deviation. Also co-located experimen
   \end{tabular}
 \end{table}
 
-\subsection{Is the CPU utilization of the server increasing
-accordingly to throughput?}
+\subsection{Is the user CPU utilization of the application increasing
+accordingly to average throughput?}
 \begin{figure}[thbp]
 	\centering
         \includegraphics[width=\linewidth]{./fig/PR_64_THR.png}
@@ -523,22 +523,65 @@ accordingly to throughput?}
 \end{figure}
 
 
-The main goal for colocating tasks is to increase the CPU utilization and achieve better
+\begin{figure}[thbp]
+        \centering
+        \includegraphics[width=\linewidth]{./fig/G_PR_128_THR.png}
+    \caption{Native and TeraHeap Giraph average throughput
+        as the number of instances increases under 8 GB DRAM / core running Page Rank.}
+                \label{fig:g_pr_128_thr}
+        \includegraphics[width=\linewidth]{./fig/G_PR_128_USR.png}
+    \caption{Native and TeraHeap Giraph average user CPU utilization
+        as the number of instances increases under 8 GB DRAM / core running Page Rank.}
+        \label{fig:g_pr_128_usr}
+\end{figure}
+
+\begin{figure}[thbp]
+        \centering
+        \includegraphics[width=\linewidth]{./fig/G_CDLP_128_THR.png}
+    \caption{Native and TeraHeap Giraph average throughput
+        as the number of instances increases under 8 GB DRAM / core running Page Rank.}
+                \label{fig:g_cdlp_128_thr}
+        \includegraphics[width=\linewidth]{./fig/G_CDLP_128_USR.png}
+    \caption{Native and TeraHeap Giraph average user CPU utilization
+        as the number of instances increases under 8 GB DRAM / core running Page Rank.}
+        \label{fig:g_cdlp_128_usr}
+\end{figure}
+
+\begin{table}[t!]
+  \centering
+  \caption{Range of increment for # of instances and corresponding range of increment factor of user CPU utilization}
+  \label{tab:user_factors}
+  \begin{tabular}{|c|c|}
+    \hline
+    \textbf{Incr. in # instances} & \textbf{Incr. Factor} \\
+    \hline
+    Native Spark 1 to 2  & 1.5x-2.5x \\
+    Native Spark 1 to 4 & 2.5x \\
+    TH Spark 1 to 2 & 2x-3x \\
+    TH Spark 1 to 4 & 2x-3x \\
+    Native Giraph 1 to 2 & 2x \\
+    TH Giraph 1 to 2 & 2x-2.5x \\
+    TH Giraph 1 to 4 & 2.5x-3x \\
+    \hline
+  \end{tabular}
+\end{table}
+
+
+The main goal for co-locating tasks is to increase the CPU utilization and achieve better
 throughput. CPU utilization is split to 2 parts. 
 User utilization includes all CPU cycles that were executed in user-space threads.
 It includes GC cycles, S/D cycles and cycles for mutator tasks except I/O.
 System utilization includes all CPU cycles that were executed in kernel-space threads.
 This includes I/O carried out by GC (TeraHeap) and mutator I/O.
-Therefore we have to focus to User utilization which includes the effective CPU cycles done by the application.
-By looking at figures \ref{fig:pr_64_thr}, \ref{fig:linr_64_thr},
-\ref{fig:logr_64_thr}, \ref{fig:cc_64_thr} and \ref{fig:linr_128_thr}we see that Native
-Spark's throughput decreases as the number of colocated
-instances-executors increase in the server.
-This is justified by GC and S/D that increase as instances increase and by the increased User utilization
-(\ref{fig:pr_64_usr}, \ref{fig:linr_64_usr}, \ref{fig:logr_64_usr}, \ref{fig:cc_64_usr}, \ref{fig:linr_128_usr}).
-TeraHeap achieves higher throughput than Native Spark as seen in previous sections and that is also justified by the increased User utilization.
-Having higher user utilization and lower GC and S/D means that effective CPU utilization is really higher, since more
-work is done by mutator threads.
+Therefore we have to focus to User utilization which includes the effective CPU cycles of the application.
+By looking at figures \ref{fig:pr_64_usr}, \ref{fig:linr_64_usr},
+\ref{fig:logr_64_usr}, \ref{fig:cc_64_usr} and \ref{fig:linr_128_usr} we see that Native and TeraHeap User CPU utiliztion
+increases as the number of co-located instances of Spark increase in the server.
+Table \ref{tab:user_factors} summarizes the increment of user CPU utilization for 1 to 2 and 1 to 4 instances for both offloading techniques.
+The question that arises is if that User CPU utilization reflects the throughput in \ref{fig:pr_64_thr}, \ref{fig:linr_64_thr},
+\ref{fig:logr_64_thr}, \ref{fig:cc_64_thr} and \ref{fig:linr_128_thr}.
+From the figures of the previous section with the execution time breakdown and the User CPU Utilization of this section, we come to the conclusion that since TeraHeap has lower GC and S/D and higher CPU utilization the work by mutator threads for application tasks is higher.
+For Native we see that the increment in CPU utilization is not useful work but more GC and S/D since the memory for each instance decreases as the number of co-located instances increase.
 
 \subsection{What
 happens with monetary cost across different cloud platforms?}
@@ -682,13 +725,13 @@ happens with monetary cost across different cloud platforms?}
 \end{table}
 \fi
 
-Tables \ref{tab:pr_table}, \ref{tab:linr_table}, \ref{tab:logr_table}
-and \ref{tab:cc_table} show 
-Amazon Web Services Cloud (EC2), GCP (Google Cloud Platform) and Microsoft Azure costs of deploying multiple instances of Spark
-using both techniques. 
+
+
+Tables \ref{tab:cost_table} shows hourly cost for each machine configuration in 
+Amazon Web Services Cloud (EC2), GCP (Google Cloud Platform) and Microsoft Azure costs. 
 We witness that all providers offer a similar cost for identical machines to our server. 
-As seen by the tables, taking into account that we have an hourly cost,
+Taking into account that we have an hourly cost,
 TeraHeap could be used for running colocated Spark and Giraph workloads
-and achieve benefits of up to 50\%. Reducing the GC and S/D makes a huge difference in the execution time
-and therefore running with TeraHeap decreases the hours needed to rent the machines.
+and achieve benefits of up to 50\%. The calculations are very simple so we skip them. We just multiple hourly cost
+by number of hours needed to execute each experiment until all instances finish execution. The concluded is that reducing GC and S/D makes a huge difference in the execution time and therefore running with TeraHeap decreases the hours needed to rent the machines.
 
