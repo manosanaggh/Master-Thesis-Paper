@@ -1,19 +1,16 @@
 \section{Conclusions}
 
 In this paper, we conducted an analysis of throughput for big data analytics
-using a heap offloading technique that reduces memory pressure by moving parts of
-the managed Java Heap to a secondary memory-mapped heap over fast
-storage devices such as NVMe. We offered a detailed methodology on
-how someone could use a system like TeraHeap to run Big Data Analytics workloads
-to reduce memory pressure and therefore increase his server throughput by utilizng the CPU resources
-in a more efficient way.
+using Apache Spark and Giraph under workload co-location. We investigated 3 different offloading techniques, Native Spark, Native Giraph and both systems using TeraHeap. We conducted our experiments under 2 different memory-per-core
+scnarios, 4 and 8 GB / core. 4 GB / core is the current trend and 8 GB / core is a possible future trend. 
+We showed how someone can distribute the DRAM capacity to create different memory/core setups.
+Then for simplicity we divided each setup to 2,4 and 8 and run each instance isolated to study the execution breakdown.
+Then we run each co-located experiment to study interference, execution breakdown (GC, S/D, I/O), effective CPU utilization and average throughput. We ran 4 Spark workloads (PR, LinR, LogR and CC) in the 4 GB / core scenario and 1 Spark workload (LinR) and 2 Giraph workloads (PR, CDLP) in the 8 GB / core scenario. We ran Giraph under 8 GB / core because it is more memory intensive than Spark.
 
-Our experimental results demonstrate the effectiveness of such a mechanism
-using various Big data analytics workloads on a real-world cluster. We also
-compare TeraHeap with the native Spark-Giraph distribution and show
-that TeraHeap has the potential to further improve performance by reducing GC and eliminating S/D over data.
+Our experimental results showed that reducing GC and S/D for both Spark and Giraph reduces execution time and increases the effective CPU utilization by the applications threads. 
+For Spark under 4 GB memory / core TeraHeap improves average server throughput by up to 66\% against native Spark.
+For Spark under 8 GB memory / core TeraHeap achieves up to 77\% more average throughput against Native Spark.
+For Giraph under 8 GB memory / core TeraHeap achieves up to 13\% more average throughput against Native Giraph. 
 
-Overall, our analysis showed that using a system like TeraHeap offers a promising approach to
-improving server throughput for big data analytics workloads, particularly for computation-intensive tasks. With the
-increasing demand for efficient and scalable big data processing frameworks, this analysis provides a valuable contribution to the field
-of big data analytics and memory management.
+Overall, our analysis showed that high CPU utilization does not always mean that useful work is done by the CPU. Specificaly for managed
+big data frameworks like Spark and Giraph a lot of CPU cycles are wasted on GC and S/D and even increasing H1 does not guarantee optimal execution.

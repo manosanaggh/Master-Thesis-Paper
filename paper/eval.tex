@@ -226,7 +226,11 @@ Figure \ref{fig:g_cdlp128_single} shows single instance performance with Page Ra
 \end{figure}
 
 
-Here we look at the colocated experiments of Spark and Giraph in all memory-per-core categories.
+Here we look at the co-located experiments of Spark and Giraph in all memory-per-core categories.
+Any runs that are not shown should be considered experiments that run Out of memory (OOM) for H1.
+LinR and LogR experiments with 10 GB H1 out of 14 GB cgroup DRAM budget which is less than 80\% were conducted this way
+because less than 4 GB available memory for the OS caused the cgroup to stop execution resulting to OOM error.
+
 We explain each figure from 3 aspects:
 \begin{itemize}
 \item{The differences in the time breakdown while number of instances increase for each configuration.}
@@ -254,7 +258,7 @@ and a third run with 4 colocated TH Spark instances where Page Cache dominates H
 Each instance of the first run uses 11 GB DRAM for H1 (Java Heap) and 3 GB for rest of the services. 
 The second run uses 10 GB DRAM for H1 and 4 GB for Page Cache for each instance. 
 The third run uses 6 GB DRAM for H1 and 8 GB for Page Cache for each instance. 
-Considering the first aspect we see that GC and S/D increase dramatically for Native Spark along with significant increase to Other time. GC differences are witnessed because the heap capacity decreases and that causes memory pressure. TeraHeap Spark shows a slight increase to Major GC while the number of instances increases. This is because of the decreased heap capacity. For Native Spark 2 co-located instances have 71\% speedup in execution time compared to 4 co-located instances and provide 46\% more average throughput. For TH H1 2 co-located instances have 50\% speedup in execution time compared to 4 co-located instances and provide 8\% more average throughput. For TH PC performance is the same with TH H1. So choosing H1 or PC setup for TH does not make any up or downsides. Native PC setup is not shown in the figure because PC does not have any impact and decreasing H1 would obviously downgrade performance compared to Native H1.
+Considering the first aspect we see that GC and S/D increase dramatically for Native Spark along with significant increase to Other time. GC differences are witnessed because the heap capacity decreases and that causes memory pressure. TeraHeap Spark shows a slight increase to Major GC while the number of instances increases. This is because of the decreased heap capacity. For Native Spark 2 co-located instances have 71\% speedup in execution time compared to 4 co-located instances and provide 46\% more average throughput. For TH H1 2 co-located instances have 50\% speedup in execution time compared to 4 co-located instances and provide 8\% more average throughput. For TH PC performance is the same with TH H1. So choosing H1 or PC setup for TH does not make any up or downsides. Native PC setup is not shown in the figure because PC does not have any impact and decreasing H1 would obviously downgrade performance compared to Native H1. 
 S/D is completely absorbed by MMIO. From the third aspect, as instances increase in the server the benefit gap between Native and TeraHeap Spark becomes bigger. As Native Spark starves from more GC and S/D, TeraHeap maintains its benefits. That is shown by the speedups where TeraHeap has 25\% and 57\% speedup and 48\% and 66\% more average throughput for 2 and 4 instances when compared to the corresponding Native runs.
 
 Figure \ref{fig:pr64} shows the performance of multiple
@@ -388,41 +392,102 @@ Considering the first aspect we see that GC and S/D increase dramatically for Te
 S/D is completely absorbed by MMIO. From the third aspect, as instances increase in the server the benefit gap between Native and TeraHeap Spark becomes bigger. As Native Spark starves from more GC and S/D, TeraHeap maintains its benefits. That is shown by the speedups where TeraHeap has 50\% speedup and 73\% and 77\% more average throughput for 2 and 4 instances when compared to the corresponding Native runs.
 \fi
 
+\subsubsection{Interference with single instance}
+
+\begin{table}[thbp]
+  \centering
+  \caption{Interference for each configuration with co-located instances with corresponding single instance experiment.
+	FW = framework, Conf. = configuration, M/C = Memory/core, #I = Number of instances, Interf. = interference }
+  \label{tab:interference}
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+	  \textbf{FW} & \textbf{Conf.} & \textbf{M/C (GB)} & \textbf{\#I} & \textbf{Interf. \%} \\
+    \hline
+	  Spark & PR Native & 4 & 2 & 51 \\
+	  Spark & PR Native & 4 & 4 & 77 \\
+	  Spark & PR TH H1 & 4 & 2 &  63 \\
+	  Spark & PR TH PC & 4 & 2 & 59 \\
+	  Spark & PR TH H1 & 4 & 4 &  82 \\
+	  Spark & PR TH PC & 4 & 4 & 84 \\
+	  Spark & PR TH & 4 & 8 & 92 \\
+	  Spark & LINR Native & 4 & 2 & 32  \\
+	  Spark & LINR Native & 4 & 4 & 80 \\
+	  Spark & LINR TH H1 & 4 & 2 & 52 \\
+	  Spark & LINR TH PC & 4 & 2 & 53 \\
+	  Spark & LINR TH H1 & 4 & 4 & 78 \\
+	  Spark & LINR TH PC & 4 & 4 & 80 \\
+	  Spark & LINR Native & 8 & 2 & 49 \\
+	  Spark & LINR Native & 8 & 4 & 73 \\
+	  Spark & LINR TH H1 & 8 & 2 & 46 \\
+	  Spark & LINR TH PC & 8 & 2 & 32 \\
+	  Spark & LINR TH H1 & 8 & 4 & 71 \\
+	  Spark & LINR TH PC & 8 & 4 & 73 \\
+	  Spark & LOGR Native & 4 & 2 & 45 \\
+	  Spark & LOGR Native & 4 & 4 & 71 \\
+	  Spark & LOGR TH H1 & 4 & 2 & 44 \\
+	  Spark & LOGR TH PC & 4 & 2 & 44 \\
+	  Spark & LOGR TH H1 & 4 & 4 & 73 \\
+	  Spark & LOGR TH PC & 4 & 4 & 75 \\
+          Spark & CC Native & 4 & 2 & 56 \\
+          Spark & CC Native & 4 & 4 & 75 \\
+          Spark & CC TH H1 & 4 & 2 & 66 \\
+          Spark & CC TH PC & 4 & 2 & 66 \\
+          Spark & CC TH H1 & 4 & 4 & 84  \\
+          Spark & CC TH PC & 4 & 4 & 76 \\
+          Giraph & PR Native & 8 & 2 & 19 \\
+          Giraph & PR TH H1 & 8 & 2 & 21 \\
+          Giraph & PR TH PC & 8 & 2 & 38 \\
+          Giraph & PR TH & 8 & 4 & 55 \\
+          Giraph & CDLP Native & 8 & 2 & 41 \\
+          Giraph & CDLP TH H1 & 8 & 2 & 45 \\
+          Giraph & CDLP TH PC & 8 & 2 & 30 \\
+          Giraph & CDLP TH & 8 & 4 & 67 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Table \ref{tab:interference} shows the percentage of interference i.e. speedup of single instance against the corresponding co-located experiment. For Native Spark for 2 to 4 co-located instances experiments there is 32 to 80\% interference. For TeraHeap Spark for 2 to 4 co-located instances experiments there is 32 to 84\% interference. Both offloading techniques have the same interference ranges which are more than 50\% in most of the experiments. For Native Giraph there is 19\% interference for PR and 41\% for CDLP with 2 co-located instances. The first is really reduced compared to the Native Spark 2 co-located instances experiments. For TH Giraph there is 21 to 67 \% interference. For 4 co-located instances experiments TH Giraph has significantly less interference than Spark. 
+
 \subsubsection{Accuracy of experiments}
 
-We repeated all experiments with 1,2 and 4 instances a second time to estimate standard deviation. Table \ref{tab:std-dev} shows that 
-all experiments have less than 5\% standard deviation. Also co-located experiments have under 7\% difference in-between the end of execution of each co-located instance. This is important because when one instance finishes the rest have less interference than the one finished.
+We repeated all experiments with 1,2 and 4 instances except TH with PC and TH with 8 instances for PR a second time to estimate standard deviation. We left there experiments out because of lack of time. Table \ref{tab:std-dev} shows that 
+all experiments have less than 5\% standard deviation. Also co-located experiments have under 7\% difference in-between the end of execution of each co-located instance. This is important because when one instance has finished the interference decreases.
 
-\begin{table}[t!]
+\begin{table}[thbp]
   \centering
   \caption{Standard deviation for each configuration and number of co-located instances}
   \label{tab:std-dev}
-  \begin{tabular}{|c|c|c|}
+  \begin{tabular}{|c|c|c|c|c|}
     \hline
-	  \textbf{Conf.} & \textbf{\#I} & \textbf{St. dev \%} \\
+	  \textbf{FW} & \textbf{Conf.} & \textbf{M/C (GB)} & \textbf{\#I} & \textbf{St. dev \%} \\
     \hline
-	  PR-64 Native & 2 & 2\\
-	  PR-64 Native & 4 & 4\\
-	  PR-64 TH & 2 & 1 \\
-	  PR-64 TH & 4 & 1 \\
-	  PR-256 Native & 4 & 3 \\
-	  PR-256 TH & 4 & 4 \\
-     	  LINR-64 Native & 2 & 2 \\
-	  LINR-64 Native & 4 & 3 \\
-	  LINR-64 TH & 2 & 1 \\
-	  LINR-64 TH & 4 & 2 \\
-	  LINR-128 Native & 2 & 2 \\
-	  LINR-128 Native & 4 & 4 \\
-	  LINR-128 TH & 2 & 3 \\
-	  LINR-128 TH & 4 & 4 \\
-	  LOGR-64 Native & 2 & 2 \\
-	  LOGR-64 Native & 4 & 4 \\
-	  LOGR-64 TH & 2 & 3 \\
-	  LOGR-64 TH & 4 & 4 \\ 
-	  CC-64 Native & 2 & 2 \\
-	  CC-64 Native & 4 & 4 \\
-	  CC-64 TH & 2 & 3 \\
-	  CC-64 TH & 4 & 4 \\ 
+	  Spark & PR Native & 4 & 2 & 2\\
+	  Spark & PR Native & 4 & 4 & 4\\
+	  Spark & PR TH H1 & 4 & 2 & 1 \\
+	  Spark & PR TH H1 & 4 & 4 & 1 \\
+	  Spark & LINR Native & 4 & 2 & 2 \\
+	  Spark & LINR Native & 4 & 4 & 3 \\
+	  Spark & LINR TH H1 & 4 & 2 & 1 \\
+	  Spark & LINR TH H1 & 4 & 4 & 2 \\
+	  Spark & LINR Native & 4 & 2 & 2 \\
+	  Spark & LINR Native & 4 & 4 & 4 \\
+	  Spark & LINR TH H1 & 4 & 2 & 3 \\
+	  Spark & LINR TH H1 & 4 & 4 & 4 \\
+	  Spark & LOGR Native & 4 & 2 & 2 \\
+	  Spark & LOGR Native & 4 & 4 & 4 \\
+	  Spark & LOGR TH H1 & 4 & 2 & 3 \\
+	  Spark & LOGR TH H1 & 4 & 4 & 4 \\ 
+	  Spark & CC Native & 4 & 2 & 2 \\
+	  Spark & CC Native & 4 & 4 & 4 \\
+	  Spark & CC TH H1 & 4 & 2 & 3 \\
+	  Spark & CC TH H1 & 4 & 4 & 4 \\ 
+	  Giraph & PR Native & 8 & 2 & 3 \\
+	  Giraph & PR TH H1 & 8 & 2 & 2 \\
+	  Giraph & PR TH & 8 & 4 & 4 \\
+	  Giraph & CDLP Native & 8 & 2 & 1 \\
+	  Giraph & CDLP TH H1 & 8 & 2 & 2 \\
+	  Giraph & CDLP TH & 8 & 4 & 2 \\
+
     \hline
   \end{tabular}
 \end{table}
@@ -549,7 +614,7 @@ accordingly to average throughput?}
 
 \begin{table}[t!]
   \centering
-  \caption{Range of increment for # of instances and corresponding range of increment factor of user CPU utilization}
+  \caption{Range of increment between single and co-located \# of instances and corresponding range of increment factor of user CPU utilization}
   \label{tab:user_factors}
   \begin{tabular}{|c|c|}
     \hline
@@ -726,12 +791,31 @@ happens with monetary cost across different cloud platforms?}
 \fi
 
 
+\begin{table}[t!]
+  \centering
+  \caption{Hourly costs for EC2, GCP and Azure Cloud}
+  \label{tab:cost_table}
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+	  \textbf{Provider} & \textbf{DRAM (GB)} & \textbf{Cores #} & \textbf{Hourly cost (\$)} \\
+    \hline
+	  EC2 & 128 & 16 & 0.72  \\
+	  EC2 & 64 & 16 & 0.6 \\
+	  GCP & 128 & 16 & 0.8  \\
+	  GCP & 64 & 16 & 0.58 \\
+	  AZ & 128 & 16 & 0.99 \\
+	  AZ & 64 & 16 & 0.67 \\
+    \hline
+  \end{tabular}
+\end{table}
+
 
 Tables \ref{tab:cost_table} shows hourly cost for each machine configuration in 
 Amazon Web Services Cloud (EC2), GCP (Google Cloud Platform) and Microsoft Azure costs. 
-We witness that all providers offer a similar cost for identical machines to our server. 
+We witness that Amazon and Google providers offer a similar cost for identical machines to our server.
+Azure is more expensive especially for the 8 GB memory / core machine where it is 20\% more expensive than GCP.
 Taking into account that we have an hourly cost,
 TeraHeap could be used for running colocated Spark and Giraph workloads
-and achieve benefits of up to 50\%. The calculations are very simple so we skip them. We just multiple hourly cost
-by number of hours needed to execute each experiment until all instances finish execution. The concluded is that reducing GC and S/D makes a huge difference in the execution time and therefore running with TeraHeap decreases the hours needed to rent the machines.
+and achieve benefits of up to 50\%. The calculations are very simple so we skip them. We multiple hourly cost
+by number of hours needed to execute each experiment until all instances finish execution. The conclusion is that reducing GC and S/D makes a huge difference in the execution time and therefore running with TeraHeap decreases the hours needed to rent the machines.
 
