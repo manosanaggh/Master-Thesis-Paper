@@ -1,11 +1,11 @@
 \section{Conclusions}
 
-In this paper, we conducted an analysis of throughput for big data analytics
-using Apache Spark and Giraph under workload co-location. We investigated 3 different offloading techniques, Native Spark, Native Giraph and both systems using TeraHeap. We conducted our experiments under 2 different memory-per-core
+In this paper, we conducted an analysis of throughput for managed big data analytics frameworks
+using Apache Spark and Giraph under workload co-location. We investigated if reducing GC and S/D for managed big data frameworks can improve application throughput by using TeraHeap. We conducted our experiments under 2 different memory-per-core
 scnarios, 4 and 8 GB / core. 4 GB / core is the current trend and 8 GB / core is a possible future trend. 
-We showed how someone can distribute the DRAM capacity to create different memory/core setups.
-Then for simplicity we divided each setup to 2,4 and 8 and run each instance isolated to study the execution breakdown.
-Then we run each co-located experiment to study interference, execution breakdown (GC, S/D, I/O), effective CPU utilization and average throughput. We ran 4 Spark workloads (PR, LinR, LogR and CC) in the 4 GB / core scenario and 1 Spark workload (LinR) and 2 Giraph workloads (PR, CDLP) in the 8 GB / core scenario. We ran Giraph under 8 GB / core because it is more memory intensive than Spark.
+We showed how someone can adjust the DRAM capacity to create different memory/core setups.
+Then for simplicity we divided total DRAM capacity to 2,4 and 8 even memory budgets. We used each budget to run each instance isolated with Native Spark-Giraph and TH Spark-Giraph to study the execution breakdown.
+Then we run experiments with 2,4 and 8 co-located instances using the above budgets for each instance. We ran 4 Spark workloads (PR, LinR, LogR and CC) in the 4 GB / core scenario and 1 Spark workload (LinR) and 2 Giraph workloads (PR, CDLP) in the 8 GB / core scenario. We ran Giraph under 8 GB / core because it is more memory intensive than Spark. We report interference with single instance, execution breakdown (GC, S/D, I/O), user CPU utilization and average throughput.
 
 Our experimental results showed that reducing GC and S/D for both Spark and Giraph reduces execution time and increases the effective CPU utilization by the applications threads. 
 For Spark under 4 GB memory / core TeraHeap improves average server throughput by up to 66\% against native Spark.

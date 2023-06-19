@@ -2,12 +2,12 @@
     Managed big data frameworks, such as Apache Spark and Giraph
     demand large amount of memory to process massive volume
     datasets effectively. The memory pressure that arises from the big data processing leads to
-    long garbage collection (GC). In order to avoid this overhead, big
+    long garbage collection (GC). To avoid this overhead, big
     data analytics frameworks, increase heap capacity or try offloading objects to storage devices. 
     Increasing heap capacity to optimize performance reduces the number of co-located instances
 	that can be executed in order to increase utilization of available resources.
 	On the other hand offloading objects to storage devices poses other overheads like Serialization/Deserialization (S/D).
-    These limits prevent the frameworks from effectively utilizing the CPU thus
+    These limitations prevent managed big data frameworks from effectively utilizing the CPU thus
     leading to low server throughput and shows that the memory/core ratio is not enough to both satisfy overheads and the application.
 
     In this paper, we conduct a methodological analysis of server throughput for

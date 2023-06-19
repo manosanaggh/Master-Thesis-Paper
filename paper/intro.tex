@@ -40,7 +40,8 @@ Alibaba's traces analyses (\cite{Alibaba}, \cite{Alibaba1},
 DRAM utilization is high, while the CPU is under-utilized. In
 Facebook's Twine presentation \cite{Twine}, they used a cluster of
 machines where each machine had 40 cores and 80 GB DRAM. This means
-that ratio of GB for memory/core was 2. This shows that memory
+that ratio of GB for memory/core was 2. The same ratio is shown in Facebook's Yosemite
+\cite{Yosemite}. This shows that memory
 capacity for each core is low. Most of the time many the CPU cores are
 going to be idle because a few of them will be enough to carry out the
 work.
@@ -68,7 +69,7 @@ devices 2) reduces GC pauses drastically over the secondary heap. By
 using TeraHeap, we aim to investigate the impact of reducing GC and S/D
 to server throughput under workload co-location compared to Native Spark
 and Giraph. We divide all the available DRAM
-in our machine to 2,4,8 even budgets to run the co-located instances.
+in our machine to 2,4 and 8 even budgets to run the co-located instances.
 First we run each instance isolated to be able to study interference when adding more
 co-located instances. We run each individual workload with a different Spark-Giraph instance in a cgroup.
 We do this to limit the memory budget for each instance. Memory budget is
@@ -104,10 +105,10 @@ To summarize, this paper makes the following contributions:
 	We show how to pick the DRAM budget for each co-located instance and how to divide this budget
 		for the different memory needs of a group of processes.
 		Furthermore, we show how to create different memory-per-core configurations with a single machine and choose
-		2 of them for our evaluation stting why we did it.
+		2 of them for our evaluation stating why we did it.
 		}
 
-    \item{A comprehensive evaluation of both Spark and Giraph with or without the use TeraHeap.
+    \item{A comprehensive evaluation using the above methodology.
 	    We run 4 Spark and 2 Giraph workloads in 2 memory-per-core scenarios
 	    analyzing different aspects of performance like GC, S/D, I/O, average throughput
 		and CPU utilization. We show the interference impact of running multiple co-located managed big data frameworks
