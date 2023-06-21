@@ -85,17 +85,19 @@ The Community Detection using Label Propagation (CDLP) workload, another key com
     \hline
 	  \textbf{Workload} & \textbf{Framework} & \textbf{Dataset (GB)} & \textbf{DRAM GB / core} \\
     \hline
-	  PR & Spark,Giraph & 8,13 & 4,8 \\
-	  LinR & Spark & 64, 128 & 4,8 \\
+	  PR & Spark & 8 & 4 \\
+	  LinR & Spark & 64 & 4 \\
+	  LinR & Spark & 128 & 8 \\
     	LogR & Spark & 64 & 4 \\
 	  CC & Spark & 8 & 4 \\
+	  PR & Giraph & 13 & 8 \\
 	  CDLP & Giraph & 13 & 8 \\
     \hline
   \end{tabular}
 \end{table}
 
 
-We decide to investigate performance in two memory-per-core scenarios. Our main focus is 4 GB / core 
+We investigate performance in two memory-per-core scenarios. Our main focus is 4 GB / core 
 which is the next possible trend in datacenters based on introduction section. The other
 is 8 GB / core which is a possible future trend. For the 4 GB / core scenario we use a ramdisk to 
 allocate 192 GB of memory in our server thus leaving 64 GB available memory with 16 cores. In this setup, we run 4
