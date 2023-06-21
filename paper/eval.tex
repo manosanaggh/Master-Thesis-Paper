@@ -1,6 +1,8 @@
 \section{Evaluation}
 \label{sec:eval}
 
+In this section we report and analyze our experiments.
+
 \begin{table}[thbp]
   \centering
   \caption{Server Specifications}
@@ -21,7 +23,7 @@
 \end{table}
 
 \subsection{Server Characteristics}
-In \ref{tab:server-specs} we see the characteristics of our server.
+Table \ref{tab:server-specs} summarizes the characteristics of our server.
 The server used in our experiments is a high-performance machine with
 hardware specifications found in real-world clusters.
 It is equipped with 8x DDR4 32-GB 2.4 GHz 64-bit DIMMs, providing a
@@ -42,7 +44,7 @@ storage devices are designed for fast, random access to data, making
 them ideal for storing and retrieving large amounts of data in big
 data applications. Overall, the server's hardware specifications make
 it a powerful platform for conducting experiments on managed big data
-analytics and evaluating the performance of TeraHeap.
+analytics and evaluating their performance.
 
 \subsection{Native Spark Configuration}
 We use Spark v3.3.0 (\cite{Building}, \cite{Tuning}, \cite{Conf}, \cite{Monitoring}) with Kryo Serializer \cite{Kryo}, a state-of-the-art highly optimized S/D Library for Java that Spark recommends. We run Spark

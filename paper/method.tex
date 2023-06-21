@@ -121,7 +121,7 @@ the total available DRAM. After having perfomed these calculations we run each e
 
 \subsection{Cgroup DRAM percentage for Java Heap}
 We use cgroups \cite{cgroups} to restrict the DRAM for all processes in a single instance of Spark and Giraph.
-For cgroups we choose as a baseline an 80\% of total cgroup DRAM budget for H1 as RedHat does from June 2023 \cite{redhatblog}.
+For cgroups we choose as a baseline an 80\% of total cgroup DRAM budget for H1 as RedHat does for its cgroups from June 2023 \cite{redhatblog}.
 The rest 20\% remains to the OS to be used for Page Cache.
 For TeraHeap we also run experiments with 40\% for H1 to investigate what happens when Page Cache dominates H1.
 For Native Spark and Giraph we do not report results for those experiments because we saw that Page Cache makes no difference.
@@ -456,7 +456,7 @@ In order to estimate the cost of our evaluation in real-world public clusters we
 chose a variety of providers like Amazon \cite{EC2}, Google \cite{GCP} and Microsoft \cite{Azure}. This
 way we covered the most known providers and platforms someone would
 choose to run their workloads on. We chose 2 machines from each
-platform identical to the specifications of our 64, 128 and 256 GB DRAM
+platform identical to the specifications of our 64 and 128 GB DRAM
 machines. These are the cheapest machines of that particular category
 offered by the platform. We then used the platform's pricing
 calculator to estimate the cost of renting that machine for the time
