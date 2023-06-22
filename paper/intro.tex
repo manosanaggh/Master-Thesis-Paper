@@ -4,24 +4,20 @@
 With the exponential growth of data in various fields such as
 healthcare and social media, managed big data frameworks (e.g, Apache
 Spark \cite{Spark} and Apache Giraph \cite{Giraph}) require large
-amount of DRAM. These frameworks, during processing, generate large
+amount of DRAM / core for data processing. During the processing, they generate large
 amount of objects in the managed heap that span multiple computation
 stages. The memory pressure that arises in the managed heap leads to
 frequent garbage collection (GC) cycles. Frequent GCs waste CPU cycles 
 and prevent application execution.
 
-To reduce the frequency of GC and optimize performance, users of big data
-frameworks try two different approaches. First, they increase heap capacity to
-facilitate the big number of allocated objects. Apart from increasing
-heap size, they use mechanisms offfered by the frameworks 
-to offload objects from the heap to storage devices. However, these
+On the one hand, to reduce the frequency of GC and optimize performance, big data
+frameworks offload objects from the managed heap to storage devices. However, these
 objects need to be serialized to byte streams to be stored in the storage
 device or to be deserialized into memory objects to be loaded back to memory. 
 This practice leads to high serialization/deserialization overhead.
+On the other hand infrastructure providers, trying to address the same problem increase memory per framework instance that runs in the server. This leaves CPU cores underutilized. 
 
-Furthermore, due to the increased needs for data processing, there is
-a need to co-locate many isolated managed big data framework
-instances. Co-locating workloads aims to increase available resource utilization
+Co-locating workloads aims to increase available resource utilization
 thus increasing the throughput in server. 
 In order to maximize throughput, the number of instances
 increase to utilize all available DRAM. The result of this
@@ -70,32 +66,34 @@ using TeraHeap, we aim to investigate the impact of reducing GC and S/D
 to server throughput under workload co-location compared to Native Spark
 and Giraph. We divide all the available DRAM
 in our machine to 2,4 and 8 even budgets to run the co-located instances.
-First we run each instance isolated to be able to study interference when adding more
-co-located instances. We run each individual workload with a different Spark-Giraph instance in a cgroup.
+First we run each instance isolated to analyze performance and be able to study the interference when adding more
+co-located instances. We run each individual workload with a different Spark or Giraph instance in a cgroup.
 We do this to limit the memory budget for each instance. Memory budget is
 the summary of Java Heap, IO Cache (Linux Page Cache) and JVM native memory. We choose
 the Java Heap (H1) ratio over the total DRAM budget based on RedHat's decisions
 for running containers as a baseline. We also run experiment with more Page Cache (PC) ratio than H1
-to investigate Page Cache affection to the performance. We show performance of both Native and TH in 2 different
+to investigate Page Cache affection to the performance. We show performance of both Native Spark-Giraph and Spark-Giraph with TH in 2 different
 memory/core scenarios, 4 GB / core which is the current trend and 8 GB / core 
 for possible future trends. We evaluate both offloading techniques by running 2 widely used
 managed big data frameworks, Apache Spark and Giraph. We
 specificaly run 4 different workloads with Spark with 4 GB / core and 1 workload with 8 GB / core.
-We run 2 different workloads with Giraph with 8 GB / core because Giraph is more memory intensive than Spark.
+We run 2 different workloads with Giraph with 4 and 8 GB / core.
 We compare TeraHeap with the native Spark and Giraph distributions under workload
 co-location and analyze their performance using several metrics like
 GC, S/D, I/O and CPU utilization. Finally, we estimate the cost of running these
 experiments in public world clusters like Amazon EC2, Google Cloud Platform (GCP)
 and Microsoft Azure Cloud to see possible benefits of either of the two techniques.
 
-Our experimental results show that reducing Java Garbage Collection
-overhead and S/D by offloading the heap to fast storage devices significantly
-improves average server throughput by up to 66\% against native Spark in 4 GB memory / core. 
-For Spark under 8 GB memory / core TeraHeap achieves up to 77\% more average throughput against Native Spark.
-For Giraph under 8 GB memory / core TeraHeap achieves up to 13\% more average throughput against Native Giraph.
-Finally, we also include a cost estimation to show that
-TeraHeap could reduce monetary cost by up to 50\% for running big data
-analytics, if deployed in a world cluster like EC2, GCP or Microsoft Azure Cloud, which are available to
+Our experimental results show that there is indeed a problem with memory per core ratio
+for managed big data frameworks.
+A solution is to move the managed heap over fast storage devices to avoid both GC and S/D.
+Our experimental results show that reducing GC and S/D by offloading the heap to fast storage devices significantly
+improves average server throughput by up to 66\% in 4 GB memory / core. 
+For Spark under 8 GB memory / core reducing GC and S/D increases average throughput up to 77\%.
+For Giraph under 4 GB / memory / core which is more memory intensive, GC and S/D prevents execution.
+For Giraph under 8 GB memory / core reducing GC and S/D increases average throughput up to 13\%.
+Finally, we also include a cost estimation to show that reducing GC and S/D could reduce monetary cost by up to 50\% for running big data
+analytics, in a world cluster like EC2, GCP or Microsoft Azure Cloud, which are available to
 the public.
 
 To summarize, this paper makes the following contributions: 

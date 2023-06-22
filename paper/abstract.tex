@@ -2,10 +2,10 @@
     Managed big data frameworks, such as Apache Spark and Giraph
     demand a large amount of memory per core to process massive volume
     datasets effectively. The memory pressure that arises from the big data processing leads to
-    long garbage collection (GC). Big data analytics frameworks attempt to remove this overhead by offloading objects to storage devices. 
-    Increasing heap capacity to optimize performance reduces the number of co-located instances
-	that can be executed in order to increase utilization of available resources.
-	On the other hand offloading objects to storage devices poses other overheads like Serialization/Deserialization (S/D).
+    high garbage collection (GC) overhead. Big data analytics frameworks attempt to remove this overhead by offloading objects to storage devices.
+    At the same time, infrastructure providers, trying to address the same problem, attribute more memory to increase memory per instance leaving cores underutilized.
+	For frameworks, trying to avoid GC through offloading to storage devices leads to high Serialiation/Deserialization (S/D) overhead.
+	For infrastructure, the result is that resource usage is decreased.
     These limitations prevent managed big data frameworks from effectively utilizing the CPU thus leading to low server throughput.
 
     In this paper, we conduct a methodological analysis of server throughput for
@@ -21,10 +21,10 @@
     We evaluate both techniques under 2 different memory/core scenarios using Spark and Giraph with native JVM or JVM with TeraHeap. 
 	We report GC, S/D, I/O, average server throughput and CPU utilization.
 
-    Our experimental results show that reducing Java Garbage
-    Collection overhead by offloading the heap to fast storage devices
-    significantly improves server throughput by up to 77\% against
-    native Spark and 13\% against Native Giraph. Finally, we also include a cost
+    Our experimental results show that there is indeed a problem with memory / core. Effective solutions
+    for this problem is using systems like TeraHeap and Panthera that offload objects from the managed heap without 
+    increasing the CPU load. Moving large parts of the heap to fast storage decreases the DRAM GB / core and increases the utilization
+    of the server. Finally, we also include a cost
     estimation to show that using an approach like TeraHeap could reduce monetary cost by up
     to 50\% for running big data analytics in a world
     cluster like Amazon's EC2 or Google Cloud Platform or Microsoft

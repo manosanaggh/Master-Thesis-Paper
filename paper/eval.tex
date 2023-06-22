@@ -2,7 +2,7 @@
 \label{sec:eval}
 
 In this section we report and analyze our experiments.
-
+\iffalse
 \begin{table}[thbp]
   \centering
   \caption{Server Specifications}
@@ -45,7 +45,7 @@ them ideal for storing and retrieving large amounts of data in big
 data applications. Overall, the server's hardware specifications make
 it a powerful platform for conducting experiments on managed big data
 analytics and evaluating their performance.
-
+\fi
 \subsection{Native Spark Configuration}
 We use Spark v3.3.0 (\cite{Building}, \cite{Tuning}, \cite{Conf}, \cite{Monitoring}) with Kryo Serializer \cite{Kryo}, a state-of-the-art highly optimized S/D Library for Java that Spark recommends. We run Spark
 with Native OpenJDK8 \cite{JDK8} as a baseline. We use the Parallel Scavenge
@@ -95,19 +95,17 @@ thus Giraph is unaware of the presence of a second heap.
 In this section we run the single instance experiments and provide an explanation of their performance to use it later to study the interference with co-located experiments.
 These experiments map one to one to the co-located experiments of the next section.
 DRAM / core is added to the figure titles to show relation between this mapping the co-located experiments and not because it has any impact
-for single instance performance.
+for single instance performance. For all figures each configuration is described with memory capacity for H1 + memory for OS in GB and a label that denotes the division of memory e.g. N2 is 1/2 of total DRAM for Native, N4 is 1/4 of total DRAM for Native. TH H1 means denotes 80\% memory for H1 and TH PC denotes 40\% memory for H1 to investigate the PC scenario.
 
 \begin{figure}[thbp]
 \centering
     \includegraphics[width=\linewidth]{./fig/pr64_single.png}
-    \caption{Execution time breakdown for single instances of Spark
-    Page Rank. X axis shows each configuration.
-        For example, 22 H1 + 6 OS - N2 is a single instance experiment targetting an experiment with two co-located instances of Native Spark (T for TeraHeap) with 22 GB memory for H1 and 6 for the OS to be used as Page Cache. Y axis shows execution time in seconds.}
+    \caption{ Execution time breakdown for single instances of Spark
+	Page Rank. X axis shows each configuration. Y axis shows execution time in seconds. All missing configurations in the figure are OOM experiments.}
     \label{fig:pr64_single}
 	\includegraphics[width=\linewidth]{./fig/linr64_single.png}
-    \caption{Execution time breakdown for single instainces of Spark
-    Linear Regression. X axis shows each configuration.
-        For example, 22 H1 + 6 OS - N2 is a single instance experiment targetting an experiment with two co-located instances of Native Spark (T for TeraHeap) with 22 GB memory for H1 and 6 for the OS to be used as Page Cache. Y axis shows execution time in seconds.}
+    \caption{Execution time breakdown for single instances of Spark
+	Linear Regression. X axis shows each configuration. Y axis shows execution time in seconds. All missing configurations in the figure are OOM experiments.}
     \label{fig:linr64_single}
 \end{figure}
 
@@ -115,14 +113,13 @@ for single instance performance.
         \centering
     \includegraphics[width=\linewidth]{./fig/logr64_single.png}
     \caption{Execution time breakdown for single instances of Spark
-    Logistic Regression. X axis shows each configuration.
-        For example, 22 H1 + 6 OS - N2 is a single instance experiment targetting an experiment two co-located instances of Native Spark (T for TeraHeap) with 22 GB memory for H1 and 6 for the OS to be used as Page Cache. Y axis shows execution time in seconds.}
+    Logistic Regression. X axis shows each configuration. Y axis shows execution time in seconds. All missing configurations in the figure are OOM experiments.}
     \label{fig:logr64_single}
 
     \includegraphics[width=\linewidth]{./fig/cc64_single.png}
     \caption{Execution time breakdown for single instances of Spark
     Connected Component. X axis shows each configuration.
-        For example, 22 H1 + 6 OS - N2 is a single instance experiment targetting an experiment with two co-located instances of Native Spark (T for TeraHeap) with 22 GB memory for H1 and 6 for the OS to be used as Page Cache. Y axis shows execution time in seconds.}
+Y axis shows execution time in seconds. All missing configurations in the figure are OOM experiments.}
     \label{fig:cc64_single}
 \end{figure}
 
@@ -138,7 +135,7 @@ for single instance performance.
     \includegraphics[width=\linewidth]{./fig/linr128_single.png}
     \caption{Execution time breakdown for single instances of Spark
     Linear Regression. X axis shows each configuration.
-        For example, 48 H1 + 12 OS - N2 is a single instance experiment targetting an experiment with two co-located instances of Native Spark (T for TeraHeap) with 48 GB memory for H1 and 12 for the OS to be used as Page Cache. Y axis shows execution time in seconds.}
+Y axis shows execution time in seconds. All missing configurations in the figure are OOM experiments.}
     \label{fig:linr128_single}
 \end{figure}
 
@@ -147,12 +144,12 @@ for single instance performance.
     \includegraphics[width=\linewidth]{./fig/g_pr128_single.png}
     \caption{Execution time breakdown for single instances of Giraph
     Page Rank. X axis shows each configuration.
-        For example, 48 H1 + 12 OS - N2 is a single instance experiment targetting an experiment with two co-located instances of Native Giraph (T for TeraHeap) with 48 GB memory for H1 and 12 for the OS to be used as Page Cache. Y axis shows execution time in seconds.}
+Y axis shows execution time in seconds. All missing configurations in the figure are OOM experiments.}
     \label{fig:g_pr128_single}
     \includegraphics[width=\linewidth]{./fig/g_cdlp128_single.png}
     \caption{Execution time breakdown for single instances of Giraph
     Community Detection Label Propagation. X axis shows each configuration.
-        For example, 48 H1 + 12 OS - N2 is a single instance experiment targetting an experiment with two co-located instances of Native Giraph (T for TeraHeap) with 48 GB memory for H1 and 12 for the OS to be used as Page Cache. Y axis shows execution time in seconds.}
+Y axis shows execution time in seconds. All missing configurations in the figure are OOM experiments.}
     \label{fig:g_cdlp128_single}
 \end{figure}
 
