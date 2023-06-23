@@ -100,7 +100,7 @@ The Community Detection using Label Propagation (CDLP) workload, another key com
 
 
 We investigate performance in two memory-per-core scenarios. Our main focus is 4 GB / core 
-which is the next possible trend in datacenters based on introduction section. The other
+which is the next possible trend in datacenters based on \ref{sec:intro}. The other
 is 8 GB / core which is a possible future trend. For the 4 GB / core scenario we use 64 GB memory with 16 cores.
 In this setup, we run 4 workloads with Native Spark and Spark using TH and 2 workloads with Native Giraph and Giraph using TH. For the 8 GB / core scenario we run 1 workload with Native Spark and Spark using TeraHeap and 2 workloads with Native Giraph and Giraph using TeraHeap. We also choose 8 GB / core for Giraph because it experiences more memory pressure than Spark. This happens because it does not have
 an aggresive memory offloading mechanism. For this setup we use 128 GB of memory with 16 cores. 
@@ -111,11 +111,10 @@ To utilize all the available DRAM of the machine we choose a simple method.
 We divide the total DRAM of the machine by the number of co-located workloads we run for each experiment.
 For simplicity and time management we choose the numbers 1,2,4,8. However, there are 2 problems with that decision
 than we need to overcome. The first is that we need a number that is exactly divided by these numbers to give the same amount of DRAM to
-all cgroups. The second is that we need to leave some memory to the OS for system tasks. For the 4 GB memory/core scenario we utilize
+all cgroups. The second is that we need to leave memory to the OS for system tasks that are executed along with the system reserved memory of 2 GB. For the 4 GB memory/core scenario we utilize
 56 GB out of 64 GB total DRAM and leave the rest 8 GB to the OS which is a safe option. For the 8 GB memory/core scenario we utilize
 120 out of 128 GB total DRAM and leave the rest 8 GB to the OS. 
-In both scenarios we choose the number closer to
-the total available DRAM. After having perfomed these calculations we run each experiment isolated and break down the execution time to know how each experiment performs isolated. Then we run the co-located experiments and study the interference in execution. For the co-located experiments we run the same workload with the same dataset size for all instances. We do this for simplicity of explaining the results. We also study CPU utilization compared to the isolated experiments. Furthermore we examine these parameters in terms of increasing number of instances and between the 2 different offloading techniques. 
+In both scenarios we choose the number closer to the total DRAM. After having perfomed these calculations we run each experiment isolated and break down the execution time to know how each experiment performs isolated. Then we run the co-located experiments and study the interference in execution. For the co-located experiments we run the same workload with the same dataset size for all instances. We do this for simplicity of explaining the results.
 
 \subsection{Cgroup DRAM percentage for Java Heap}
 We use cgroups \cite{cgroups} to restrict the DRAM for all processes in a single instance of Spark and Giraph.

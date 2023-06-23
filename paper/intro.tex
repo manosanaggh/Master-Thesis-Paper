@@ -86,7 +86,7 @@ and Microsoft Azure Cloud to see possible benefits of either of the two techniqu
 
 Our experimental results show that there is indeed a problem with memory per core ratio
 for managed big data frameworks.
-A solution is to move the managed heap over fast storage devices to avoid both GC and S/D.
+A solution is to move the managed heap over fast storage devices to avoid both GC and S/D like TeraHeap and Panthera \cite{Panthera}.
 Our experimental results show that reducing GC and S/D by offloading the heap to fast storage devices significantly
 improves average server throughput by up to 66\% in 4 GB memory / core. 
 For Spark under 8 GB memory / core reducing GC and S/D increases average throughput up to 77\%.
@@ -102,15 +102,13 @@ To summarize, this paper makes the following contributions:
         workloads with or without TeraHeap. 
 	We show how to pick the DRAM budget for each co-located instance and how to divide this budget
 		for the different memory needs of a group of processes.
-		Furthermore, we show how to create different memory-per-core configurations with a single machine and choose
-		2 of them for our evaluation stating why we did it.
 		}
 
     \item{A comprehensive evaluation using the above methodology.
 	    We run 4 Spark and 2 Giraph workloads in 2 memory-per-core scenarios
 	    analyzing different aspects of performance like GC, S/D, I/O, average throughput
 		and CPU utilization. We show the interference impact of running multiple co-located managed big data frameworks
-		workloads and show which offloading technique utilizes the CPU in a better and more efficient way.}
+		workloads and show that reducing GC and eliminating S/D increases application throughput and utilizes the CPU in a better and more efficient way. }
 
     \item{A cost estimation of running our experiments in real-world
         cloud platforms like Amazon EC2, Google Cloud and Microsoft
