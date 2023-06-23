@@ -114,7 +114,7 @@ than we need to overcome. The first is that we need a number that is exactly div
 all cgroups. The second is that we need to leave memory to the OS for system tasks that are executed along with the system reserved memory of 2 GB. For the 4 GB memory/core scenario we utilize
 56 GB out of 64 GB total DRAM and leave the rest 8 GB to the OS which is a safe option. For the 8 GB memory/core scenario we utilize
 120 out of 128 GB total DRAM and leave the rest 8 GB to the OS. 
-In both scenarios we choose the number closer to the total DRAM. After having perfomed these calculations we run each experiment isolated and break down the execution time to know how each experiment performs isolated. Then we run the co-located experiments and study the interference in execution. For the co-located experiments we run the same workload with the same dataset size for all instances. We do this for simplicity of explaining the results.
+In both scenarios we choose the number closer to the total DRAM. After having perfomed these calculations we run each experiment isolated and break down the execution time to know how each experiment performs isolated. Then we run the co-located experiments and study the interference in execution. For the co-located experiments we run the same workload with the same dataset size for all instances. We do this for simplicity of explaining the results. For all experiments we have swap memory disabled.
 
 \subsection{Cgroup DRAM percentage for Java Heap}
 We use cgroups \cite{cgroups} to restrict the DRAM for all processes in a single instance of Spark and Giraph.
