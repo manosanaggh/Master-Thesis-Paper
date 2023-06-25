@@ -4,7 +4,7 @@
 With the exponential growth of data in various fields such as
 healthcare and social media, managed big data frameworks (e.g, Apache
 Spark \cite{Spark} and Apache Giraph \cite{Giraph}) require large
-amount of DRAM / core for data processing. During the processing, they generate large
+amount of DRAM per core for data processing. During the processing, they generate large
 amount of objects in the managed heap that span multiple computation
 stages. The memory pressure that arises in the managed heap leads to
 frequent garbage collection (GC) cycles. Frequent GCs waste CPU cycles 
@@ -24,10 +24,10 @@ increase to utilize all available DRAM. The result of this
 practice is that the underlying machine runs out of memory, while the
  overhead of GC and S/D is still high. The remaining GC and S/D
 overheads lead to the problem of wasting the CPU resources
-to do unuseful work. This leads to the conclusion that the avalaible memory/core is
+to do unuseful work. This leads to the conclusion that the avalaible memory per core is
 not enough for the Garbage Collector, S/D and the application.
 
-The memory-per-core problem can better be understood when looking at
+The memory per core problem can better be understood when looking at
 the resource usage and the characteristics of the servers of big
 companies e.g. Alibaba and Facebook. When looking at the results of
 Alibaba's traces analyses (\cite{Alibaba}, \cite{Alibaba1},
@@ -36,9 +36,9 @@ Alibaba's traces analyses (\cite{Alibaba}, \cite{Alibaba1},
 DRAM utilization is high, while the CPU is under-utilized. In
 Facebook's Twine presentation \cite{Twine}, they used a cluster of
 machines where each machine had 40 cores and 80 GB DRAM. This means
-that ratio of GB for memory/core was 2. The same ratio is shown in Facebook's Yosemite
+that ratio of GB for memory per core was 2. The same ratio is shown in Facebook's Yosemite
 \cite{Yosemite}. This shows that memory
-capacity for each core is low. Most of the time many the CPU cores are
+capacity for each core is low while DRAM usage is high compared to the CPU usage. Most of the time many the CPU cores are
 going to be idle because a few of them will be enough to carry out the
 work.
 
@@ -73,11 +73,11 @@ the summary of Java Heap, IO Cache (Linux Page Cache) and JVM native memory. We 
 the Java Heap (H1) ratio over the total DRAM budget based on RedHat's decisions
 for running containers as a baseline. We also run experiment with more Page Cache (PC) ratio than H1
 to investigate Page Cache affection to the performance. We show performance of both Native Spark-Giraph and Spark-Giraph with TH in 2 different
-memory/core scenarios, 4 GB / core which is the current trend and 8 GB / core 
+memory per core scenarios, 4 GB per core which is the current trend and 8 GB per core 
 for possible future trends. We evaluate both offloading techniques by running 2 widely used
 managed big data frameworks, Apache Spark and Giraph. We
-specificaly run 4 different workloads with Spark with 4 GB / core and 1 workload with 8 GB / core.
-We run 2 different workloads with Giraph with 4 and 8 GB / core.
+specificaly run 4 different workloads with Spark with 4 GB per core and 1 workload with 8 GB / core.
+We run 2 different workloads with Giraph with 4 and 8 GB per core.
 We compare TeraHeap with the native Spark and Giraph distributions under workload
 co-location and analyze their performance using several metrics like
 GC, S/D, I/O and CPU utilization. Finally, we estimate the cost of running these
@@ -88,10 +88,10 @@ Our experimental results show that there is indeed a problem with memory per cor
 for managed big data frameworks.
 A solution is to move the managed heap over fast storage devices to avoid both GC and S/D like TeraHeap and Panthera \cite{Panthera}.
 Our experimental results show that reducing GC and S/D by offloading the heap to fast storage devices significantly
-improves average server throughput by up to 66\% in 4 GB memory / core. 
-For Spark under 8 GB memory / core reducing GC and S/D increases average throughput up to 77\%.
-For Giraph under 4 GB / memory / core which is more memory intensive, GC and S/D prevents execution.
-For Giraph under 8 GB memory / core reducing GC and S/D increases average throughput up to 13\%.
+improves average server throughput by up to 66\% in 4 GB memory per core. 
+For Spark under 8 GB memory per core reducing GC and S/D increases average throughput up to 77\%.
+For Giraph under 4 GB memory per core which is more memory intensive, GC and S/D prevents execution.
+For Giraph under 8 GB memory per core reducing GC and S/D increases average throughput up to 13\%.
 Finally, we also include a cost estimation to show that reducing GC and S/D could reduce monetary cost by up to 50\% for running big data
 analytics, in a world cluster like EC2, GCP or Microsoft Azure Cloud, which are available to
 the public.
@@ -105,7 +105,7 @@ To summarize, this paper makes the following contributions:
 		}
 
     \item{A comprehensive evaluation using the above methodology.
-	    We run 4 Spark and 2 Giraph workloads in 2 memory-per-core scenarios
+	    We run 4 Spark and 2 Giraph workloads in 2 memory per core scenarios
 	    analyzing different aspects of performance like GC, S/D, I/O, average throughput
 		and CPU utilization. We show the interference impact of running multiple co-located managed big data frameworks
 		workloads and show that reducing GC and eliminating S/D increases application throughput and utilizes the CPU in a better and more efficient way. }

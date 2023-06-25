@@ -16,14 +16,14 @@ Our methodology answers the following questions:
 For our experiments with Spark, we selected four specific workloads from two
 different categories of the Spark Bench suite \cite{Spark-Bench}: Page Rank (PR) and Connected
 Component (CC) from GraphX \cite{GraphX} and Linear Regression (LinR) and Logistic Regression (LogR)
-from MLLib \cite{MLLib}. For Giraph we choose PageRank and Community detection 
+from MLLib \cite{MLLib}. For Giraph, we choose PageRank and Community detection 
 using label propagation (CDLP) from LDBC Graphalytics \cite{ldbc}. The primary reason for selecting these workloads for Spark is that
 they represent different types of algorithms: PR and CC are graph-based workloads, while LinR and LogR are machine learning
 workloads. Giraph is a graph processing framework so we only used graph workloads. All of these
 workloads are well-established and commonly used for benchmarking big
 data analytics systems, making them a suitable choice for our
 experiments. Overall, the selection of these workloads allows us to
-evaluate the performance of Spark and Giraph in a variety of contexts. Furthermore it allows us to
+evaluate the performance of Spark and Giraph in a variety of contexts. Furthermore, it allows us to
 provide insights into the performance of both frameworks with or without using TeraHeap.
 
 
@@ -74,53 +74,56 @@ graph, therefore a suitable choise for our experiments.
 \subsubsection{Community Detection Label Propagation}
 The Community Detection using Label Propagation (CDLP) workload, another key component of the Graphalytics benchmark, aims to identify communities within a graph based on label propagation techniques. The CDLP workload assigns labels to nodes iteratively, with each node adopting the most frequently occurring label among its neighbors. This iterative process propagates labels throughout the graph, eventually converging to stable communities. Community detection is a fundamental task in graph analysis, enabling researchers to uncover groups of nodes that exhibit strong internal connectivity. It has applications in social network analysis, recommendation systems, and anomaly detection. The CDLP workload in the Graphalytics benchmark provides a standardized evaluation of graph processing systems' performance in terms of community detection scalability, convergence, and accuracy. By benchmarking CDLP, researchers and practitioners can compare the efficiency and effectiveness of different graph processing platforms and algorithms for community detection tasks.
 
-\subsection{Memory-per-core}
+\subsection{Memory per core}
 
 \begin{table}[thbp]
   \centering
-  \caption{Configurations}
+  \caption{Configurations. WL = workload, FW = framework, DS = dataset, Mem.= total memory M/C = memory per core, HW Thr.= hardware threads}
   \label{tab:setups}
-  \begin{tabular}{|c|c|c|c|}
+  \begin{tabular}{|c|c|c|c|c|c|c|}
     \hline
-	  \textbf{Workload} & \textbf{Framework} & \textbf{Dataset (GB)} & \textbf{DRAM GB / core} \\
+	  \textbf{WL} & \textbf{FW} & \textbf{DS (GB)} & \textbf{Mem.} & \textbf{M/C} & \textbf{#Cores} & \textbf{#HW Thr.}\\
     \hline
-	  PR & Spark & 8 & 4 \\
-	  LinR & Spark & 64 & 4 \\
-	  LinR & Spark & 128 & 8 \\
-    	LogR & Spark & 64 & 4 \\
-	  CC & Spark & 8 & 4 \\
-	  PR & Giraph & 13 & 4 \\
-	  CDLP & Giraph & 13 & 4 \\
-	  PR & Giraph & 13 & 8 \\
-	  CDLP & Giraph & 13 & 8 \\
+	  PR & Spark & 8 & 32 & 4 & 8 & 16\\
+	  PR & Spark & 8 & 64 & 8 & 8 & 16\\
+	  LinR & Spark & 64 & 32 & 4 & 8 & 16\\
+	  LinR & Spark & 64 & 64 & 8 & 8 & 16\\
+	  LogR & Spark & 64 & 32 & 4 & 8 & 16\\
+	  LogR & Spark & 64 & 64 & 8 & 8 & 16\\
+	  CC & Spark & 8 & 32 & 4 & 8 & 16\\
+	  CC & Spark & 8 & 64 & 8 & 8 & 16\\
+	  PR & Giraph & 13 & 64 & 8 & 8 & 16\\
+	  CDLP & Giraph & 13 & 64 & 8 & 8 & 16\\
+	  PR & Giraph & 13 & 128 & 16 & 8 & 16\\
+	  CDLP & Giraph & 13 & 128 & 16 & 8 & 16\\
     \hline
   \end{tabular}
 \end{table}
 
 
-We investigate performance in two memory-per-core scenarios. Our main focus is 4 GB / core 
-which is the next possible trend in datacenters based on \ref{sec:intro}. The other
-is 8 GB / core which is a possible future trend. For the 4 GB / core scenario we use 64 GB memory with 16 cores.
-In this setup, we run 4 workloads with Native Spark and Spark using TH and 2 workloads with Native Giraph and Giraph using TH. For the 8 GB / core scenario we run 1 workload with Native Spark and Spark using TeraHeap and 2 workloads with Native Giraph and Giraph using TeraHeap. We also choose 8 GB / core for Giraph because it experiences more memory pressure than Spark. This happens because it does not have
-an aggresive memory offloading mechanism. For this setup we use 128 GB of memory with 16 cores. 
-Table \ref{tab:setups} summarizes all setups with the coresponding workloads and datasets.
+We investigate performance in three memory per core scenarios. Our main focus is 4 GB per core 
+which is the next possible trend in datacenters based on \ref{sec:intro}. The others
+are 8 and 16 GB per core which is a possible future trend. For the 4 GB per core scenario, we use 32 GB memory with 8 cores.
+In this setup, we run 4 workloads with Native Spark and Spark using TH. Giraph can't run with 4 GB per core with any of the two
+configurations.
+For the 8 GB per core we use 64 GB memory with 8 cores. 
+In this setup, we run 4 workloads with Native Spark and Spark using TH and 2 workloads with Native Giraph and Giraph using TH. For the 16 GB memory per core, we use 128 GB of memory with 16 cores. For this setup, we run 2 workloads with Native Giraph and Giraph using TeraHeap. We choose 16 GB per core for Giraph, because it experiences more memory pressure than Spark and it cannot even run with 4 GB DRAM per core. For 8 GB memory per core we are able to run only a few experiments with TH. This happens, because it does not have a very aggresive memory offloading mechanism and cannot offload the heap properly. Table \ref{tab:setups} summarizes all setups with the coresponding workloads and datasets.
 
 \subsection{Choosing the configurations to run the co-located experiments}
-To utilize all the available DRAM of the machine we choose a simple method. 
+To utilize all the available DRAM of the machine, we choose a simple method. 
 We divide the total DRAM of the machine by the number of co-located workloads we run for each experiment.
-For simplicity and time management we choose the numbers 1,2,4,8. However, there are 2 problems with that decision
+For simplicity and time management, we choose the numbers 1,2,4,8. However, there are 2 problems with that decision
 than we need to overcome. The first is that we need a number that is exactly divided by these numbers to give the same amount of DRAM to
-all cgroups. The second is that we need to leave memory to the OS for system tasks that are executed along with the system reserved memory of 2 GB. For the 4 GB memory/core scenario we utilize
-56 GB out of 64 GB total DRAM and leave the rest 8 GB to the OS which is a safe option. For the 8 GB memory/core scenario we utilize
-120 out of 128 GB total DRAM and leave the rest 8 GB to the OS. 
-In both scenarios we choose the number closer to the total DRAM. After having perfomed these calculations we run each experiment isolated and break down the execution time to know how each experiment performs isolated. Then we run the co-located experiments and study the interference in execution. For the co-located experiments we run the same workload with the same dataset size for all instances. We do this for simplicity of explaining the results. For all experiments we have swap memory disabled.
+all cgroups. The second is that we need to leave memory to the OS for system tasks that are executed along with the system reserved memory of 2 GB. For the 4 GB memory per core, we utilize 24 out of 32 GB total DRAM and leave the rest 8 GB to the OS for system reserved memory and system tasks. For the 8 GB memory per core scenario, we utilize 56 GB out of 64 GB total DRAM and leave the rest 8 GB to the OS. For the 16 GB memory per core scenario we utilize 120 out of 128 GB total DRAM and leave the rest 8 GB to the OS. 
+In all scenarios, we choose the number closer to the total DRAM. After having perfomed these calculations, we run each experiment isolated and break down the execution time to know how each experiment performs isolated. Then we run the co-located experiments and study the interference in execution. For the co-located experiments, we run the same workload with the same dataset size for all instances. We do this for simplicity of explaining the results. For all experiments, we disable swap memory.
 
 \subsection{Cgroup DRAM percentage for Java Heap}
 We use cgroups \cite{cgroups} to restrict the DRAM for all processes in a single instance of Spark and Giraph.
-For cgroups we choose as a baseline an 80\% of total cgroup DRAM budget for H1 as RedHat does for its cgroups from June 2023 \cite{redhatblog}.
-The rest 20\% remains to the OS to be used for Page Cache.
-For TeraHeap we also run experiments with 40\% for H1 to investigate what happens when Page Cache dominates H1.
-For Native Spark and Giraph we do not report results for those experiments because we saw that Page Cache makes no difference.
+For cgroups, we choose as a baseline an 80\% of total cgroup DRAM budget for H1 as RedHat does for its cgroup containers from June 2023 \cite{redhatblog}.
+The rest 20\% remains to the OS to be used as Page Cache.
+For TeraHeap, we also run experiments with 40\% for H1 to investigate what happens when Page Cache dominates H1.
+In some experiments TeraHeap requires more than 20\% for OS so we make an adjustment to the cgroup budget.
+For Native Spark and Giraph, we do not report results for those experiments as we saw that Page Cache adjustments make no difference.
 
 \subsection{Cost estimation}
 Renting servers is a common practice for organizations requiring
@@ -145,13 +148,13 @@ and reducing rental expenses. Therefore, pursuing higher throughput
 and faster workload completion offers tangible benefits in terms of
 monetary cost reduction for organizations renting servers. 
 
-In order to estimate the cost of our evaluation in real-world public clusters we
+To estimate the cost of our experiments in real-world public clusters, we
 chose a variety of providers like Amazon \cite{EC2}, Google \cite{GCP} and Microsoft \cite{Azure}. This
-way we covered the most known providers and platforms someone would
-choose to run their workloads on. We chose 2 machines from each
-platform identical to the specifications of our 64 and 128 GB DRAM
+way, we covered the most known providers and platforms someone would
+choose to run their workloads on. We chose 3 machines from each
+platform identical to the specifications of our 32, 64 and 128 GB DRAM
 machines. These are the cheapest machines of that particular category
 offered by the platform. We then used the platform's pricing
 calculator to estimate the cost of renting that machine for the time
-needed for each configuration to finish execution of all instances. We noticed that the price for
+needed for each configuration to finish execution of all instances. We noticed, that the price for
 renting the storage device is really amenable to the cost for renting the machine.

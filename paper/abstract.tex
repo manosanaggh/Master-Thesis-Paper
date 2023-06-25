@@ -18,12 +18,12 @@
     instances. Our detailed methodology includes choosing the DRAM budget for each instance and how to distribute
 	this budget among H1 and Page Cache (PC). We try two different distributions for the DRAM budget, one with more H1
 	and one with more PC to study the needs of both approaches. 
-    We evaluate both techniques under 2 different memory/core scenarios using Spark and Giraph with native JVM or JVM with TeraHeap. 
+    We evaluate both techniques under 2 different memory per core scenarios using Spark and Giraph with native JVM or JVM with TeraHeap. 
 	We report GC, S/D, I/O, average server throughput and CPU utilization.
 
-    Our experimental results show that there is indeed a problem with memory / core. Effective solutions
+    Our experimental results show that there is indeed a problem with memory per core. Effective solutions
     for this problem is using systems like TeraHeap and Panthera that offload objects from the managed heap without 
-    increasing the CPU load. Moving large parts of the heap to fast storage decreases the DRAM GB / core and increases the utilization
+    increasing the CPU load. Moving large parts of the heap to fast storage decreases the DRAM GB per core and increases the utilization
     of the server. Finally, we also include a cost
     estimation to show that using an approach like TeraHeap could reduce monetary cost by up
     to 50\% for running big data analytics in a world
