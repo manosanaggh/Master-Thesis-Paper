@@ -1,16 +1,11 @@
 \section{Conclusions}
 
 In this paper, we conducted an analysis of throughput for managed big data analytics frameworks
-using Apache Spark and Giraph under workload co-location. We investigated if reducing GC and S/D for managed big data frameworks can improve application throughput by using TeraHeap. We conducted our experiments under 2 different memory-per-core
-scnarios, 4 and 8 GB / core. 4 GB / core is the current trend and 8 GB / core is a possible future trend. 
-We showed how someone can adjust the DRAM capacity to create different memory/core setups.
-Then for simplicity we divided total DRAM capacity to 2,4 and 8 even memory budgets. We used each budget to run each instance isolated with Native Spark and Giraph and Spark and Giraph using TH to study the execution breakdown.
-Then we run experiments with 2,4 and 8 co-located instances using the above budgets for each instance. We ran 4 Spark workloads (PR, LinR, LogR and CC) in the 4 GB / core scenario and 1 Spark workload (LinR) and 2 Giraph workloads (PR, CDLP) in the 8 GB / core scenario. We ran Giraph under 8 GB / core because it is more memory intensive than Spark. We report interference with single instance, execution breakdown (GC, S/D, I/O), user CPU utilization and average throughput.
+using Apache Spark and Giraph under workload co-location. We investigated, if reducing GC and S/D for managed big data frameworks improves application throughput by using an open-source system TeraHeap. We conducted our experiments under 3 different memory-per-core
+scnarios, 4, 8 and 16 GB / core. 4 GB / core is the current trend and 8 and 16 GB / core are possible future trends. 
+We showed how someone can adjust the DRAM capacity to create different memory per core setups.
+Then for simplicity, we divided total DRAM capacity to 2,4 and 8 even memory budgets. We used each budget to run each instance isolated with Native Spark and Giraph and Spark and Giraph using TH to study the execution breakdown.
+Then we run experiments with 2,4 and 8 co-located instances using the above budgets for each instance. We ran 4 Spark workloads (PR, LinR, LogR and CC) in the 4 and 8 GB / core scenario and 2 Giraph workloads (PR, CDLP) in the 16 GB / core scenario. We ran Giraph under 16 GB / core, because it is more memory intensive than Spark. We reported interference with single instance, execution breakdown (GC, S/D, I/O), user and CPU utilization, CPU cycles and average throughput.
 
-Our experimental results showed that reducing GC and S/D for both Spark and Giraph reduces execution time and increases the effective CPU utilization by the applications threads. 
-For Spark under 4 GB memory / core reducing GC and S/D increases average server throughput by up to 66\% against native Spark.
-For Spark under 8 GB memory / core reducing GC and S/D increases up to 77\% more average throughput against Native Spark.
-For Giraph under 8 GB memory / core reducing GC and S/D increases up to 13\% more average throughput against Native Giraph. 
-
-Overall, our analysis showed that high CPU utilization does not always mean that useful work is done by the CPU. Specificaly for managed
+Our experimental results showed that reducing GC and S/D for Spark reduces execution time and increases the effective CPU utilization by the applications threads, where in Giraph that assumption is not completely confirmed. Furthermore, decreasing GC and S/D allows a higher number of co-located instances to be executed in the server, because of lower memory per instance needs. Overall, our analysis showed that high CPU utilization does not always mean that useful work is done by the CPU. Specificaly for managed
 big data frameworks like Spark and Giraph a lot of CPU cycles are wasted on GC and S/D and even increasing H1 does not guarantee optimal execution.
