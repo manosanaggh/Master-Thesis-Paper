@@ -100,6 +100,22 @@ The Community Detection using Label Propagation (CDLP) workload, another key com
   \end{tabular}
 \end{table}
 
+\begin{table}[thbp]
+  \centering
+	\caption{}
+  \label{tab:budgets}
+  \begin{tabular}{|c|c|}
+    \hline
+          \textbf{Configuration} & \textbf{H1/cgroup mem. budget ratio}\\
+    \hline
+          Native Spark & 80\\
+          TH Spark & 80 etc., 40\\
+          Native Giraph & 80\\
+	  TH Giraph & 80 etc., 40\\
+    \hline
+  \end{tabular}
+\end{table}
+
 
 We investigate performance in three memory per core scenarios. Our main focus is 4 GB per core 
 which is the next possible trend in datacenters based on \ref{sec:intro}. The others
@@ -124,6 +140,7 @@ The rest 20\% remains to the OS to be used as Page Cache.
 For TeraHeap, we also run experiments with 40\% for H1 to investigate what happens when Page Cache dominates H1.
 In some experiments TeraHeap requires more than 20\% for OS so we make an adjustment to the cgroup budget.
 For Native Spark and Giraph, we do not report results for those experiments as we saw that Page Cache adjustments make no difference.
+Table \ref{tab:budgets} summarizes the budgets for each configuration.
 
 \subsection{Cost estimation}
 Renting servers is a common practice for organizations requiring
@@ -158,3 +175,4 @@ offered by the platform. We then used the platform's pricing
 calculator to estimate the cost of renting that machine for the time
 needed for each configuration to finish execution of all instances. We noticed, that the price for
 renting the storage device is really amenable to the cost for renting the machine.
+%

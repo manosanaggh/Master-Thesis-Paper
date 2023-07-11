@@ -1,29 +1,29 @@
 \begin{abstract}
-    Managed big data frameworks, such as Apache Spark and Giraph
+Managed big data frameworks, such as Apache Spark and Giraph
     demand a large amount of memory per core to process massive volume
     datasets effectively. The memory pressure that arises from the big data processing leads to
     high garbage collection (GC) overhead. Big data analytics frameworks attempt to remove this overhead by offloading objects to storage devices.
     At the same time, infrastructure providers, trying to address the same problem, attribute more memory to increase memory per instance leaving cores underutilized.
-	For frameworks, trying to avoid GC through offloading to storage devices leads to high Serialiation/Deserialization (S/D) overhead.
-	For infrastructure, the result is that resource usage is decreased.
+        For frameworks, trying to avoid GC through offloading to storage devices leads to high Serialiation/Deserialization (S/D) overhead.
+        For infrastructure, the result is that resource usage is decreased.
     These limitations prevent managed big data frameworks from effectively utilizing the CPU thus leading to low server throughput.
 
-    In this paper, we conduct a methodological analysis of server throughput for
+    In this thesis, we conduct a methodological analysis of server throughput for
     managed big data analytics frameworks. More specifically, we examine, whether
-    reducing GC and S/D	can help increase the effective CPU utilization of the server.
+    reducing GC and S/D can help increase the effective CPU utilization of the server.
     We use a system called TeraHeap (TH) that moves objects from
-	the Java managed heap (H1) to a secondary heap over a fast storage
-	device (H2) to reduce the GC overhead and eliminate S/D over data. We focus on analyzing the system's
+        the Java managed heap (H1) to a secondary heap over a fast storage
+        device (H2) to reduce the GC overhead and eliminate S/D over data. We focus on analyzing the system's
     performance under the co-location of multiple memory-bound
     instances. Our detailed methodology includes choosing the DRAM budget for each instance and how to distribute
-	this budget among H1 and Page Cache (PC). We try two different distributions for the DRAM budget, one with more H1
-	and one with more PC to study the needs of both approaches. 
-    We evaluate both techniques under 2 different memory per core scenarios using Spark and Giraph with native JVM or JVM with TeraHeap. 
-	We report GC, S/D, I/O, average server throughput and CPU utilization.
+        this budget among H1 and Page Cache (PC). We try two different distributions for the DRAM budget, one with more H1
+        and one with more PC to study the needs of both approaches.
+    We evaluate both techniques under 2 different memory per core scenarios using Spark and Giraph with native JVM or JVM with TeraHeap.
+        We report GC, S/D, I/O, average server throughput and CPU utilization.
 
     Our experimental results show that there is indeed a problem with memory per core. Effective solutions
-    for this problem is using systems like TeraHeap and Panthera that offload objects from the managed heap without 
-    increasing the CPU load. Moving large parts of the heap to fast storage decreases the DRAM GB per core needs and increases the utilization
+    for this problem is using systems like TeraHeap and Panthera that offload objects from the managed heap without
+    increasing the CPU load. Moving large parts of the heap to fast storage, decreases the DRAM GB per core needs and increases the utilization
     of the server. Finally, we also include a cost
     estimation to show that using an approach like TeraHeap could reduce monetary cost by up
     to 50\% for running big data analytics in a world

@@ -655,11 +655,10 @@ S/D is completely absorbed by MMIO. From the third aspect, as instances increase
 \end{table}
 
 
-Table \ref{tab:interference} shows the percentage of interference i.e. speedup of single instance against the corresponding co-located experiment. For Native Spark for 2 to 4 co-located instances experiments there is 19 to 80\% interference. For TeraHeap Spark for 2 to 4 co-located instances experiments there is 32 to 84\% interference. Both offloading techniques have the same interference ranges which are more than 50\% in most of the experiments. For Native Giraph there is 19\% interference for PR and 41\% for CDLP with 2 co-located instances. The first is really reduced compared to the Native Spark 2 co-located instances experiments. For TH Giraph there is 21 to 67 \% interference. For 4 co-located instances experiments TH Giraph has significantly less interference than Spark. In conclusion we wee that interference increases as number of instances increases for both Spark and Giraph. Experiments with 2 co-located instances and an interference under 50\% have better average throughput than single instance and the same happens for experiments with 4 co-located instances with interference under 25\%. The latter happens
-only in PR workload for Giraph.
+Table \ref{tab:interference} shows the percentage of interference i.e. speedup of single instance against the corresponding co-located experiment. For Native Spark for 2 to 4 co-located instances experiments there is 19 to 80\% interference. For TeraHeap Spark for 2 to 4 co-located instances experiments there is 32 to 84\% interference. Both offloading techniques have similar interference ranges which are more than 50\% in half of the experiments. For Native Giraph there is 19\% interference for PR and 41\% for CDLP with 2 co-located instances. The first is really reduced compared to the Native Spark 2 co-located instances experiments. For TH Giraph there is 21 to 67 \% interference. For 4 co-located instances experiments TH Giraph has significantly less interference than Spark. In conclusion we wee that interference increases as number of instances increases for both Spark and Giraph. Experiments with 2 co-located instances and an interference under 50\% have better average throughput than single instance and the same happens for experiments with 4 co-located instances with interference under 25\%. The latter never happens.
 
 \subsubsection{Does H1 or PageCache offer better performance?}
-We don't investigate Page Cache-dominated cgroup budgets for Native Spark or Giraph, since we have seen that it does not make a difference. For TeraHeap Spark, Page Cache provides slightly better average throughput for 2 co-located instances, while for 4 instances H1 dominates PC. For TH Giraph, H1 dominates PC in terms of average throughput. That is, because H1 affects Write traffic in Giraph and Page Cache absorbs mostly reads. In conclusion, for TH someone can choose PC dominated budgets for 2 instances, but as instances grow H1 is more crucial to performance.
+We don't investigate Page Cache-dominated cgroup budgets for Native Spark or Giraph, since we have seen that it does not make a difference. For TeraHeap Spark, Page Cache provides slightly better average throughput for 2 co-located instances in ML. In speedup, this is 5\% for LinR and 6\% for LogR, while for 4 instances H1 dominates PC. For the Spark GraphX experiments, we witness the same average throughput for both 2 and 4 co-located instances experiments. For TH Giraph, H1 dominates PC in terms of average throughput. That is, because H1 affects Write traffic in Giraph and Page Cache absorbs mostly reads. In conclusion, based on average throughput, it seems someone would still choose H1 dominated setups for TeraHeap as well.
 
 \subsubsection{Accuracy of experiments}
 
@@ -903,162 +902,25 @@ Therefore, we have to focus to User utilization, which includes the effective CP
 We look at the CPU cycles performed by each configuration and compare it with user and total CPU utilization and then come to our conlusion.
 CPU cycles are calculated using the formula (total number of cores * cpu frequency * execution time of slowest instance * cpu utlization achieved by all instances).
 
-In the figures \ref{fig:pr32_cycles}, \ref{fig:linr32_cycles}, \ref{fig:logr32_cycles} and \ref{fig:cc32_cycles}, we look at the CPU cycles under 4 GB memory per core for Spark. We see that TH Spark executes in less CPU cycles except for PageRank, when in the same time, it has increased CPU utilization compared to Native Spark by 40, 4, 13 and 7 \% accordingly.
+In the figures \ref{fig:pr32_cycles}, \ref{fig:linr32_cycles}, \ref{fig:logr32_cycles} and \ref{fig:cc32_cycles}, we look at the CPU cycles under 4 GB memory per core for Spark. We see that TH Spark executes in less CPU cycles (56\% for LinR,55\% for LogR and 16\% for CC) except for PageRank, where Native executes in less cycles by 11\%. In the same time, it has increased CPU utilization compared to Native Spark by 40, 4, 13 and 7 \% accordingly.
 This means that reducing GC and S/D leads to more effective CPU utilization for all workloads except PageRank. For PageRank, TH executes in more cycles thus we cannot be sure about the benefit.
-In the figures \ref{fig:pr64_cycles}, \ref{fig:linr64_cycles}, \ref{fig:logr64_cycles} and \ref{fig:cc64_cycles}, we look at the CPU cycles under 8 GB memory per core for Spark. We see that TH Spark executes in less CPU cycles except for PR and CC with 2 co-located instances, where the cycles are nearly the same.
-This means that reducing GC and S/D leads to more effective CPU utilization for all workloads for 4 co-located instances and for LinR and LogR for 2 co-located instances.
-In the figures \ref{fig:g_pr128_cycles} and \ref{fig:g_cdlp128_cycles}, we look at the CPU cycles under 16 GB memory per core for Giraph. We see that TH Giraph executes in the same or more CPU cycles except for PR and CC with 2 co-located instances, where the cycles are nearly the same.
-This means that reducing GC for Giraph does not neccessarily lead to more effective CPU utilization.
+In the figures \ref{fig:pr64_cycles}, \ref{fig:linr64_cycles}, \ref{fig:logr64_cycles} and \ref{fig:cc64_cycles}, we look at the CPU cycles under 8 GB memory per core for Spark. For PR, TH Spark executes in less CPU cycles (6\% for T2 H1, 14\% for T2 PC, 25\% for T4 H1, 21\% for T4 PC).
+For LinR, TH Spark executes in less CPU cycles (23\% for T2 H1, 24\% for T2 PC, 58\% for T4 H1, 59\% for T4 PC).
+For LogR, TH Spark executes in less CPU cycles (48\% for T2 H1, 49\% for T2 PC, 58\% for T4 H1, 53\% for T4 PC).
+For PR, TH Spark executes in less CPU cycles for 4 co-located instances (22\% for T4 H1, 21\% for T4 PC), while Native Spark executes in less
+CPU cycles for 2 co-located instances (7\% against both T2 H1 and T2 PC).
+This means that reducing GC and S/D leads to more effective CPU utilization for all workloads for 2 and 4 co-located instances except for CC with 2 co-located instances.
+In the figures \ref{fig:g_pr128_cycles} and \ref{fig:g_cdlp128_cycles}, we look at the CPU cycles under 16 GB memory per core for Giraph. We see that TH Giraph executes in more CPU cycles except for T2 PC in PR with speedup in cycles by 14\%.
+This means that reducing GC for Giraph does not necessarily lead to more effective CPU utilization.
 
 If we look at the figures \ref{fig:pr_64_usr}, \ref{fig:linr_64_usr}, \ref{fig:logr_64_usr}, \ref{fig:cc_64_usr}, \ref{fig:g_pr128_usr} and \ref{fig:g_cdlp128_usr}, we witness User utilization for 8 GB memory per core for Spark and 16 GB memory per core for Giraph. TH has more User utilization in all scenarios.
 We also include the total CPU utilization (User+System) in \ref{fig:pr_64_util}, \ref{fig:linr_64_util}, \ref{fig:logr_64_util}, \ref{fig:cc_64_util}, \ref{fig:g_pr_128_util} and \ref{fig:g_cdlp_128_util}.
 For 4 GB memory per core in Spark and for 8 GB memory per core for Giraph, we do not include user utilization as the number of instances increases, since we cannot run more than 2 instances, especially for Giraph, where Native is not able to run at all. For Spark, TH increases User and and total CPU utilization accordingly to 8 and 16 GB memory per core.
-By combining cycles and user utilization, we come to the conclusion that, since TH has increased User utilization in all scenarions, in the ones, where it executes in less CPU cycles it has more effective CPU utilization. That is because of reduced GC and S/D. In the scenarios where it executes in more cycles we cannot say for sure, despite TH having more average throughput. However, for Giraph, we see that decreasing GC and S/D, allows us to run more instances in the server, because TH needs less memory per instance.
-
+By combining cycles and user utilization, we come to the conclusion that, since TH has increased User utilization in all scenarions, in the ones, where it executes in less CPU cycles it has more effective CPU utilization. That is because of reduced GC and S/D. In the scenarios where it executes in more cycles we cannot say for sure, despite TH having more average throughput. However, for Giraph, we see that decreasing GC and S/D, allows us to run more instances in the server, because TH needs less memory per instance. In terms of choosing what is best for TH, H1 or PC, we see from the CPU cycles that for Spark there are no clear benefits for any side. For Giraph, in \ref{fig:g_pr128_cycles} we see that with 4 instances PC executes in less cycles, but the execution time is the same and CPU utilization is more for TH H1 so the benefit is not clear.
 To conclude for Native Spark and Giraph, we see in most scenarios that the increment in CPU utilization is not useful work, but more GC and S/D since the memory for each instance decreases as the number of co-located instances increase.
 
 \subsection{What
 happens with monetary cost across different cloud platforms?}
-
-\iffalse
-\begin{table}[htbp]
-  \centering
-	\begin{subtable}[b]{0.45\linewidth}
-  \caption{Page Rank synopsis table. Configurations starting
-    with N denote a run with Native instances of Spark and with T with
-    TeraHeap. H1 is a run with the memory budget configured to contain
-    a bigger size for H1 than PageCache and PC the opposite.}
-  \label{tab:pr_table}
-        %\resizebox{19cm}{!}{
-        \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-      \hline
-\textbf{Conf.} & \textbf{H1 Size/I} & \textbf{Memory/I} & \textbf{Total Mem.} & \textbf{\#I} & \textbf{Exec. Time} & \textbf{CPU Idle} & \textbf{Total MB Proc.} & \textbf{MB/s} & \textbf{MB/s/I} & \textbf{Cost AWS \$} & \textbf{Cost GCP \$} & \textbf{Cost Azure \$} \\
-        \hline
-    N2 - small & 22 & 28 & 64 & 2 & 3563 & 29 & 16980 & 5 & 2 & 0.6 & 0.58 & 0.67 \\
-    N4 - small & 11 & 14 & 64 & 4 & 8195 & 11 & 33960 & 4 & 1 & 1.8 & 1.74 & 2.01 \\
-    T2 H1 – small & 22 & 28 & 64 & 2 & 2545 & 7 & 16980 & 7 & 3 & 0.6 & 0.58 & 0.67 \\
-    T2 PC – small & 11 & 28 & 64 & 2 & 2385 & 9 & 16980 & 7 & 4 & 0.6 & 0.58 & 0.67 \\
-    T4 H1 – small & 11 & 14 & 64 & 4 & 5554 & 1 & 33960 & 6 & 2 & 1.2 & 1.16 & 1.34 \\
-    T4 PC – small & 6 & 14 & 64 & 4 & 5880 & 1 & 33960 & 6 & 2 & 1.2 & 1.16 & 1.34 \\
-    N8 – small & 4 & 7 & 64 & 8 & OOM & ** & 0 & 0 & 0 & *** & *** & *** \\
-    T8 – small & 4 & 7 & 64 & 8 & 12305 & 0 & 67920 & 6 & 1 & 2.4 & 2.32 & 2.68 \\
-    N4 - big & 44 & 60 & 256 & 4 & 13542 & 15 & 135872 & 10 & 3 & 6.4 & *** & *** \\
-    T4 – big & 48 & 60 & 256 & 4 & 9284 & 5 & 135782 & 16 & 4 \\      
-	\hline
-     \end{tabular}%
-        %}
-\end{subtable}
-
-	\begin{subtable}[b]{0.45\linewidth}
-  \caption{Linear Regression synopsis table. Configurations starting
-    with N denote a run with Native instances of Spark and with T with
-    TeraHeap. H1 is a run with the memory budget configured to contain
-    a bigger size for H1 than PageCache and PC the opposite.}
-  \label{tab:linr_table}
-        %\resizebox{19cm}{!}{
-        \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-      \hline
-\textbf{Conf.} & \textbf{H1 Size/I} & \textbf{Memory/I} & \textbf{Total Mem.} & \textbf{\#I} & \textbf{Exec. Time} & \textbf{CPU Idle} & \textbf{Total MB Proc.} & \textbf{MB/s} & \textbf{MB/s/I} & \textbf{Cost AWS \$} & \textbf{Cost GCP \$} & \textbf{Cost Azure \$} \\
-	\hline 
-      N2 & 22 & 28 & 64 & 2 & 3745 & 20 & 134896 & 37 & 18 & 0.6 & 0.58 & 0.67 \\ 
-      N4 & 11 & 14 & 64 & 4 & 13874 & 7 & 269792 & 20 & 5 & 2.4 & 2.32 & 2.01 \\
-      T2 H1 & 22 & 28 & 64 & 2 & 2891 & 19 & 134896 & 48 & 24 & 0.6 & 0.58 & 0.67 \\
-      T2 PC & 11 & 28 & 64 & 2 & 2747 & 18 & 134896 & 49 & 25 & 0.6 & 0.58 & 0.67 \\
-      T4 H1 & 11 & 14 & 64 & 4 & 6075 & 2 & 269792 & 44 & 11 & 1.2 & 1.16 & 1.34 \\
-      T4 PC & 6 & 14 & 64 & 4 & 6176 & 3 & 269792 & 44 & 11 & 1.2 & 1.16 & 1.34 \\ 
-      \hline
-     \end{tabular}%
-	%}
-\end{subtable}
-	\vspace{1em}
-\end{table}
-\fi
-\iffalse
-%\begin{center}%[htbp]
- %   \centering
-  %  \caption{Page Rank synopsis table}
-\begin{table*}
-\resizebox{\textwidth}{!}{
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-		%\begin{tabularx}{\linewidth}{*{17}{X}}
-	    \hline
-        \multirow{2}{*}{Configuration} & H1       & \multirow{2}{*}{Mem / I} & Total & \multirow{2}{*}{\#I} & Exec. & User  & System & I/O  & CPU  & Total MB  & \multirow{2}{*}{MB/s} & \multirow{2}{*}{MB/s/I} & Cost   & Cost   & Cost \\
-                                       & Size / I &                          & memory &                     & Time  & util. & util.  & Wait & Idle & Processed &                       &                         & AWS \$ & GCP \$ & Azure \$ \\
-        \hline
-        \hline
-        N2-small – single & 22 & 28 & 64 & 1 & 1762 & 32 & 2 & 1 & 65 & 8490 & 5 & 5 & 0.6 & 0.58 & 0.67 \\
-        N2 - small & 22 & 28 & 64 & 2 & 3563 & 66 & 5 & 2 & 27 & 16980 & 5 & 2 & 0.6 & 0.58 & 0.67 \\
-        N4 – small – single & 11 & 14 & 64 & 1 & 1783 & 29 & 2 & 1 & 68 & 8490 & 5 & 5 & 0.6 & 0.58 & 0.67 \\
-        N4 - small & 11 & 14 & 64 & 4 & 8195 & 84 & 6 & 2 & 8 & 33960 & 4 & 1 & 1.8 & 1.74 & 2.01 \\
-        N8 – small & 4 & 7 & 64 & 8 & OOM & 0 & 0 & 0 & ** & 0 & 0 & 0 & *** & *** & *** \\
-        T2 H1- small – single & 22 & 28 & 64 & 1 & 1146 & 46 & 2 & 1 & 51 & 8490 & 7 & 7 & 0.6 & 0.58 & 0.67 \\
-        T2 H1 – small & 22 & 28 & 64 & 2 & 2545 & 89 & 4 & 1 & 6 & 16980 & 7 & 3 & 0.6 & 0.58 & 0.67 \\
-        T2 PC- small – single & 11 & 28 & 64 & 1 & 966 & 45 & 2 & 1 & 52 & 8490 & 9 & 9 & 0.6 & 0.58 & 0.67 \\
-        T2 PC – small & 11 & 28 & 64 & 2 & 2385 & 87 & 4 & 0 & 9 & 16980 & 7 & 4 & 0.6 & 0.58 & 0.67 \\
-        T4 H1 – small – single & 11 & 14 & 64 & 1 & 984 & 43 & 3 & 1 & 53 & 8490 & 9 & 9 & 0.6 & 0.58 & 0.67 \\
-        T4 H1 – small & 11 & 14 & 64 & 4 & 5554 & 94 & 5 & 0 & 1 & 33960 & 6 & 2 & 1.2 & 1.16 & 1.34 \\
-        T4 PC – small – single & 6 & 14 & 64 & 1 & 922 & 42 & 2 & 2 & 54 & 8490 & 9 & 9 & 0.6 & 0.58 & 0.67 \\
-        T4 PC – small & 6 & 14 & 64 & 4 & 5880 & 94 & 5 & 0 & 1 & 33960 & 6 & 2 & 1.2 & 1.16 & 1.34 \\
-        T8 – small – single & 4 & 7 & 64 & 1 & 1037 & 39 & 2 & 1 & 58 & 8490 & 8 & 8 & 0.6 & 0.58 & 0.67 \\
-        T8 – small & 4 & 7 & 64 & 8 & 12305 & 95 & 5 & 0 & 0 & 67920 & 6 & 1 & 2.4 & 2.32 & 2.68 \\
-        N4 - big & 48 & 60 & 256 & 4 & 13542 & 78 & 7 & 7 & 8 & 135872 & 10 & 3 & 6.4 & *** & *** \\
-        T4 – big & 48 & 60 & 256 & 4 & 9284 & 91 & 8 & 1 & 1 & 135782 & 16 & 4 & 1.8 & *** & *** \\
-        \hline
-	\bottomrule
-\end{tabular}
-}
-\end{table*}
-%	\label{tab:pr_table}
-%\end{center}
-\fi
-\iffalse
-\begin{table}[t!]
-  \centering
-  \caption{Logistic Regression synopsis table. Configurations starting
-    with N denote a run with Native instances of Spark and with T with
-    TeraHeap. H1 is a run with the memory budget configured to contain
-    a bigger size for H1 than PageCache and PC the opposite.}
-  \label{tab:logr_table}
-	\resizebox{19cm}{!}{
-	\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-      \hline
-\textbf{Conf.} & \textbf{H1 Size/I} & \textbf{Memory/I} & \textbf{Total Mem.} & \textbf{\#I} & \textbf{Exec. Time} & \textbf{CPU Idle} & \textbf{Total MB Proc.} & \textbf{MB/s} & \textbf{MB/s/I} & \textbf{Cost AWS \$} & \textbf{Cost GCP \$} & \textbf{Cost Azure \$} \\
-      \hline
-      N2 & 22 & 28 & 64 & 2 & 5127 & 18 & 133348 & 26 & 13 & 1.2 & 1.16 & 0.67 \\
-      N4 & 11 & 14 & 64 & 4 & 13730 & 7 & 266696 & 19 & 5 & 2.4 & 2.32 & 2.68 \\
-      T2 H1 & 22 & 28 & 64 & 2 & 2861 & 18 & 133348 & 47 & 24 & 0.6 & 0.58 & 0.67 \\
-      T2 PC & 11 & 28 & 64 & 2 & 2683 & 18 & 133348 & 50 & 25 & 0.6 & 0.58 & 0.67 \\
-      T4 H1 & 10 & 14 & 64 & 4 & 5712 & 2 & 266696 & 47 & 12 & 1.2 & 1.16 & 1.34 \\
-      T4 PC & 6 & 14 & 64 & 4 & 6138 & 2 & 266696 & 43 & 10 & 1.2 & 1.16 & 1.34 \\
-      \hline
-     \end{tabular}%
-	}
-\end{table}
-
-\begin{table}[t!]
-  \centering
-  \caption{Connected Component synopsis table. Configurations starting
-    with N denote a run with Native instances of Spark and with T with
-    TeraHeap. H1 is a run with the memory budget configured to contain
-    a bigger size for H1 than PageCache and PC the opposite.}
-  \label{tab:cc_table}
-        \resizebox{19cm}{!}{
-        \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-      \hline
-\textbf{Conf.} & \textbf{H1 Size/I} & \textbf{Memory/I} & \textbf{Total Mem.} & \textbf{\#I} & \textbf{Exec. Time} & \textbf{CPU Idle} & \textbf{Total MB Proc.} & \textbf{MB/s} & \textbf{MB/s/I} & \textbf{Cost AWS \$} & \textbf{Cost GCP \$} & \textbf{Cost Azure \$} \\
-	\hline
-      N2 & 22 & 28 & 64 & 2 & 2958 & 26 & 16980 & 6 & 3 & 0.6 & 0.58 & 0.67 \\
-      N4 & 11 & 14 & 64 & 4 & 7231 & 7 & 33960 & 5 & 3 & 1.8 & 1.74 & 2.01 \\
-      T2 H1 & 22 & 28 & 64 & 2 & 2526 & 5 & 16980 & 7 & 4 & 0.6 & 0.58 & 0.67 \\
-      T2 PC & 11 & 28 & 64 & 2 & 2519 & 7 & 16980 & 7 & 4 & 0.6 & 0.58 & 0.67 \\
-      T4 H1 & 11 & 14 & 64 & 4 & 5439 & 3 & 33960 & 6 & 3 & 1.2 & 0.58 & 0.67 \\
-      T4 PC & 6 & 14 & 64 & 4 & 5487 & 2 & 33960 & 6 & 3 & 1.2 & 1.16 & 1.34 \\
-      \hline
-     \end{tabular}%
-	}
-\end{table}
-\fi
-
 
 \begin{table}[t!]
   \centering
@@ -1090,4 +952,5 @@ Google does not offer a 16 GB memory per core machine.
 Taking into account that we have an hourly cost and that we have an estimation,
 reducing GC and S/D achieves benefits of up to 50\% for running co-located workloads in these clouds. The calculations are very simple so we skip them. We multiple hourly cost
 by number of hours needed to execute each experiment until all instances finish execution. The conclusion is that reducing GC and S/D makes a huge difference in the execution time and therefore running with TeraHeap decreases the hours needed to rent the machines.
+
 
