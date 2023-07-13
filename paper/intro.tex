@@ -62,32 +62,32 @@ the long lived objects instead of the main managed Java Heap. TeraHeap
 kind of frameworks when moving data off-heap to/from fast storage
 devices 2) reduces GC pauses drastically over the secondary heap. By
 using TeraHeap, we aim to investigate the impact of reducing GC and S/D
-to server throughput under workload co-location compared to Native Spark
-and Giraph. We divide all the available DRAM
-in our machine to 2,4 and 8 even budgets to run the co-located instances.
-First we run each instance isolated to analyze performance and be able to study the interference when adding more
+to server throughput compared to Native Spark and Giraph. We divide all the available DRAM
+in our machine to 2,4 and 8 even budgets to run experiments with co-located instances.
+We do this to utilize all available DRAM and then check CPU utilization to understand throughput.
+First, we run each instance isolated to analyze performance and be able to study the interference when adding more
 co-located instances. We run each individual workload with a different Spark or Giraph instance in a cgroup.
-We do this to limit the memory budget for each instance. Memory budget is
+We do this, to limit the memory budget for each instance. Memory budget is
 the summary of Java Heap, IO Cache (Linux Page Cache) and JVM native memory. We choose
 the Java Heap (H1) ratio over the total DRAM budget based on RedHat's decisions
-for running containers as a baseline. We also run experiment with more Page Cache (PC) ratio than H1
+for running containers as a baseline. We also run experiments with more Page Cache (PC) ratio than H1
 to investigate Page Cache affection to the performance. We show performance of both Native Spark-Giraph and Spark-Giraph with TH in 3 different
 memory per core scenarios, 4 GB per core, which is the current trend and 8 and 16 GB per core 
-as possible future trends. We evaluate both offloading techniques by running 2 widely used
+as possible future trends. We do this to study the changes to server throughput as memory-per-core increases. 
+We evaluate both offloading techniques by running 2 widely used
 managed big data frameworks, Apache Spark and Giraph. We
 specificaly run 4 different workloads with Spark with 4 and 8 GB per core.
 We run 2 different workloads with Giraph with 8 and 16 GB per core.
 We compare TeraHeap with the native Spark and Giraph distributions under workload
 co-location and analyze their performance using several metrics like
-GC, S/D, I/O and CPU utilization. Finally, we estimate the cost of running these
+GC, S/D, I/O, CPU cycles and CPU utilization. Finally, we estimate the cost of running these
 experiments in public world clusters like Amazon EC2, Google Cloud Platform (GCP)
 and Microsoft Azure Cloud to see possible benefits of either of the two techniques.
 
-Our experimental results show that there is indeed a problem with memory per core ratio
-for managed big data frameworks.
-A solution is to move the managed heap over fast storage devices to avoid both GC and S/D like TeraHeap and Panthera \cite{Panthera}.
-Our experimental results show that reducing GC and S/D by offloading the heap to fast storage devices improves effective CPU utlization up to 59\% in CPU cycles for Spark and also leaves place to run more co-located instances in the server for both frameworks.
-Finally, we also include a cost estimation to show that reducing GC and S/D could reduce monetary cost by up to 50\% for running big data
+Our experimental results show that increasing memory per core does not guarantee reaching max throughput for managed big data frameworks.
+A solution is to move the managed heap over fast storage devices in order to offload objects like TeraHeap and Panthera \cite{Panthera}.
+Furthermore, reducing GC and S/D by offloading the heap to fast storage devices improves effective CPU utlization up to 59\% in CPU cycles for Spark and also leaves place to run more co-located instances in the server for both frameworks.
+Finally, we also include a cost estimation to show that reducing GC and S/D could reduce monetary spendings by up to 50\% for running big data
 analytics, in a world cluster like EC2, GCP or Microsoft Azure Cloud, which are available to
 the public.
 
@@ -95,17 +95,11 @@ To summarize, this thesis makes the following contributions:
 \begin{itemize}
     \item{A detailed methodology for running co-located Apache Spark and Giraph
         workloads with or without TeraHeap. 
-	We show how to pick the DRAM budget for each co-located instance and how to divide this budget
-		for the different memory needs of a group of processes.
-		}
+		We show the interference impact of running multiple co-located managed big data frameworks workloads. We also show that, increasing DRAM capacity is not the solution to the problem of server throughput. First, DRAM density cannot scale further. Therefore, increasing memory-per-core allows more instances to run in the server, but the overheads of GC and S/D remain, because the heap size still is not enough. This leads to the conclusion that these overheads are the obstacle to reach max throughput. Moreover, decreasing GC and S/D, increases the number of co-located instances that can be executed in the server as well.}
 
-    \item{A comprehensive evaluation using the above methodology.
-	    We run 4 Spark and 2 Giraph workloads in 3 memory per core scenarios
-	    analyzing different aspects of performance like GC, S/D, I/O, average throughput, CPU utilization and CPU cycles. We show the interference impact of running multiple co-located managed big data frameworks workloads and show that reducing GC and S/D increases application throughput and utilizes the CPU in a better and more efficient way for Spark. We also show that decreasing GC and S/D, increases the number of co-located instances that can be executed in the server.}
-
-    \item{A cost estimation of running our experiments in real-world
+    \item{A cost estimation for running our experiments in real-world
         cloud platforms like Amazon EC2, Google Cloud Platform and Microsoft
-        Azure.}
+        Azure. This estimation shows that decreasing GC and S/D leads to less spendings, because money is not wasted to overheads.}
 \end{itemize}
 
 %

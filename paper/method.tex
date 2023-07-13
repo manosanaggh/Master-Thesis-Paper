@@ -8,7 +8,6 @@ Our methodology answers the following questions:
 	\item{What workloads did we choose to run for our experiments and why?}
 	\item{How do we investigate the memory per core problem?}
 	\item{How do we choose the configurations for running the co-located experiments?}
-	\item{How do we decide what percentage of total cgroup DRAM to use for Java Heap for each cgroup?}
 	\item{Is cost a contributing factor to pursuing higher throughput for a server?}
 \end{itemize}
 
@@ -100,29 +99,10 @@ The Community Detection using Label Propagation (CDLP) workload, another key com
   \end{tabular}
 \end{table}
 
-\begin{table}[thbp]
-  \centering
-	\caption{}
-  \label{tab:budgets}
-  \begin{tabular}{|c|c|}
-    \hline
-          \textbf{Configuration} & \textbf{H1/cgroup mem. budget ratio}\\
-    \hline
-          Native Spark & 80\\
-          TH Spark & 80 etc., 40\\
-          Native Giraph & 80\\
-	  TH Giraph & 80 etc., 40\\
-    \hline
-  \end{tabular}
-\end{table}
-
-
-We investigate performance in three memory per core scenarios. Our main focus is 4 GB per core 
-which is the next possible trend in datacenters based on \ref{sec:intro}. The others
+We investigate performance in three memory per core scenarios to check if throughput increases as memory availability increases. Our main focus is 4 GB per core which is the next possible trend in datacenters based on \ref{sec:intro}. The others
 are 8 and 16 GB per core which is a possible future trend. For the 4 GB per core scenario, we use 32 GB memory with 8 cores.
 In this setup, we run 4 workloads with Native Spark and Spark using TH. Giraph can't run with 4 GB per core with any of the two
-configurations.
-For the 8 GB per core we use 64 GB memory with 8 cores. 
+configurations. For 8 GB per core, we use 64 GB memory with 8 cores. 
 In this setup, we run 4 workloads with Native Spark and Spark using TH and 2 workloads with Native Giraph and Giraph using TH. For the 16 GB memory per core, we use 128 GB of memory with 16 cores. For this setup, we run 2 workloads with Native Giraph and Giraph using TeraHeap. We choose 16 GB per core for Giraph, because it experiences more memory pressure than Spark and it cannot even run with 4 GB DRAM per core. For 8 GB memory per core we are able to run only a few experiments with TH. This happens, because it does not have a very aggresive memory offloading mechanism and cannot offload the heap properly. Table \ref{tab:setups} summarizes all setups with the coresponding workloads and datasets.
 
 \subsection{Choosing the configurations to run the co-located experiments}
@@ -132,15 +112,12 @@ For simplicity and time management, we choose the numbers 1,2,4,8. However, ther
 than we need to overcome. The first is that we need a number that is exactly divided by these numbers to give the same amount of DRAM to
 all cgroups. The second is that we need to leave memory to the OS for system tasks that are executed along with the system reserved memory of 2 GB. For the 4 GB memory per core, we utilize 24 out of 32 GB total DRAM and leave the rest 8 GB to the OS for system reserved memory and system tasks. For the 8 GB memory per core scenario, we utilize 56 GB out of 64 GB total DRAM and leave the rest 8 GB to the OS. For the 16 GB memory per core scenario we utilize 120 out of 128 GB total DRAM and leave the rest 8 GB to the OS. 
 In all scenarios, we choose the number closer to the total DRAM. After having perfomed these calculations, we run each experiment isolated and break down the execution time to know how each experiment performs isolated. Then we run the co-located experiments and study the interference in execution. For the co-located experiments, we run the same workload with the same dataset size for all instances. We do this for simplicity of explaining the results. For all experiments, we disable swap memory.
-
-\subsection{Cgroup DRAM percentage for Java Heap}
 We use cgroups \cite{cgroups} to restrict the DRAM for all processes in a single instance of Spark and Giraph.
 For cgroups, we choose as a baseline an 80\% of total cgroup DRAM budget for H1 as RedHat does for its cgroup containers from June 2023 \cite{redhatblog}.
 The rest 20\% remains to the OS to be used as Page Cache.
 For TeraHeap, we also run experiments with 40\% for H1 to investigate what happens when Page Cache dominates H1.
 In some experiments TeraHeap requires more than 20\% for OS so we make an adjustment to the cgroup budget.
 For Native Spark and Giraph, we do not report results for those experiments as we saw that Page Cache adjustments make no difference.
-Table \ref{tab:budgets} summarizes the budgets for each configuration.
 
 \subsection{Cost estimation}
 Renting servers is a common practice for organizations requiring
@@ -165,7 +142,8 @@ and reducing rental expenses. Therefore, pursuing higher throughput
 and faster workload completion offers tangible benefits in terms of
 monetary cost reduction for organizations renting servers. 
 
-To estimate the cost of our experiments in real-world public clusters, we
+We estimate the cost of our experiments in real-world public clusters, to show that increasing throughput by
+decreasing GC and S/D leads to avoiding wasting money in overheads when renting servers. We
 chose a variety of providers like Amazon \cite{EC2}, Google \cite{GCP} and Microsoft \cite{Azure}. This
 way, we covered the most known providers and platforms someone would
 choose to run their workloads on. We chose 3 machines from each

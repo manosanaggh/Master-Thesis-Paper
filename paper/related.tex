@@ -7,7 +7,7 @@ We group the related work in the two following categories:
 \end{itemize}
 
 \subsection{Works that examine the co-location of workloads}
-To our best knowledge there is limited work in investigating workload co-location. Here we refer to some works does in this area.
+To our best knowledge, there is limited work in investigating workload co-location for Managed Big Data Frameworks. Here we refer to some works in this area.
 
 
 Baig et al. in \cite{NUMA} investigate how Spark-based workloads are impacted by the effects of NUMA-placement decisions. This is something we do not do in our work, because we run our experiments in a single NUMA island to avoid NUMA effects that could complicate the understanding of GC, S/D and the aspects of execution that we investigate. Apart from that difference they investigate the performance of co-located spark workers where each worker runs in a different NUMA island. They count remote memory accesses and context switches in CPU. Chen et al. in \cite{interference} analyze the characteristics of co-located workloads running in containers on the same server from the perspective of hardware events. These events include inctructions per cycle, branch prediction misses and dTLB misses. They also show the execution time of co-located workloads, but they do not provide further analysis or breakdown.
