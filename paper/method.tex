@@ -77,24 +77,24 @@ The Community Detection using Label Propagation (CDLP) workload, another key com
 
 \begin{table}[thbp]
   \centering
-  \caption{Configurations. WL = workload, FW = framework, DS = dataset, Mem.= total memory M/C = memory per core, HW Thr.= hardware threads}
+  \caption{Configurations. WL = workload, FW = framework, DS = dataset, Mem.= total memory, M/C = memory per core, Phys. Cores = physical cores}
   \label{tab:setups}
   \begin{tabular}{|c|c|c|c|c|c|c|}
     \hline
-	  \textbf{WL} & \textbf{FW} & \textbf{DS (GB)} & \textbf{Mem.} & \textbf{M/C} & \textbf{#Cores} & \textbf{#HW Thr.}\\
+	  \textbf{WL} & \textbf{FW} & \textbf{DS (GB)} & \textbf{Mem.} & \textbf{M/C} & \textbf{\#Phys. Cores}\\
     \hline
-	  PR & Spark & 8 & 32 & 4 & 8 & 16\\
-	  PR & Spark & 8 & 64 & 8 & 8 & 16\\
-	  LinR & Spark & 64 & 32 & 4 & 8 & 16\\
-	  LinR & Spark & 64 & 64 & 8 & 8 & 16\\
-	  LogR & Spark & 64 & 32 & 4 & 8 & 16\\
-	  LogR & Spark & 64 & 64 & 8 & 8 & 16\\
-	  CC & Spark & 8 & 32 & 4 & 8 & 16\\
-	  CC & Spark & 8 & 64 & 8 & 8 & 16\\
-	  PR & Giraph & 13 & 64 & 8 & 8 & 16\\
-	  CDLP & Giraph & 13 & 64 & 8 & 8 & 16\\
-	  PR & Giraph & 13 & 128 & 16 & 8 & 16\\
-	  CDLP & Giraph & 13 & 128 & 16 & 8 & 16\\
+	  PR & Spark & 8 & 32 & 4 & 8 \\
+	  PR & Spark & 8 & 64 & 8 & 8 \\
+	  LinR & Spark & 64 & 32 & 4 & 8 \\
+	  LinR & Spark & 64 & 64 & 8 & 8 \\
+	  LogR & Spark & 64 & 32 & 4 & 8 \\
+	  LogR & Spark & 64 & 64 & 8 & 8 \\
+	  CC & Spark & 8 & 32 & 4 & 8 \\
+	  CC & Spark & 8 & 64 & 8 & 8 \\
+	  PR & Giraph & 13 & 64 & 8 & 8 \\
+	  CDLP & Giraph & 13 & 64 & 8 & 8 \\
+	  PR & Giraph & 13 & 128 & 16 & 8 \\
+	  CDLP & Giraph & 13 & 128 & 16 & 8 \\
     \hline
   \end{tabular}
 \end{table}

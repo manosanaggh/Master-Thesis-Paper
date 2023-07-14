@@ -1,0 +1,32 @@
+\section{Background}
+\label{sec:background}
+
+In this section, we describe how TeraHeap eliminates GC and S/D.
+
+TeraHeap is a system that eliminates S/D
+and GC overheads for a large portion of the data in managed big data
+analytics frameworks. TeraHeap extends the Java virtual machine
+(JVM) to use a second, high-capacity heap (H2) over a fast storage
+device that coexists alongside the regular heap (H1). It eliminates
+S/D by providing direct access to objects in H2 and reduces GC
+by avoiding costly GC scans over objects in H2. Frameworks use
+TeraHeap through its hint-based interface without modifications to
+the applications that run on top of them.
+TeraHeap provides a hint-based interface that uses key-object opportunism
+and enables frameworks to mark objects and indicate when to move
+them to H2. During GC, TeraHeap starts from root key-objects and
+dynamically identifies the objects to move to H2.
+
+Furthermore, TeraHeap presents a unified heap
+with the aggregate capacity of H1 and H2, where scans over H2
+during GC are eliminated, to avoid expensive device I/O. To achieve
+this, TeraHeap organizes H2 into regions with similar-lifetime objects. 
+For space reclamation, the collector reclaims H1
+objects as usual. For H2 regions, unlike existing region-based allocators, 
+TeraHeap resolves the space-performance trade-off
+for reclaiming space differently. Existing allocators reclaim region
+space eagerly by moving live objects to another region, which would
+generate excessive I/O for storage-backed regions. Instead, 
+TeraHeap uses the high capacity of NVMe SSDs to reclaim entire regions
+lazily, avoiding slow object compaction on the storage device.
+
